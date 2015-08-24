@@ -77,7 +77,7 @@ The plugin creates the object `window.BackgroundGeolocation`
   
 ## Help
 
-[See the Wiki](https://github.com/transistorsoft/cordova-background-geolocation/wiki)
+[See the Wiki](/wiki)
 
 ## Example
 
