@@ -1,4 +1,5 @@
 [Premium Version](http://shop.transistorsoft.com/pages/cordova-background-geolocation-premium)
+==========================
 
 This repo hosts the **iOS** version available in the **[Premium Version](http://shop.transistorsoft.com/pages/cordova-background-geolocation-premium).  **Android** functionality is available in the **[Premium Version](http://shop.transistorsoft.com/pages/cordova-background-geolocation-premium)**.
 
