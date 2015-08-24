@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<plugin xmlns="http://www.phonegap.com/ns/plugins/1.0"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    id="com.transistorsoft.cordova.background-geolocation"
+    version="0.5.6">
+    <name>BackgroundGeolocation</name>
+    <description>Sophisticated, battery-efficient background-geolocation plugin for Cordova</description>
+    <license>MIT</license>
+    <keywords>cordova, phonegap, background geolocation</keywords>
+
+    <engines>
+        <engine name="cordova" version=">=3.0.0" />
+    </engines>
+
+    <!-- 
+        Pre-Cordova 5, non-npm plugin reference.  Uncomment this if you're not using Cordova 5.
+    <dependency id="org.apache.cordova.dialogs" />
+    -->
+
+    <!-- Cordova 5 npm-style plugin referernce.  Comment this out if you're not using Cordova 5 -->
+    <dependency id="cordova-plugin-dialogs" />
+
+    <js-module src="www/BackgroundGeolocation.js" name="BackgroundGeolocation">
+        <clobbers target="window.BackgroundGeolocation" />
+    </js-module>
+
+    <!-- android available in Premium Version: http://transistorsoft.github.io/cordova-background-geolocation -->
+    
+     <platform name="ios">
+        <!-- required background modes:  App registers for location updates -->
+        
+        <config-file target="*-Info.plist" parent="NSLocationAlwaysUsageDescription">
+            <string>TSLocationManager requires background location tracking</string>
+        </config-file>
+
+        <config-file target="*-Info.plist" parent="UIBackgroundModes">
+            <array>
+                <string>location</string>
+            </array>
+        </config-file>
+
+        <config-file target="config.xml" parent="/*">
+            <feature name="BackgroundGeolocation">
+                <param name="ios-package" value="CDVBackgroundGeolocation"/>
+            </feature>
+        </config-file>
+        <framework src="AudioToolbox.framework" weak="true" />
+        <framework src="AVFoundation.framework" weak="true" />
+        <framework src="libsqlite3.dylib" weak="true" />
+        <framework src="src/ios/TSLocationManager.framework" custom="true" />
+        <source-file src="src/ios/CDVBackgroundGeolocation.m" />
+        <header-file src="src/ios/CDVBackgroundGeolocation.h" />
+     </platform>          
+
+</plugin>
