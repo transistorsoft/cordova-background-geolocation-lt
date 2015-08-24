@@ -13,6 +13,13 @@ This plugin leverages Cordova/PhoneGap's [require/define functionality used for 
 ## Using the plugin ##
 The plugin creates the object `window.BackgroundGeolocation`
 
+## Installing the plugin ##
+
+```
+
+   cordova plugin add https://github.com/transistorsoft/cordova-background-geolocation.git
+```
+
 ## [Common Options](https://github.com/transistorsoft/react-native-background-geolocation#config)
 
 | Option | Type | Opt/Required | Default | Note |
@@ -63,13 +70,6 @@ The plugin creates the object `window.BackgroundGeolocation`
 | `removeGeofence` | `identifier` | Removes a geofence identified by the provided `identifier` |
 | `getGeofences` | `callbackFn` | Fetch the list of monitored geofences. Your callbackFn will be provided with an Array of geofences. If there are no geofences being monitored, you'll receive an empty `Array []`.|
   
-## Installing the plugin ##
-
-```
-
-   cordova plugin add https://github.com/transistorsoft/cordova-background-geolocation.git
-```
-
 ## Help
 
 [See the Wiki](https://github.com/transistorsoft/cordova-background-geolocation/wiki)
