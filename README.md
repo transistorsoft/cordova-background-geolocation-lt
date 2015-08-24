@@ -10,15 +10,15 @@ Follows the [Cordova Plugin spec](http://cordova.apache.org/docs/en/3.0.0/plugin
 
 This plugin leverages Cordova/PhoneGap's [require/define functionality used for plugins](http://simonmacdonald.blogspot.ca/2012/08/so-you-wanna-write-phonegap-200-android.html).
 
-## Using the plugin ##
-The plugin creates the object `window.BackgroundGeolocation`
-
 ## Installing the plugin ##
 
 ```
 
    cordova plugin add https://github.com/transistorsoft/cordova-background-geolocation.git
 ```
+
+## Using the plugin ##
+The plugin creates the object `window.BackgroundGeolocation`
 
 ## [Common Options](https://github.com/transistorsoft/react-native-background-geolocation#config)
 
