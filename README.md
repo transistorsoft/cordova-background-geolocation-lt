@@ -179,7 +179,7 @@ If you're using XCode, boot the SampleApp in the iOS Simulator and enable ```Deb
 
 ## Help!  It doesn't work!
 
-Yes it does.  [See the Wiki](wiki)
+Yes it does.  [See the Wiki](/wiki)
 
 - on iOS, background tracking won't be engaged until you travel about **2-3 city blocks**, so go for a walk or car-ride (or use the Simulator with ```Debug->Location->City Drive```)
 - Android is much quicker detecting movements; typically several meters of walking will do it.
