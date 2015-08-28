@@ -25,6 +25,14 @@ This plugin leverages Cordova/PhoneGap's [require/define functionality used for 
 ## Using the plugin ##
 The plugin creates the object `window.BackgroundGeolocation`
 
+## Advanced Sample Application for Field-testing
+
+A fully-featured [SampleApp](https://github.com/christocracy/cordova-background-geolocation-SampleApp) is available in its own public repo.  After first cloning that repo, follow the installation instructions in the **README** there.  This SampleApp includes a settings-screen allowing you to quickly experiment with all the different settings available for each platform.
+
+If you're using XCode, boot the SampleApp in the iOS Simulator and enable ```Debug->Location->City Drive```.
+
+![](https://dl.dropboxusercontent.com/u/2319755/cordova-background-geolocaiton/simulate-location.png)
+
 ## [Common Options](https://github.com/transistorsoft/react-native-background-geolocation#config)
 
 | Option | Type | Opt/Required | Default | Note |
@@ -167,15 +175,6 @@ function onDeviceReady() {
 
 
 ```
-
-## Advanced Sample Application for Field-testing
-
-A fully-featured [SampleApp](https://github.com/christocracy/cordova-background-geolocation-SampleApp) is available in its own public repo.  After first cloning that repo, follow the installation instructions in the **README** there.  This SampleApp includes a settings-screen allowing you to quickly experiment with all the different settings available for each platform.
-
-![Home](https://dl.dropboxusercontent.com/u/2319755/cordova-background-geolocaiton/screenshot-iphone5-geofences-framed-README.png)
-![Settings](https://dl.dropboxusercontent.com/u/2319755/cordova-background-geolocaiton/screenshot-iphone5-settings-framed-README.png)
-
-If you're using XCode, boot the SampleApp in the iOS Simulator and enable ```Debug->Location->City Drive```.
 
 ## Help!  It doesn't work!
 
