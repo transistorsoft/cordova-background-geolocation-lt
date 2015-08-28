@@ -1,7 +1,7 @@
-[Premium Version](http://shop.transistorsoft.com/pages/cordova-background-geolocation-premium)
+[Premium Version (iOS)](http://shop.transistorsoft.com/pages/cordova-background-geolocation-premium)
 ==========================
 
-This repo hosts the **iOS** version available in the **[Premium Version](http://shop.transistorsoft.com/pages/cordova-background-geolocation-premium)**.  **Android** functionality is available in the **[Premium Version](http://shop.transistorsoft.com/pages/cordova-background-geolocation-premium)**.
+This repo hosts the **iOS** version available in the **[Premium Version](http://shop.transistorsoft.com/pages/cordova-background-geolocation-premium)**.  **Android** functionality is available only in the **[Premium Version](http://shop.transistorsoft.com/pages/cordova-background-geolocation-premium)**.
 
 Background Geolocation
 ==============================
@@ -24,6 +24,14 @@ This plugin leverages Cordova/PhoneGap's [require/define functionality used for 
 
 ## Using the plugin ##
 The plugin creates the object `window.BackgroundGeolocation`
+
+## [Advanced Sample Application](https://github.com/christocracy/cordova-background-geolocation-SampleApp)
+
+A fully-featured [SampleApp](https://github.com/christocracy/cordova-background-geolocation-SampleApp) is available in its own public repo.  After first cloning that repo, follow the installation instructions in the **README** there.  This SampleApp includes a settings-screen allowing you to quickly experiment with all the different settings available for each platform.
+
+If you're using XCode, boot the SampleApp in the iOS Simulator and enable ```Debug->Location->Freeway Drive```.
+
+![](https://dl.dropboxusercontent.com/u/2319755/cordova-background-geolocaiton/simulate-location.png)
 
 ## [Common Options](https://github.com/transistorsoft/react-native-background-geolocation#config)
 
@@ -77,7 +85,7 @@ The plugin creates the object `window.BackgroundGeolocation`
   
 ## Help
 
-[See the Wiki](https://github.com/transistorsoft/cordova-background-geolocation/wiki)
+[See the Wiki](https://github.com/transistorsoft/cordova-background-geolocation-lt/wiki)
 
 ## Example
 
@@ -168,18 +176,9 @@ function onDeviceReady() {
 
 ```
 
-## Advanced Sample Application for Field-testing
-
-A fully-featured [SampleApp](https://github.com/christocracy/cordova-background-geolocation-SampleApp) is available in its own public repo.  After first cloning that repo, follow the installation instructions in the **README** there.  This SampleApp includes a settings-screen allowing you to quickly experiment with all the different settings available for each platform.
-
-![Home](https://dl.dropboxusercontent.com/u/2319755/cordova-background-geolocaiton/screenshot-iphone5-geofences-framed-README.png)
-![Settings](https://dl.dropboxusercontent.com/u/2319755/cordova-background-geolocaiton/screenshot-iphone5-settings-framed-README.png)
-
-If you're using XCode, boot the SampleApp in the iOS Simulator and enable ```Debug->Location->City Drive```.
-
 ## Help!  It doesn't work!
 
-Yes it does.  [See the Wiki](https://github.com/transistorsoft/cordova-background-geolocation/wiki)
+Yes it does.  [See the Wiki](https://github.com/transistorsoft/cordova-background-geolocation-lt/wiki)
 
 - on iOS, background tracking won't be engaged until you travel about **2-3 city blocks**, so go for a walk or car-ride (or use the Simulator with ```Debug->Location->City Drive```)
 - Android is much quicker detecting movements; typically several meters of walking will do it.
