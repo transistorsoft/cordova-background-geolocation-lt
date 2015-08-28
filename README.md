@@ -25,7 +25,7 @@ This plugin leverages Cordova/PhoneGap's [require/define functionality used for 
 ## Using the plugin ##
 The plugin creates the object `window.BackgroundGeolocation`
 
-## Advanced Sample Application for Field-testing
+## [Advanced Sample Application](https://github.com/christocracy/cordova-background-geolocation-SampleApp)
 
 A fully-featured [SampleApp](https://github.com/christocracy/cordova-background-geolocation-SampleApp) is available in its own public repo.  After first cloning that repo, follow the installation instructions in the **README** there.  This SampleApp includes a settings-screen allowing you to quickly experiment with all the different settings available for each platform.
 
