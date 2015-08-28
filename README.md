@@ -29,7 +29,7 @@ The plugin creates the object `window.BackgroundGeolocation`
 
 A fully-featured [SampleApp](https://github.com/christocracy/cordova-background-geolocation-SampleApp) is available in its own public repo.  After first cloning that repo, follow the installation instructions in the **README** there.  This SampleApp includes a settings-screen allowing you to quickly experiment with all the different settings available for each platform.
 
-If you're using XCode, boot the SampleApp in the iOS Simulator and enable ```Debug->Location->City Drive```.
+If you're using XCode, boot the SampleApp in the iOS Simulator and enable ```Debug->Location->Freeway Drive```.
 
 ![](https://dl.dropboxusercontent.com/u/2319755/cordova-background-geolocaiton/simulate-location.png)
 
