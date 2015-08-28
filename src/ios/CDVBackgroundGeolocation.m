@@ -358,6 +358,7 @@
 {
     UIBackgroundTaskIdentifier taskId = [[command.arguments objectAtIndex: 0] integerValue];
     [bgGeo stopBackgroundTask:taskId];
+    [self.commandDelegate sendPluginResult:[CDVPluginResult resultWithStatus:CDVCommandStatus_OK] callbackId:command.callbackId];
 }
 
 /**
@@ -368,6 +369,7 @@
     UIBackgroundTaskIdentifier taskId = [[command.arguments objectAtIndex: 0] integerValue];
     NSString *error = [command.arguments objectAtIndex:1];
     [bgGeo error:taskId message:error];
+    [self.commandDelegate sendPluginResult:[CDVPluginResult resultWithStatus:CDVCommandStatus_OK] callbackId:command.callbackId];
 }
 
 - (void) onLocationManagerError:(NSNotification*)notification
