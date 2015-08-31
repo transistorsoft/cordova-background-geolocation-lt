@@ -18,7 +18,7 @@ This plugin leverages Cordova/PhoneGap's [require/define functionality used for 
 ## Installing the plugin ##
 
 ```
-cordova plugin add https://github.com/transistorsoft/cordova-background-geolocation.git
+cordova plugin add https://github.com/transistorsoft/cordova-background-geolocation-lt.git
 ```
 
 ## Using the plugin ##
