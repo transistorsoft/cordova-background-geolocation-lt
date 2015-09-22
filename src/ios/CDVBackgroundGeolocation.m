@@ -386,6 +386,8 @@
             }
             [self.currentPositionListeners removeAllObjects];
         }
+
+        [result setKeepCallbackAsBool:YES];
         [self.commandDelegate sendPluginResult:result callbackId:locationCallbackId];
     }
 }
