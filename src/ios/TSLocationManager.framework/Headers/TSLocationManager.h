@@ -3,11 +3,15 @@
 #import <CoreData/CoreData.h>
 #import <CoreLocation/CoreLocation.h>
 #import <AudioToolbox/AudioToolbox.h>
+#import "SOMotionDetector.h"
 
 @interface TSLocationManager : NSObject <CLLocationManagerDelegate>
 
 @property (nonatomic) CLLocationDistance odometer;
 @property (nonatomic, strong) CLLocationManager* locationManager;
+@property (nonatomic) NSDate *stoppedAt;
+@property (nonatomic) UIBackgroundTaskIdentifier motionDetectionTask;
+@property (nonatomic) SOMotionType motionType;
 
 - (void) configure:(NSDictionary*)config;
 - (void) start;
@@ -30,5 +34,6 @@
 - (NSArray*) getGeofences;
 - (void) updateCurrentPosition:(NSDictionary*)options;
 - (void) playSound:(SystemSoundID)soundId;
+- (void) notify:(NSString*)message;
 @end
 
