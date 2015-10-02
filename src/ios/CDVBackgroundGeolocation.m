@@ -313,7 +313,7 @@
 - (void) getGeofences:(CDVInvokedUrlCommand*)command
 {
     NSMutableArray *rs = [[NSMutableArray alloc] init];
-    for (CLRegion *geofence in [bgGeo getGeofences]) {
+    for (CLCircularRegion *geofence in [bgGeo getGeofences]) {
         [rs addObject:@{
             @"identifier":geofence.identifier,
             @"radius": @(geofence.radius),
@@ -345,7 +345,7 @@
 
 - (void) playSound:(CDVInvokedUrlCommand*)command
 {
-    int soundId = [[command.arguments objectAtIndex:0] integerValue];
+    SystemSoundID soundId = [[command.arguments objectAtIndex:0] intValue];
     [bgGeo playSound: soundId];
     CDVPluginResult *result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK];
     [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
