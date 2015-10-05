@@ -411,14 +411,19 @@ bgGeo.getGeofences(function(geofences) {
 ####`onGeofence(callbackFn)`
 Adds a geofence event-listener.  Your supplied callback will be called when any monitored geofence crossing occurs.  The `callbackFn` will be provided the following parameters:
 
-######@param {Object} params.  This object contains 2 keys: `@param {String} identifier` and `@param {String} action [ENTER|EXIT]`.
+######@param {Object} params.  This object contains 3 keys: `@param {String} identifier`, `@param {String} action [ENTER|EXIT]`, `@param {Object} location`.
 ######@param {Integer} taskId The background taskId which you must send back to the native plugin via `bgGeo.finish(taskId)` in order to signal that your callback is complete.
 
 ```
 bgGeo.onGeofence(function(params, taskId) {
     try {
-        console.log('A geofence has been crossed: ', params.identifier);
-        console.log('ENTER or EXIT?: ', params.action);
+        var location = params.location;
+        var identifier = params.identifier;
+        var action = params.action;
+        
+        console.log('A geofence has been crossed: ', identifier);
+        console.log('ENTER or EXIT?: ', action);
+        console.log('Location: ', JSON.stringify(location));
     } catch(e) {
         console.error('An error occurred in my application code', e);
     }
