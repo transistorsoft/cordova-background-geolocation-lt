@@ -742,7 +742,7 @@ These are the comma-delimited list of [activity-names](https://developers.google
 The number of miutes to wait before turning off the GPS after the ActivityRecognition System (ARS) detects the device is ```STILL``` (defaults to 0, no timeout).  If you don't set a value, the plugin is eager to turn off the GPS ASAP.  An example use-case for this configuration is to delay GPS OFF while in a car waiting at a traffic light.
 
 **iOS Stop-detection timing**
-![](https://dl.dropboxusercontent.com/u/2319755/cordova-background-geolocaiton/ios-stop-detection-timing-diagram.png)
+![](https://dl.dropboxusercontent.com/u/2319755/cordova-background-geolocaiton/ios-stop-detection-timing.png)
 
 ####`@param {Integer minutes} stopDetectionDelay [0]` 
 
