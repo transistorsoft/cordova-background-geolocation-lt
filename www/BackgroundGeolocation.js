@@ -45,6 +45,14 @@ module.exports = {
              [config]
         );
     },
+    getState: function(success, failure) {
+        exec(success || function() {},
+             failure || function() {},
+             'BackgroundGeolocation',
+             'getState',
+             []
+        );
+    },
     start: function(success, failure, config) {
         exec(success || function() {},
              failure || function() {},

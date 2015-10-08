@@ -11,7 +11,6 @@
 @property (nonatomic, strong) CLLocationManager* locationManager;
 @property (nonatomic) NSDate *stoppedAt;
 @property (nonatomic) UIBackgroundTaskIdentifier motionDetectionTask;
-@property (nonatomic) NSTimeInterval *stopDetectionDelay;
 
 @property (nonatomic) SOMotionType motionType;
 
@@ -25,6 +24,7 @@
 - (void) error:(UIBackgroundTaskIdentifier)taskId message:(NSString*)message;
 - (void) changePace:(BOOL)value;
 - (void) setConfig:(NSDictionary*)command;
+- (NSDictionary*) getState;
 - (NSDictionary*) getStationaryLocation;
 - (void) onSuspend:(NSNotification *)notification;
 - (void) onResume:(NSNotification *)notification;
