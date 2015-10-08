@@ -1,0 +1,11 @@
+##0.6.4
+
+- pin google-play-services at 7.5.0 to help people suffering from Google Play Services bug
+- Tweak stop-detection system.  add `#stopDetectionDelay`
+
+![](https://camo.githubusercontent.com/76f20a03f04f455f8219dbbca2a40631cd009fb4/68747470733a2f2f646c2e64726f70626f7875736572636f6e74656e742e636f6d2f752f323331393735352f636f72646f76612d6261636b67726f756e642d67656f6c6f636169746f6e2f696f732d73746f702d646574656374696f6e2d74696d696e672e706e67)
+
+## 0.6.3
+- Introduce accelerometer-base stop-detection for ios.
+- `@config {Boolean} useSignificantChangesOnly`
+- When a geofence event occurs, the associated location will have geolocation meta-data attached to the associated location.  Find it in the POST data.  See Wiki Location Data Schema for details.
