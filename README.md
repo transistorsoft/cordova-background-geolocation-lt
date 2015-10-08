@@ -83,6 +83,7 @@ A simple Node-based [web-application](https://github.com/transistorsoft/backgrou
 | `setConfig` | `{config}` | Re-configure the plugin with new values |
 | `start` | `callbackFn`| Enable location tracking.  Supplied `callbackFn` will be executed when tracking is successfully engaged |
 | `stop` | `callbackFn` | Disable location tracking.  Supplied `callbackFn` will be executed when tracking is successfully engaged |
+| `getState` | `callbackFn` | Fetch the current-state of the plugin, including `enabled`, `isMoving`, as well as all other config params |
 | `getCurrentPosition` | `callbackFn` | Retrieves the current position. This method instructs the native code to fetch exactly one location using maximum power & accuracy. |
 | `changePace` | `isMoving` | Initiate or cancel immediate background tracking. When set to true, the plugin will begin aggressively tracking the devices Geolocation, bypassing stationary monitoring. If you were making a "Jogging" application, this would be your [Start Workout] button to immediately begin GPS tracking. Send false to disable aggressive GPS monitoring and return to stationary-monitoring mode. |
 | `getLocations` | `callbackFn` | Fetch all the locations currently stored in native plugin's SQLite database. Your callbackFn`` will receive an `Array` of locations in the 1st parameter |
@@ -287,6 +288,49 @@ Disable background geolocation tracking.
 
 ```
 bgGeo.stop();
+```
+
+####`getState(successFn)`
+
+Fetch the current-state of the plugin, including all configuration parameters.
+
+```
+bgGeo.getState(function(state) {
+  console.log(JSON.stringify(state));
+});
+
+{
+  "stopOnTerminate": true,
+  "disableMotionActivityUpdates": false,
+  "params": {
+    "device": {
+      "manufacturer": "Apple",
+       "available": true,
+       "platform": "iOS",
+       "cordova": "3.9.1",
+       "uuid": "61CA53C7-BC4B-44D3-991B-E9021AE7F8EE",
+       "model": "iPhone8,1",
+       "version": "9.0.2"
+    }
+  },
+  "url": "http://192.168.11.120:8080/locations",
+  "desiredAccuracy": 0,
+  "stopDetectionDelay": 0,
+  "activityRecognitionInterval": 10000,
+  "distanceFilter": 50,
+  "activityType": 2,
+  "useSignificantChangesOnly": false,
+  "autoSync": false,
+  "isMoving": false,
+  "maxDaysToPersist": 1,
+  "stopTimeout": 2,
+  "enabled": false,
+  "debug": true,
+  "batchSync": false,
+  "headers": {},
+  "disableElasticity": false,
+  "stationaryRadius": 20
+}
 ```
 
 ####`getCurrentPosition(successFn, failureFn)`
