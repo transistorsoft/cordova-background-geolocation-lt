@@ -50,6 +50,12 @@
     [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
 }
 
+- (void) getState:(CDVInvokedUrlCommand*)command
+{
+    CDVPluginResult *result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:[bgGeo getState]];
+    [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
+}
+
 /**
  * Turn on background geolocation
  */
@@ -185,11 +191,13 @@
     NSLog(@"- onEnterGeofence: %@", notification.userInfo);
     
     CLCircularRegion *region = [notification.userInfo objectForKey:@"geofence"];
+    CLLocation *location     = [notification.userInfo objectForKey:@"location"];
 
     for (NSString *callbackId in self.geofenceListeners) {
         NSDictionary *params = @{
             @"identifier": region.identifier,
             @"action": [notification.userInfo objectForKey:@"action"],
+            @"location": [bgGeo locationToDictionary:location],
             @"taskId": @([bgGeo createBackgroundTask])
         };
         CDVPluginResult *result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:params];
