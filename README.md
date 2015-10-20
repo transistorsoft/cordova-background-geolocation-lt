@@ -39,10 +39,10 @@ The plugin creates the object `window.BackgroundGeolocation`.  See [API Document
 
 ## Documentation
 - [API Documentation](docs/api.md)
-- [Location Data Schema](wiki/Location-Data-Schema)
-- [Debugging Sounds](wiki/Debug-Sounds)
-- [Geofence Features](wiki/Geofence-Features)
-- [Background Tasks](wiki/Background-Tasks)
+- [Location Data Schema](../../wiki/Location-Data-Schema)
+- [Debugging Sounds](../../wiki/Debug-Sounds)
+- [Geofence Features](../../wiki/Geofence-Features)
+- [Background Tasks](../../wiki/Background-Tasks)
 
 ## Example
 
