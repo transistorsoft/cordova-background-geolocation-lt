@@ -38,7 +38,11 @@ This plugin has tagged stable versions.  To install a particular version, append
 The plugin creates the object `window.BackgroundGeolocation`.  See [API Documentation](docs/api.md) for details
 
 ## Documentation
-[API Documentation](docs/api.md)
+- [API Documentation](docs/api.md)
+- [Location Data Schema](wiki/Location-Data-Schema)
+- [Debugging Sounds](wiki/Debug-Sounds)
+- [Geofence Features](wiki/Geofence-Features)
+- [Background Tasks](wiki/Background-Tasks)
 
 ## Example
 
