@@ -40,39 +40,6 @@ The plugin creates the object `window.BackgroundGeolocation`.  See [API Document
 ## Documentation
 [API Documentation](docs/api.md)
 
-## Help!  It doesn't work!
-
-Yes it does.  [See the Wiki](https://github.com/transistorsoft/cordova-background-geolocation-lt/wiki)
-
-- on iOS, background tracking won't be engaged until you travel about **2-3 city blocks**, so go for a walk or car-ride (or use the Simulator with ```Debug->Location->City Drive```)
-- When in doubt, **nuke everything**:  First delete the app from your device (or simulator)
-
-```
-$ cordova plugin remove com.transistorsoft.cordova.background-geolocation
-$ cordova plugin add git@github.com:transistorsoft/cordova-background-geolocation-lt.git
-
-$ cordova platform remove ios
-$ cordova platform add ios
-$ cordova build ios
-
-```
-
-## [Advanced Sample Application](https://github.com/christocracy/cordova-background-geolocation-SampleApp)
-
-A fully-featured [SampleApp](https://github.com/christocracy/cordova-background-geolocation-SampleApp) is available in its own public repo.  After first cloning that repo, follow the installation instructions in the **README** there.  This SampleApp includes a settings-screen allowing you to quickly experiment with all the different settings available for each platform.
-
-If you're using XCode, boot the SampleApp in the iOS Simulator and enable ```Debug->Location->Freeway Drive```.
-
-![](https://dl.dropboxusercontent.com/u/2319755/cordova-background-geolocaiton/simulate-location.png)
-
-## Simple Testing Server
-
-A simple Node-based [web-application](https://github.com/transistorsoft/background-geolocation-console) with SQLite database is available for field-testing and performance analysis.  If you're familiar with Node, you can have this server up-and-running in about **one minute**.
-
-![](https://dl.dropboxusercontent.com/u/2319755/cordova-background-geolocaiton/background-geolocation-console-map.png)
-
-![](https://dl.dropboxusercontent.com/u/2319755/cordova-background-geolocaiton/background-geolocation-console-grid.png)
-
 ## Example
 
 ```
@@ -161,6 +128,41 @@ function onDeviceReady() {
 }
 
 ```
+
+## Help!  It doesn't work!
+
+Yes it does.  [See the Wiki](https://github.com/transistorsoft/cordova-background-geolocation-lt/wiki)
+
+- on iOS, background tracking won't be engaged until you travel about **2-3 city blocks**, so go for a walk or car-ride (or use the Simulator with ```Debug->Location->City Drive```)
+- When in doubt, **nuke everything**:  First delete the app from your device (or simulator)
+
+```
+$ cordova plugin remove com.transistorsoft.cordova.background-geolocation
+$ cordova plugin add git@github.com:transistorsoft/cordova-background-geolocation-lt.git
+
+$ cordova platform remove ios
+$ cordova platform add ios
+$ cordova build ios
+
+```
+
+## [Advanced Sample Application](https://github.com/christocracy/cordova-background-geolocation-SampleApp)
+
+A fully-featured [SampleApp](https://github.com/christocracy/cordova-background-geolocation-SampleApp) is available in its own public repo.  After first cloning that repo, follow the installation instructions in the **README** there.  This SampleApp includes a settings-screen allowing you to quickly experiment with all the different settings available for each platform.
+
+If you're using XCode, boot the SampleApp in the iOS Simulator and enable ```Debug->Location->Freeway Drive```.
+
+![](https://dl.dropboxusercontent.com/u/2319755/cordova-background-geolocaiton/simulate-location.png)
+
+## Simple Testing Server
+
+A simple Node-based [web-application](https://github.com/transistorsoft/background-geolocation-console) with SQLite database is available for field-testing and performance analysis.  If you're familiar with Node, you can have this server up-and-running in about **one minute**.
+
+![](https://dl.dropboxusercontent.com/u/2319755/cordova-background-geolocaiton/background-geolocation-console-map.png)
+
+![](https://dl.dropboxusercontent.com/u/2319755/cordova-background-geolocaiton/background-geolocation-console-grid.png)
+
+
 
 ## Behaviour
 
