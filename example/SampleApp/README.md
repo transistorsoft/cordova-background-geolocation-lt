@@ -1,3 +1,0 @@
-Example Background GeoLocation app.
-=============================================
-
