@@ -59,24 +59,11 @@ function onDeviceReady() {
         var lat    = coords.latitude;
         var lng    = coords.longitude;
         
-        console.log('[js] BackgroundGeoLocation callback:  ' + JSON.stringify(location));
-
-        /**
-        * This would be your own callback for Ajax-requests after POSTing background geolocation to your server.
-        * eg:  
-        *     $.post({url: url, success: yourAjaxCallback});
-        */
-        var yourAjaxCallback = function(response) {
-            ////
-            // IMPORTANT:  You must execute the #finish, providing the taskId provided to callbackFn above in order to inform the native plugin that you're finished,
-            //  and the background-task may be completed.  You must do this regardless if your HTTP request is successful or not.
-            // IF YOU DON'T, ios will CRASH YOUR APP for spending too much time in the background.
-            //
-            //
-            bgGeo.finish(taskId);
-        };
-
-        yourAjaxCallback.call(this);
+        // Simulate doing some extra work with a bogus setTimeout.  This could perhaps be an Ajax request to your server.
+        // The point here is that you must execute bgGeo.finish after all asynchronous operations within the callback are complete.
+        setTimeout(function() {
+          bgGeo.finish(taskId); // <-- execute #finish when your work in callbackFn is complete
+        }, 1000);
     };
 
     var failureFn = function(error) {
