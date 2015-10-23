@@ -13,7 +13,14 @@
 @property (nonatomic) UIBackgroundTaskIdentifier motionDetectionTask;
 @property (nonatomic) SOMotionType motionType;
 
-@property (copy) void (^serverResponseBlock) (NSInteger statusCode, NSDictionary *requestData, NSData *responseData, NSError *error);
+// Blocks
+@property (copy) void (^httpResponseBlock) (NSInteger statusCode, NSDictionary *requestData, NSData *responseData, NSError *error);
+@property (copy) void (^locationChangedBlock) (CLLocation *location, BOOL isMoving);
+@property (copy) void (^motionChangedBlock) (CLLocation *location, BOOL isMoving);
+@property (copy) void (^geofenceBlock) (CLCircularRegion *region, CLLocation *location, NSString *action);
+@property (copy) void (^syncCompleteBlock) (NSArray *locations);
+@property (copy) void (^locationTimeoutBlock) (void);
+@property (copy) void (^errorBlock) (NSString *type, NSError *error);
 
 - (void) configure:(NSDictionary*)config;
 - (void) start;
