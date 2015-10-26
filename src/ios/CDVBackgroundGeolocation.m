@@ -22,7 +22,6 @@
     bgGeo.geofenceBlock         = [self createGeofenceHandler];
     bgGeo.syncCompleteBlock     = [self createSyncCompleteHandler];
     bgGeo.httpResponseBlock     = [self createHttpResponseHandler];
-    bgGeo.locationTimeoutBlock  = [self createLocationTimeoutHandler];
     bgGeo.errorBlock            = [self createErrorHandler];
 }
 

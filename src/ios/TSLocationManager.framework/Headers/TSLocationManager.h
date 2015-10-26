@@ -19,7 +19,6 @@
 @property (copy) void (^motionChangedBlock) (CLLocation *location, BOOL isMoving);
 @property (copy) void (^geofenceBlock) (CLCircularRegion *region, CLLocation *location, NSString *action);
 @property (copy) void (^syncCompleteBlock) (NSArray *locations);
-@property (copy) void (^locationTimeoutBlock) (void);
 @property (copy) void (^errorBlock) (NSString *type, NSError *error);
 
 - (void) configure:(NSDictionary*)config;
