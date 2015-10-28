@@ -258,7 +258,7 @@ Maximum number of days to store a geolocation in plugin's SQLite database when y
 
 ####`@param {Boolean} debug`
 
-When enabled, the plugin will emit sounds for life-cycle events of background-geolocation!  **NOTE iOS**:  In addition, you must manually enable the *Audio and Airplay* background mode in *Background Capabilities* to hear these [debugging sounds](wiki/Debug-Sounds).  See the wiki [Debug Sounds](wiki/Debug-Sounds) for a detailed description of these sounds.
+When enabled, the plugin will emit sounds for life-cycle events of background-geolocation!  **NOTE iOS**:  In addition, you must manually enable the *Audio and Airplay* background mode in *Background Capabilities* to hear these [debugging sounds](../../../wiki/Debug-Sounds).  See the wiki [Debug Sounds](../../../wiki/Debug-Sounds) for a detailed description of these sounds.
 
 ####`@param {Boolean} stopOnTerminate`
 Enable this in order to force a stop() when the application terminated (e.g. on iOS, double-tap home button, swipe away the app).  On Android, ```stopOnTerminate: false``` will cause the plugin to operate as a headless background-service (in this case, you should configure an #url in order for the background-service to send the location to your server)
@@ -385,6 +385,8 @@ bgGeo.configure(function(location, taskId) {
 });
 ```
 
+If an error occurs while fetching the location, the `failureFn` will be executed with an `Integer` [Error Code](../../../wiki/Location-Error-Codes) as the first argument.
+
 ####`setConfig(successFn, failureFn, config)`
 Reconfigure plugin's configuration (@see followign ##Config## section for accepted ```config``` params.  **NOTE** The plugin will continue to send recorded Geolocation to the ```locationCallback``` you provided to ```configure``` method -- use this method only to change configuration params (eg: ```distanceFilter```, ```stationaryRadius```, etc).
 
@@ -457,6 +459,8 @@ bgGeo.getState(function(state) {
 ####`getCurrentPosition(successFn, failureFn, options)`
 Retrieves the current position.  This method instructs the native code to fetch exactly one location using maximum power & accuracy.  The native code will persist the fetched location to its SQLite database just as any other location in addition to POSTing to your configured `#url` (if you've enabled the HTTP features).  In addition to your supplied `callbackFn`, the plugin will also execute the `callback` provided to `#configure`.
 
+If an error occurs while fetching the location, the `failureFn` will be executed with an `Integer` [Error Code](../../../wiki/Location-Error-Codes) as the first argument.
+
 #### Options
 
 ######@param {Integer} timeout [30]
@@ -483,6 +487,8 @@ bgGeo.getCurrentPosition(function(location, taskId) {
 
     console.log(“- Current position received: “, location);
     bgGeo.finish(taskId);
+}, function(errorCode) {
+	alert('A Location Error: ' + errorCode);
 }, {
   timeout: 30,    // 30 second timeout to fetch location
   maximumAge: 5000,	// Accept the last-known-location if not older than 5000 ms.

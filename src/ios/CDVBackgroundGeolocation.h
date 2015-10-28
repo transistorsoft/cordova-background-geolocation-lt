@@ -14,8 +14,8 @@
 @property (nonatomic, strong) NSString* locationCallbackId;
 @property (nonatomic, strong) NSMutableArray* currentPositionListeners;
 @property (nonatomic, strong) NSMutableArray* geofenceListeners;
-@property (nonatomic, strong) NSMutableArray* stationaryRegionListeners;
 @property (nonatomic, strong) NSMutableArray* motionChangeListeners;
+@property (nonatomic, strong) NSMutableArray* httpListeners;
 
 - (void) configure:(CDVInvokedUrlCommand*)command;
 - (void) start:(CDVInvokedUrlCommand*)command;
@@ -24,11 +24,11 @@
 - (void) error:(CDVInvokedUrlCommand*)command;
 - (void) changePace:(CDVInvokedUrlCommand*)command;
 - (void) setConfig:(CDVInvokedUrlCommand*)command;
-- (void) addStationaryRegionListener:(CDVInvokedUrlCommand*)command;
 - (void) addMotionChangeListener:(CDVInvokedUrlCommand*)command;
 - (void) getStationaryLocation:(CDVInvokedUrlCommand *)command;
 - (void) getLocations:(CDVInvokedUrlCommand *)command;
 - (void) sync:(CDVInvokedUrlCommand *)command;
+- (void) addHttpListener:(CDVInvokedUrlCommand *)command;
 - (void) getOdometer:(CDVInvokedUrlCommand *)command;
 - (void) resetOdometer:(CDVInvokedUrlCommand *)command;
 - (void) addGeofence:(CDVInvokedUrlCommand *)command;
@@ -36,6 +36,8 @@
 - (void) getGeofences:(CDVInvokedUrlCommand *)command;
 - (void) onGeofence:(CDVInvokedUrlCommand *)command;
 - (void) getCurrentPosition:(CDVInvokedUrlCommand *)command;
+- (void) clearDatabase:(CDVInvokedUrlCommand *) command;
 - (void) playSound:(CDVInvokedUrlCommand *)command;
 @end
+
 
