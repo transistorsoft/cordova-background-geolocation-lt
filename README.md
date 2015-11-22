@@ -20,7 +20,7 @@ This plugin leverages Cordova/PhoneGap's [require/define functionality used for 
 #### From master (latest, greatest.)
 
 ```
-   cordova plugin add https://github.com/transistorsoft/cordova-background-geolocation.git
+   cordova plugin add https://github.com/transistorsoft/cordova-background-geolocation-lt.git
 ```
 
 #### Installing a tagged version.
