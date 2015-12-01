@@ -16,6 +16,17 @@ module.exports = {
     * @property {Object} config
     */
     config: {},
+    on: function(event, success, fail) {
+        switch (event) {
+            case 'http':
+                return this.onHttp(success, fail);
+            case 'geofence':
+                return this.onGeofence(success, fail);
+            case 'motionchange':
+                return this.onMotionChange(success, fail);
+        }
+    },
+
     /**
     * @private {Error} error
     */
@@ -65,6 +76,16 @@ module.exports = {
             failure || function() {},
             'BackgroundGeolocation',
             'stop',
+            []);
+    },
+    beginBackgroundTask: function(callback) {
+        if (typeof(callback) !== 'function') {
+            throw "beginBackgroundTask must be provided with a callbackFn to receive the returned #taskId";
+        }
+        exec(callback,
+            function() {},
+            'BackgroundGeolocation',
+            'beginBackgroundTask',
             []);
     },
     finish: function(taskId, success, failure) {
@@ -119,33 +140,6 @@ module.exports = {
             []);
     },
     /**
-    * Add a stationary-region listener.  Whenever the devices enters "stationary-mode", your #success callback will be executed with #location param containing #radius of region
-    * @deprecated in favour of dual-function #onMotionChange
-    * @param {Function} success
-    * @param {Function} failure [optional] NOT IMPLEMENTED
-    */
-    onStationary: function(success, failure) {
-        var me = this;
-        success = success || function(location, taskId) {
-            me.finish(taskId);
-        };
-        var callback = function(params) {
-            var location    = params.location || params,
-                taskId      = params.taskId || 'task-id-undefined';
-            
-            me.stationaryLocation = location;
-
-            me._runBackgroundTask(taskId, function() {
-                success.call(me, location, taskId);
-            }, failure);
-        };
-        exec(callback,
-            failure || function() {},
-            'BackgroundGeolocation',
-            'addStationaryRegionListener',
-            []);
-    },
-    /**
     * Add a movement-state-change listener.  Whenever the devices enters "stationary" or "moving" mode, your #success callback will be executed with #location param containing #radius of region
     * @param {Function} success
     * @param {Function} failure [optional] NOT IMPLEMENTED
@@ -192,6 +186,13 @@ module.exports = {
             'getLocations',
             []);
     },
+    clearDatabase: function(success, failure) {
+        exec(success||function(){},
+            failure || function() {},
+            'BackgroundGeolocation',
+            'clearDatabase',
+            []);  
+    },
     /**
     * Signal native plugin to sync locations queue to HTTP
     */
@@ -212,6 +213,13 @@ module.exports = {
             failure || function() {},
             'BackgroundGeolocation',
             'sync',
+            []);
+    },
+    onHttp: function(success, failure) {
+      exec(success || function() {},
+            failure || function() {},
+            'BackgroundGeolocation',
+            'addHttpListener',
             []);
     },
     /**
