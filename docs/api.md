@@ -297,7 +297,7 @@ Set to ```true``` to start the background-service whenever the device boots.  Un
 # Events
 
 ####`onMotionChange(callbackFn, failureFn)`
-Your ```callbackFn``` will be executed each time the device has changed-state between **MOVING** or **STATIONARY**.  The ```callbackFn``` will be provided with a ```Location``` object as the 1st param, with the usual params (```latitude, longitude, accuracy, speed, bearing, altitude```), in addition to a ```taskId``` used to signal that your callback is finished.
+Your ```callbackFn``` will be executed each time the device has changed-state between **MOVING** or **STATIONARY**.  The ```callbackFn``` will be provided with a `Boolean` flag `isMoving` as the 1st param, a ```Location``` object as the 2nd param, with the usual params (```latitude, longitude, accuracy, speed, bearing, altitude```), in addition to a ```taskId``` used to signal that your callback is finished.
 
 ######@param {Boolean} isMoving `false` if entered **STATIONARY** mode; `true` if entered **MOVING** mode.
 ######@param {Object} location The location at the state-change.
