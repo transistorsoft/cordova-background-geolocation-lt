@@ -601,6 +601,7 @@ Fetch the list of monitored geofences.  Your `callbackFn` will be provided with 
 ```
 bgGeo.getGeofences(function(geofences) {
     for (var n=0,len=geofences.length;n<len;n++) {
+        var geofence = geofences[n];
         console.log("Geofence: ", geofence.identifier, geofence.radius, geofence.latitude, geofence.longitude);
     }
 }, function(error) {
