@@ -24,6 +24,8 @@ module.exports = {
                 return this.onGeofence(success, fail);
             case 'motionchange':
                 return this.onMotionChange(success, fail);
+            case 'log':
+                return this.onLog(success, fail);
         }
     },
 
@@ -216,10 +218,17 @@ module.exports = {
             []);
     },
     onHttp: function(success, failure) {
-      exec(success || function() {},
+        exec(success || function() {},
             failure || function() {},
             'BackgroundGeolocation',
             'addHttpListener',
+            []);
+    },
+    onLog: function(success, failure) {
+        exec(success || function() {},
+            failure || function() {},
+            'BackgroundGeolocation',
+            'addLogListener',
             []);
     },
     /**
@@ -256,8 +265,8 @@ module.exports = {
         if (!config.radius) {
             throw "#addGeofence requires a #radius";
         }
-        if ( (typeof(config.notifyOnEnter) === 'undefined') && (typeof(config.notifyOnExit) === 'undefined') ) {
-            throw "#addGeofence requires at least notifyOnEnter {Boolean} and/or #notifyOnExit {Boolean}";
+        if ( (typeof(config.notifyOnEntry) === 'undefined') && (typeof(config.notifyOnExit) === 'undefined') ) {
+            throw "#addGeofence requires at least notifyOnEntry {Boolean} and/or #notifyOnExit {Boolean}";
         }
         exec(success || function() {},
             failure || function() {},
@@ -333,6 +342,15 @@ module.exports = {
             'BackgroundGeolocation',
             'getCurrentPosition',
             [options]);
+    },
+    getLog: function(success, failure) {
+        var success = success || function() {};
+        var failure = failure || function() {};
+        exec(success,
+            failure,
+            'BackgroundGeolocation',
+            'getLog',
+            []); 
     },
     /**
     * Play a system sound.  This is totally experimental.
