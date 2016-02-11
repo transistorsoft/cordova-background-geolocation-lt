@@ -16,6 +16,7 @@
 @property (nonatomic, strong) NSMutableArray* geofenceListeners;
 @property (nonatomic, strong) NSMutableArray* motionChangeListeners;
 @property (nonatomic, strong) NSMutableArray* httpListeners;
+@property (nonatomic, strong) NSMutableArray* heartbeatListeners;
 
 - (void) configure:(CDVInvokedUrlCommand*)command;
 - (void) start:(CDVInvokedUrlCommand*)command;
@@ -25,6 +26,7 @@
 - (void) changePace:(CDVInvokedUrlCommand*)command;
 - (void) setConfig:(CDVInvokedUrlCommand*)command;
 - (void) addMotionChangeListener:(CDVInvokedUrlCommand*)command;
+- (void) addHeartbeatListener:(CDVInvokedUrlCommand*)command;
 - (void) getStationaryLocation:(CDVInvokedUrlCommand *)command;
 - (void) getLocations:(CDVInvokedUrlCommand *)command;
 - (void) sync:(CDVInvokedUrlCommand *)command;
@@ -37,6 +39,8 @@
 - (void) onGeofence:(CDVInvokedUrlCommand *)command;
 - (void) getCurrentPosition:(CDVInvokedUrlCommand *)command;
 - (void) clearDatabase:(CDVInvokedUrlCommand *) command;
+- (void) insertLocation:(CDVInvokedUrlCommand *) command;
+- (void) getCount:(CDVInvokedUrlCommand *) command;
 - (void) playSound:(CDVInvokedUrlCommand *)command;
 @end
 
