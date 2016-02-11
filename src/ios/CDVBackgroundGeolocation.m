@@ -10,7 +10,7 @@
     NSDictionary *config;
 }
 
-@synthesize syncCallbackId, syncTaskId, locationCallbackId, geofenceListeners, motionChangeListeners, currentPositionListeners, httpListeners;
+@synthesize syncCallbackId, syncTaskId, locationCallbackId, geofenceListeners, motionChangeListeners, currentPositionListeners, httpListeners, heartbeatListeners;
 
 - (void)pluginInitialize
 {
@@ -19,6 +19,7 @@
     // New style:  Use blocks instead of NSNotificationCenter
     bgGeo.locationChangedBlock  = [self createLocationChangedHandler];
     bgGeo.motionChangedBlock    = [self createMotionChangedHandler];
+    bgGeo.heartbeatBlock        = [self createHeartbeatHandler];
     bgGeo.geofenceBlock         = [self createGeofenceHandler];
     bgGeo.syncCompleteBlock     = [self createSyncCompleteHandler];
     bgGeo.httpResponseBlock     = [self createHttpResponseHandler];
@@ -180,6 +181,14 @@
     [motionChangeListeners addObject:command.callbackId];
 }
 
+- (void) addHeartbeatListener:(CDVInvokedUrlCommand*)command
+{
+    if (heartbeatListeners == nil) {
+        heartbeatListeners = [[NSMutableArray alloc] init];
+    }
+    [heartbeatListeners addObject:command.callbackId];
+}
+
 - (void) addGeofence:(CDVInvokedUrlCommand*)command
 {
     NSDictionary *cfg  = [command.arguments objectAtIndex:0];
@@ -307,6 +316,37 @@
     [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
 }
 
+-(void) insertLocation:(CDVInvokedUrlCommand*)command
+{
+    NSDictionary *params = [command.arguments objectAtIndex: 0];
+    NSLog(@"- CDVBackgroundGeolocation insertLocation %@", params);
+    [self.commandDelegate runInBackground:^{
+        BOOL success = [bgGeo insertLocation: params];
+        CDVPluginResult* result;
+        if (success) {
+            result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK];
+        } else {
+            result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR];
+        }
+        [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
+    }];
+}
+
+-(void) getCount:(CDVInvokedUrlCommand*)command
+{
+    NSLog(@"- CDVBackgroundGeolocation getCount");
+    [self.commandDelegate runInBackground:^{
+        int count = [bgGeo getCount];
+        CDVPluginResult* result;
+        if (count >= 0) {
+            result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsInt: count];
+        } else {
+            result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR];
+        }
+        [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
+    }];
+}
+
 /**
  * location handler from BackgroundGeolocation
  */
@@ -381,6 +421,24 @@
             [self.commandDelegate runInBackground:^{
                 [self.commandDelegate sendPluginResult:result callbackId:callbackId];
             }];       
+        }
+    };
+}
+
+-(void (^)(int shakeCount, CLLocation *location)) createHeartbeatHandler {
+    return ^(int shakeCount, CLLocation *location) {
+
+        NSDictionary *params = @{
+            @"shakes": @(shakeCount),
+            @"location": [bgGeo locationToDictionary:location]
+        };
+
+        for (NSString *callbackId in self.heartbeatListeners) {
+            CDVPluginResult *result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:params];
+            [result setKeepCallbackAsBool:YES];
+            [self.commandDelegate runInBackground:^{
+                [self.commandDelegate sendPluginResult:result callbackId:callbackId];
+            }];
         }
     };
 }
