@@ -1,9 +1,20 @@
+
+# Change Log
+
+## [1.4.1] - 2016-03-20
+- [Fixed] iOS Issue with timers not running on main-thread.
+- [Fixed] iOS Issue with acquriring stationary-location on a stale location.  Ensure the selected stationary-location is no older than 1s.
+- [Fixed] iOS Removed some log messages appearing when `{debug: false}`
+
+## [1.4.0] - 2016-03-08
+
+## [1.3.0]
+
+- [Changed] Upgrade `emailLog` method to attach log as email-attachment rather than rendering to email-body.  The result of `#getState` is now rendered to the 
+
 ##0.6.4
 
-- pin google-play-services at 7.5.0 to help people suffering from Google Play Services bug
 - Tweak stop-detection system.  add `#stopDetectionDelay`
-
-![](https://camo.githubusercontent.com/76f20a03f04f455f8219dbbca2a40631cd009fb4/68747470733a2f2f646c2e64726f70626f7875736572636f6e74656e742e636f6d2f752f323331393735352f636f72646f76612d6261636b67726f756e642d67656f6c6f636169746f6e2f696f732d73746f702d646574656374696f6e2d74696d696e672e706e67)
 
 ## 0.6.3
 - Introduce accelerometer-base stop-detection for ios.
