@@ -4,6 +4,7 @@
 - [Fixed] ios `stopOnTerminate` was defaulting to `false`.  Docs say default is `true`.
 - [Fixed] ios `useSignificantChangesOnly` was broken.
 - [Added] Add odometer to ios location JSON schema
+- [Added] ios Log network reachability flags on connection-type changes.
 
 ## [1.4.1] - 2016-03-20
 - [Fixed] iOS Issue with timers not running on main-thread.
