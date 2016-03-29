@@ -58,6 +58,7 @@ bgGeo.setConfig(function() {
 | [`batchSync`](#param-string-batchsync-false) | `Boolean` | Optional | `false` | Default is `false`.  If you've enabled HTTP feature by configuring an `#url`, `batchSync: true` will POST all the locations currently stored in native SQLite datbase to your server in a single HTTP POST request.  With `batchSync: false`, an HTTP POST request will be initiated for **each** location in database. |
 | [`maxBatchSize`](#param-integer-maxbatchsize-undefined) | `Integer` | Optional | `undefined` | If you've enabled HTTP feature by configuring an `#url` and `batchSync: true`, this parameter will limit the number of records attached to each batch.  If the current number of records exceeds the `maxBatchSize`, multiple HTTP requests will be generated until the location queue is empty. |
 | [`maxDaysToPersist`](#param-integer-maxdaystopersist) | `Integer` | Optional | `1` |  Maximum number of days to store a geolocation in plugin's SQLite database when your server fails to respond with `HTTP 200 OK`.  The plugin will continue attempting to sync with your server until `maxDaysToPersist` when it will give up and remove the location from the database. |
+| [`maxRecordsToPersist`](#param-integer-maxrecordstopersist) | `Integer` | Optional | `null` |  Maximum number of records to persist in plugin's SQLite database.|
 
 ## Application Options
 
@@ -272,6 +273,10 @@ Optional HTTP params sent along in HTTP request to above ```#url```.
 ####`@param {Integer} maxDaysToPersist`
 
 Maximum number of days to store a geolocation in plugin's SQLite database when your server fails to respond with ```HTTP 200 OK```.  The plugin will continue attempting to sync with your server until ```maxDaysToPersist``` when it will give up and remove the location from the database.
+
+####`@param {Integer} maxRecordsToPersist`
+
+Maximum number of records to persist in plugin's SQLite database.
 
 # Application Options
 
