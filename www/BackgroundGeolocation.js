@@ -161,6 +161,11 @@ module.exports = {
             if (!isMoving) {
                 me.stationaryLocation = location;
             }
+			
+			// Transform timestamp to Date instance.
+            if (location.timestamp) {
+                location.timestamp = new Date(location.timestamp);
+            }
 
             me._runBackgroundTask(taskId, function() {
                 success.call(me, isMoving, location, taskId);
@@ -303,6 +308,27 @@ module.exports = {
             [config]);
     },
     /**
+    * add a list of geofences
+    */
+    addGeofences: function(geofences, success, failure) {
+        geofences = geofences || [];
+        exec(success || function() {},
+            failure || function() {},
+            'BackgroundGeolocation',
+            'addGeofences',
+            [geofences]);
+    },
+    /**
+    * Remove all geofences
+    */
+    removeGeofences: function(success, failure) {
+        exec(success || function() {},
+            failure || function() {},
+            'BackgroundGeolocation',
+            'removeGeofences',
+            []);  
+    },
+    /**
     * remove a geofence
     * @param {String} identifier
     */
@@ -380,6 +406,16 @@ module.exports = {
             'getLog',
             []); 
     },
+    emailLog: function(email, success, failure) {
+        var success = success || function() {};
+        var failure = failure || function() {};
+        exec(success,
+            failure,
+            'BackgroundGeolocation',
+            'emailLog',
+            [email]); 
+    },
+
     /**
     * Play a system sound.  This is totally experimental.
     * iOS http://iphonedevwiki.net/index.php/AudioServices

@@ -34,13 +34,17 @@
 - (void) getOdometer:(CDVInvokedUrlCommand *)command;
 - (void) resetOdometer:(CDVInvokedUrlCommand *)command;
 - (void) addGeofence:(CDVInvokedUrlCommand *)command;
+- (void) addGeofences:(CDVInvokedUrlCommand *)command;
 - (void) removeGeofence:(CDVInvokedUrlCommand *)command;
+- (void) removeGeofences:(CDVInvokedUrlCommand *)command;
 - (void) getGeofences:(CDVInvokedUrlCommand *)command;
 - (void) onGeofence:(CDVInvokedUrlCommand *)command;
 - (void) getCurrentPosition:(CDVInvokedUrlCommand *)command;
 - (void) clearDatabase:(CDVInvokedUrlCommand *) command;
 - (void) insertLocation:(CDVInvokedUrlCommand *) command;
 - (void) getCount:(CDVInvokedUrlCommand *) command;
+- (void) getLog:(CDVInvokedUrlCommand *) command;
+- (void) emailLog:(CDVInvokedUrlCommand*) command;
 - (void) playSound:(CDVInvokedUrlCommand *)command;
 @end
 
