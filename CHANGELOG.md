@@ -9,7 +9,8 @@
 in plugin's SQLite database.
 - [Added] API methods `#addGeofences` (for adding a list-of-geofences), `#removeGeofences`
 - [Changed] The plugin will no longer delete geofences when `#stop` is called; it will merely stop monitoring them.  When the plugin is `#start`ed again, it will start monitoringt any geofences it holds in memory.  To completely delete geofences, use new method `#removeGeofences`.
-
+- [Fixed] iOS battery `is_charging` was rendering as `1/0` instead of boolean `true/false`
+- 
 ## [1.4.1] - 2016-03-20
 - [Fixed] iOS Issue with timers not running on main-thread.
 - [Fixed] iOS Issue with acquriring stationary-location on a stale location.  Ensure the selected stationary-location is no older than 1s.
