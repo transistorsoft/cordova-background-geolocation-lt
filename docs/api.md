@@ -52,6 +52,7 @@ bgGeo.setConfig(function() {
 |---|---|---|---|---|
 | [`url`](#param-string-url) | `String` | Optional | - | Your server url where you wish to HTTP POST recorded locations to |
 | [`params`](#param-object-params) | `Object` | Optional | `{}` | Optional HTTP params sent along in HTTP request to above `#url` |
+| [`extras`](#param-object-extras) | `Object` | Optional | | Optional `{}` to attach to each recorded location |
 | [`headers`](#param-object-headers) | `Object` | Optional | `{}` | Optional HTTP headers sent along in HTTP request to above `#url` |
 | [`method`](#param-string-method-post) | `String` | Optional | `POST` | The HTTP method.  Defaults to `POST`.  Some servers require `PUT`.
 | [`autoSync`](#param-string-autosync-true) | `Boolean` | Optional | `true` | If you've enabeld HTTP feature by configuring an `#url`, the plugin will attempt to HTTP POST each location to your server **as it is recorded**.  If you set `autoSync: false`, it's up to you to **manually** execute the `#sync` method to initate the HTTP POST (**NOTE** The plugin will continue to persist **every** recorded location in the SQLite database until you execute `#sync`). |
@@ -101,7 +102,9 @@ bgGeo.setConfig(function() {
 | [`resetOdometer`](#resetodometercallbackfn-failurefn) | `callbackFn` | Reset the **odometer** to `0`.  The plugin never automatically resets the odometer -- this is **up to you** |
 | [`playSound`](#playsoundsoundid) | `soundId` | Here's a fun one.  The plugin can play a number of OS system sounds for each platform.  For [IOS](http://iphonedevwiki.net/index.php/AudioServices) and [Android](http://developer.android.com/reference/android/media/ToneGenerator.html).  I offer this API as-is, it's up to you to figure out how this works. |
 | [`addGeofence`](#addgeofenceconfig-callbackfn-failurefn) | `{config}` | Adds a geofence to be monitored by the native plugin. Monitoring of a geofence is halted after a crossing occurs.|
+| [`addGeofences`](#addgeofencesgeofences-callbackfn-failurefn) | `{geofences}` | Adds a list geofences to be monitored by the native plugin. Monitoring of a geofence is halted after a crossing occurs.|
 | [`removeGeofence`](#removegeofenceidentifier-callbackfn-failurefn) | `identifier` | Removes a geofence identified by the provided `identifier` |
+| [`removeGeofences`](#removegeofences-callbackfn-failurefn) |  | Removes all geofences |
 | [`getGeofences`](#getgeofencescallbackfn-failurefn) | `callbackFn` | Fetch the list of monitored geofences. Your callbackFn will be provided with an Array of geofences. If there are no geofences being monitored, you'll receive an empty `Array []`.|
 | [`getLog`](#getlogcallbackfn) | `callbackFn` | **Android ONLY**.  Fetch the entire contents of the current Android circular log and return it as a String.|
 
@@ -269,6 +272,20 @@ Optional HTTP params sent along in HTTP request to above ```#url```.
 ####`@param {Object} headers`
 
 Optional HTTP params sent along in HTTP request to above ```#url```.
+
+####`@param {Object} extras`
+
+Optional arbitrary key/value `{}` to attach to each recorded location
+
+Eg: Every recorded location will have the following `extras` appended:
+```
+bgGeo.configure(success, fail, {
+  .
+  .
+  .
+  extras: {route_id: 1234}
+});
+```
 
 ####`@param {Integer} maxDaysToPersist`
 
@@ -663,6 +680,35 @@ bgGeo.addGeofence({
 });
 ```
 
+####`addGeofences(geofences, callbackFn, failureFn)`
+Adds a list of geofences to be monitored by the native plugin.  Monitoring of a geofence is halted after a crossing occurs.  The `geofences` param is an `Array` of geofence Objects `{}` with the following params:
+
+######@config {String} identifier The name of your geofence, eg: "Home", "Office"
+######@config {Float} radius The radius (meters) of the geofence.  In practice, you should make this >= 100 meters.
+######@config {Float} latitude Latitude of the center-point of the circular geofence.
+######@config {Float} longitude Longitude of the center-point of the circular geofence.
+######@config {Boolean} notifyOnExit Whether to listen to EXIT events
+######@config {Boolean} notifyOnEntry Whether to listen to ENTER events
+######@config {Boolean} notifyOnDwell (Android only) Whether to listen to DWELL events
+######@config {Integer milliseconds} loiteringDelay (Android only) When `notifyOnDwell` is `true`, the delay before DWELL event is fired after entering a geofence.
+
+```
+bgGeo.addGeofences([{
+    identifier: "Home",
+    radius: 150,
+    latitude: 45.51921926,
+    longitude: -73.61678581,
+    notifyOnEntry: true,
+    notifyOnExit: false,
+    notifyOnDwell: true,
+    loiteringDelay: 30000   // <-- 30 seconds
+}], function() {
+    console.log("Successfully added geofence");
+}, function(error) {
+    console.warn("Failed to add geofence", error);
+});
+```
+
 ####`removeGeofence(identifier, callbackFn, failureFn)`
 Removes a geofence having the given `{String} identifier`.
 
@@ -673,6 +719,20 @@ Removes a geofence having the given `{String} identifier`.
 ```
 bgGeo.removeGeofence("Home", function() {
     console.log("Successfully removed geofence");
+}, function(error) {
+    console.warn("Failed to remove geofence", error);
+});
+```
+
+####`removeGeofences(callbackFn, failureFn)`
+Removes all geofences.
+
+######@config {Function} callbackFn successfully removed geofences.
+######@config {Function} failureFn failed to remove geofences
+
+```
+bgGeo.removeGeofences(function() {
+    console.log("Successfully removed alll geofences");
 }, function(error) {
     console.warn("Failed to remove geofence", error);
 });
