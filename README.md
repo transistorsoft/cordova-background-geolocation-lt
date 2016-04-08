@@ -19,13 +19,13 @@ This plugin leverages Cordova/PhoneGap's [require/define functionality used for 
 
 #### From npm 
 ```bash
-    cordova plugin add cordova-plugin-background-geolocation-lt
+$ cordova plugin add cordova-plugin-background-geolocation-lt
 ```
 
 #### From master (latest, greatest.)
 
 ```
-   cordova plugin add https://github.com/transistorsoft/cordova-background-geolocation-lt.git
+$ cordova plugin add https://github.com/transistorsoft/cordova-background-geolocation-lt.git
 ```
 
 #### Installing a tagged version.
@@ -33,7 +33,7 @@ This plugin leverages Cordova/PhoneGap's [require/define functionality used for 
 This plugin has tagged stable versions.  To install a particular version, append a version code to the github url prefixed by `#`.
 
 ```
-    cordova plugin add <git.url>#0.6.0
+$ cordova plugin add <git.url>#1.5.0
 ```
 
 ![](https://dl.dropboxusercontent.com/u/2319755/cordova-background-geolocaiton/screenshot-github-tagged-branches.png)
