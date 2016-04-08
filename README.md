@@ -17,6 +17,7 @@ This plugin leverages Cordova/PhoneGap's [require/define functionality used for 
 
 ## Installing the plugin ##
 
+
 #### From master (latest, greatest.)
 
 ```
