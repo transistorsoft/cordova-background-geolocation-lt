@@ -15,7 +15,7 @@ Cross-platform background geolocation module for Cordova with battery-saving **"
 
 #### From npm 
 ```bash
-$ cordova plugin add cordova-plugin-background-geolocation-lt
+$ cordova plugin add cordova-background-geolocation-lt
 ```
 #### Phonegap Build
 ```xml
