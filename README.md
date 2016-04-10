@@ -116,12 +116,17 @@ function onDeviceReady() {
             "auth_token": "maybe_your_server_authenticates_via_token_YES?"
         }
     });
-
-    // Turn ON the background-geolocation system.  The user will be tracked whenever they suspend the app.
-    bgGeo.start();
-
-    // If you wish to turn OFF background-tracking, call the #stop method.
-    // bgGeo.stop()
+    
+    // You might create a toggle button to start/stop the plugin.
+    function onToggleEnabled(value) {
+        if (value) {
+          // Begin tracking.  Plugin will fetch the current-position and enter its "stationary" mode.
+          bgGeo.start();
+        } else {
+          // Cease all tracking.  Turn off location-services.
+          bgGeo.stop();
+        }
+    }
 }
 
 ```
