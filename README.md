@@ -38,11 +38,11 @@ $ cordova plugin add <git.url>#1.5.0
 
 ![](https://dl.dropboxusercontent.com/u/2319755/cordova-background-geolocaiton/screenshot-github-tagged-branches.png)
 
-# Using the plugin
+## Using the plugin
 
 The plugin creates the object `window.BackgroundGeolocation`.  See [API Documentation](docs/api.md) for details
 
-# Documentation
+## Documentation
 - [API Documentation](docs/api.md)
 - [Location Data Schema](../../wiki/Location-Data-Schema)
 - [Error Codes](../../wiki/Location-Error-Codes)
@@ -50,7 +50,7 @@ The plugin creates the object `window.BackgroundGeolocation`.  See [API Document
 - [Geofence Features](../../wiki/Geofence-Features)
 - [Background Tasks](../../wiki/Background-Tasks)
 
-# Example
+## Example
 
 ```
 
