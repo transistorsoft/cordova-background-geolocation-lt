@@ -21,6 +21,10 @@ This plugin leverages Cordova/PhoneGap's [require/define functionality used for 
 ```bash
 $ cordova plugin add cordova-plugin-background-geolocation-lt
 ```
+#### Phonegap Build
+```xml
+  <plugin name="cordova-background-geolocation-lt" source="npm" />
+```
 
 #### From master (latest, greatest.)
 
