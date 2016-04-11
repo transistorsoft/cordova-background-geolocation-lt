@@ -11,7 +11,7 @@
 
 @property (nonatomic, strong) NSString* syncCallbackId;
 @property (nonatomic) UIBackgroundTaskIdentifier syncTaskId;
-@property (nonatomic, strong) NSString* locationCallbackId;
+@property (nonatomic, strong) NSMutableArray* locationListeners;
 @property (nonatomic, strong) NSMutableArray* currentPositionListeners;
 @property (nonatomic, strong) NSMutableArray* geofenceListeners;
 @property (nonatomic, strong) NSMutableArray* motionChangeListeners;
@@ -30,6 +30,7 @@
 - (void) getStationaryLocation:(CDVInvokedUrlCommand *)command;
 - (void) getLocations:(CDVInvokedUrlCommand *)command;
 - (void) sync:(CDVInvokedUrlCommand *)command;
+- (void) addLocationListener:(CDVInvokedUrlCommand *)command;
 - (void) addHttpListener:(CDVInvokedUrlCommand *)command;
 - (void) getOdometer:(CDVInvokedUrlCommand *)command;
 - (void) resetOdometer:(CDVInvokedUrlCommand *)command;

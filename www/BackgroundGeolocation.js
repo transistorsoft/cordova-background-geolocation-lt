@@ -18,14 +18,14 @@ module.exports = {
     config: {},
     on: function(event, success, fail) {
         switch (event) {
+            case 'location':
+                return this.onLocation(success, fail);
             case 'http':
                 return this.onHttp(success, fail);
             case 'geofence':
                 return this.onGeofence(success, fail);
             case 'motionchange':
                 return this.onMotionChange(success, fail);
-            case 'log':
-                return this.onLog(success, fail);
             case 'heartbeat':
                 return this.onHeartbeat(success, fail);
         }
@@ -34,26 +34,19 @@ module.exports = {
     /**
     * @private {Error} error
     */
-    configure: function(success, failure, config) {
-        var me = this;
+    configure: function(config, success, failure) {
+        // Check for new method signature.
+        if (typeof(config) === 'function') {
+            console.warn('Warning: The method signature for BackgroundGeolocation#configure has changed!  Instead of providing the location-callback, error-callback to this method, you should now use the dedicated #onLocation method to provide these callabcks.  The #success, #failure callbacks provided to #configure will now fire to signal when the plugin is ready or failed to configure.  Please see the new documentation for #configure method and modify your code to respect the new signature ASAP.');
+            this.onLocation(config, success);
+            config  = failure || {};
+            success = function() {};
+            failure = function() {};
+        }
         config = config || {};
         this.config = config;
-        success = success || function(location, taskId) {
-            me.finish(taskId);
-        };
         
-        var mySuccess = function(params) {
-            var location    = params.location || params;
-            var taskId      = params.taskId || 'task-id-undefined';
-            // Transform timestamp to Date instance.
-            if (location.timestamp) {
-                location.timestamp = new Date(location.timestamp);
-            }
-            me._runBackgroundTask(taskId, function() {
-                success.call(this, location, taskId);
-            });
-        }
-        exec(mySuccess,
+        exec(success || function() {},
              failure || function() {},
              'BackgroundGeolocation',
              'configure',
@@ -119,13 +112,14 @@ module.exports = {
             'changePace',
             [isMoving]);
     },
-    /**
-    * @param {Integer} stationaryRadius
-    * @param {Integer} desiredAccuracy
-    * @param {Integer} distanceFilter
-    * @param {Integer} timeout
-    */
-    setConfig: function(success, failure, config) {
+    setConfig: function(config, success, failure) {
+        if (typeof(config) === 'function') {
+            console.warn('The signature for #setConfig has changed:  You now provide the {} as the 1st parameter.  ie: setConfig(config, success, failure');
+            var _config = failure, _success = config, _failure = success;
+            config  = _config;
+            success = _success;
+            failure = _failure;
+        }
         this._apply(this.config, config);
         exec(success || function() {},
             failure || function() {},
@@ -142,6 +136,30 @@ module.exports = {
             'BackgroundGeolocation',
             'getStationaryLocation',
             []);
+    },
+    onLocation: function(success, failure) {
+        if (typeof(success) !== 'function') {
+            throw "A callback must be provided";
+        }
+        
+        var me = this;
+        var mySuccess = function(params) {
+            var location    = params.location || params;
+            var taskId      = params.taskId || 'task-id-undefined';
+            // Transform timestamp to Date instance.
+            if (location.timestamp) {
+                location.timestamp = new Date(location.timestamp);
+            }
+            me._runBackgroundTask(taskId, function() {
+                success.call(this, location, taskId);
+            });
+        }
+        exec(mySuccess,
+             failure || function() {},
+             'BackgroundGeolocation',
+             'addLocationListener',
+             []
+        );
     },
     /**
     * Add a movement-state-change listener.  Whenever the devices enters "stationary" or "moving" mode, your #success callback will be executed with #location param containing #radius of region
@@ -161,8 +179,8 @@ module.exports = {
             if (!isMoving) {
                 me.stationaryLocation = location;
             }
-			
-			// Transform timestamp to Date instance.
+            
+            // Transform timestamp to Date instance.
             if (location.timestamp) {
                 location.timestamp = new Date(location.timestamp);
             }
