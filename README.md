@@ -11,16 +11,21 @@ Cross-platform background geolocation module for Cordova with battery-saving **"
 ![Home](https://www.dropbox.com/s/4cggjacj68cnvpj/screenshot-iphone5-geofences-framed.png?dl=1)
 ![Settings](https://www.dropbox.com/s/mmbwgtmipdqcfff/screenshot-iphone5-settings-framed.png?dl=1)
 
-Follows the [Cordova Plugin spec](http://cordova.apache.org/docs/en/3.0.0/plugin_ref/spec), so that it works with [Plugman](https://github.com/apache/cordova-plugman).
-
-This plugin leverages Cordova/PhoneGap's [require/define functionality used for plugins](http://simonmacdonald.blogspot.ca/2012/08/so-you-wanna-write-phonegap-200-android.html).
-
 ## Installing the plugin ##
+
+#### From npm 
+```bash
+$ cordova plugin add cordova-background-geolocation-lt
+```
+#### Phonegap Build
+```xml
+  <plugin name="cordova-background-geolocation-lt" source="npm" />
+```
 
 #### From master (latest, greatest.)
 
 ```
-   cordova plugin add https://github.com/transistorsoft/cordova-background-geolocation-lt.git
+$ cordova plugin add https://github.com/transistorsoft/cordova-background-geolocation-lt.git
 ```
 
 #### Installing a tagged version.
@@ -28,12 +33,12 @@ This plugin leverages Cordova/PhoneGap's [require/define functionality used for 
 This plugin has tagged stable versions.  To install a particular version, append a version code to the github url prefixed by `#`.
 
 ```
-    cordova plugin add <git.url>#0.6.0
+$ cordova plugin add <git.url>#1.5.0
 ```
 
 ![](https://dl.dropboxusercontent.com/u/2319755/cordova-background-geolocaiton/screenshot-github-tagged-branches.png)
 
-## Using the plugin ##
+## Using the plugin
 
 The plugin creates the object `window.BackgroundGeolocation`.  See [API Documentation](docs/api.md) for details
 
