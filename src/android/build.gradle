@@ -1,0 +1,13 @@
+repositories{    
+  jcenter()
+  flatDir{
+      dirs 'src/android/libs'
+   }
+}
+
+dependencies {
+    compile 'com.google.android.gms:play-services-location:+'
+    compile 'de.greenrobot:eventbus:3.0.0-beta1'
+    compile 'com.android.volley:volley:1.0.0'
+    compile(name:'tslocationmanager', ext:'aar')
+}

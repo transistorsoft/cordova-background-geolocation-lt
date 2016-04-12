@@ -29,7 +29,6 @@
     
      <platform name="ios">
         <!-- required background modes:  App registers for location updates -->
-        
         <config-file target="*-Info.plist" parent="NSLocationAlwaysUsageDescription">
             <string>TSLocationManager requires background location tracking</string>
         </config-file>
@@ -52,6 +51,44 @@
         <framework src="src/ios/TSLocationManager.framework" custom="true" />
         <source-file src="src/ios/CDVBackgroundGeolocation.m" />
         <header-file src="src/ios/CDVBackgroundGeolocation.h" />
-     </platform>          
+     </platform>
 
+     <!-- android.  NOTE: Requires license key -->
+    <platform name="android">
+        <framework src="src/android/build.gradle" custom="true" type="gradleReference" />
+        <resource-file src="src/android/libs/tslocationmanager.aar" target="src/android/libs/tslocationmanager.aar" />
+
+        <source-file src="src/android/CDVBackgroundGeolocation.java" target-dir="src/com/transistorsoft/cordova/bggeo" />
+        <source-file src="src/android/BootReceiver.java" target-dir="src/com/transistorsoft/cordova/bggeo" />
+
+        <config-file target="AndroidManifest.xml" parent="/manifest/application">
+            <service android:name="com.transistorsoft.locationmanager.BackgroundGeolocationService" />
+            <service android:name="com.transistorsoft.locationmanager.LocationService" />
+            <service android:name="com.transistorsoft.locationmanager.ActivityRecognitionService" />
+            <service android:name="com.transistorsoft.locationmanager.GeofenceService" />
+            <receiver android:name="com.transistorsoft.cordova.bggeo.BootReceiver" android:enabled="true" android:exported="false">
+                <intent-filter>
+                    <action android:name="android.intent.action.BOOT_COMPLETED"/>
+                </intent-filter>
+            </receiver>
+        </config-file>
+
+        <config-file target="AndroidManifest.xml" parent="/manifest">
+            <uses-permission android:name="android.permission.GET_TASKS" />
+            <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+            <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+            <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+            <uses-permission android:name="android.permission.ACCESS_LOCATION_EXTRA_COMMANDS" />
+            <uses-permission android:name="android.permission.INTERNET" />
+            <uses-permission android:name="android.permission.WAKE_LOCK" />
+            <uses-permission android:name="com.google.android.gms.permission.ACTIVITY_RECOGNITION" />
+            <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+        </config-file>
+        
+        <config-file target="res/xml/config.xml" parent="/*">
+            <feature name="BackgroundGeolocation">
+                <param name="android-package" value="com.transistorsoft.cordova.bggeo.CDVBackgroundGeolocation"/>
+            </feature>
+        </config-file> 
+     </platform>
 </plugin>
