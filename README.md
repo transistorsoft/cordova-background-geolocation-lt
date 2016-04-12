@@ -40,10 +40,10 @@ $ cordova plugin add <git.url>#1.5.0
 
 ## Using the plugin
 
-The plugin creates the object `window.BackgroundGeolocation`.  See [API Documentation](docs/api.md) for details
+The plugin creates the object `window.BackgroundGeolocation`.  See [API Documentation](docs) for details
 
 ## Documentation
-- [API Documentation](docs/api.md)
+- [API Documentation](docs)
 - [Location Data Schema](../../wiki/Location-Data-Schema)
 - [Error Codes](../../wiki/Location-Error-Codes)
 - [Debugging Sounds](../../wiki/Debug-Sounds)
