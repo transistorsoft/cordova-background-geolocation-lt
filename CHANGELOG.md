@@ -2,6 +2,8 @@
 # Change Log
 
 ## [Unreleased]
+
+## [1.5.1] - 2016-04-12
 - [Added] ios logic to handle being launched in the background (by a background-fetch event, for example).  When launched in the background, iOS will essentially do a `changePace(true)` upon itself and let the stop-detection system determine engage stationary-mode as detected.
 - [Changed] ios halt stop-detection distance was using `distanceFilter`; changed to use `stationaryRadius`.  This effects users using the accelerometer-based stop-detection system:  after stop is detected, the device must move `stationaryRadius` meters away from location where stop was detected.
 - [Changed] When `maxRecordsToPersist == 0`, don't persist any record.
