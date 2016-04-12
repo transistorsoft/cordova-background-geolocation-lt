@@ -1,11 +1,13 @@
 
 # Change Log
+
 ## [Unreleased]
 - [Added] ios logic to handle being launched in the background (by a background-fetch event, for example).  When launched in the background, iOS will essentially do a `changePace(true)` upon itself and let the stop-detection system determine engage stationary-mode as detected.
 - [Changed] ios halt stop-detection distance was using `distanceFilter`; changed to use `stationaryRadius`.  This effects users using the accelerometer-based stop-detection system:  after stop is detected, the device must move `stationaryRadius` meters away from location where stop was detected.
 - [Changed] When `maxRecordsToPersist == 0`, don't persist any record.
 - [Added] Implement `startOnBoot` param for iOS.  iOS always ignored `startOnBoot`.  If you set `startOnBoot: false` now, iOS will not begin tracking when launched in background after device is rebooted (eg: from a background-fetch event, geofence exit or significant-change event)
 - [Changed] Modified the method signature of `#configure`.  The config `{}` will now be the 1st param and the `callbackFn` will now signal successful configuration.  The `locationCallback` and `locationErrorCallback` must now be provided with a separate event-listener `#onLocation`.
+- [Added] Imported Android demo code so that users can test the Android plugin using the SampleApp `bundle ID` and `license`
 
 ## [1.5.0] - 2016-04-04
 - [Fixed] ios `stopOnTerminate` was defaulting to `false`.  Docs say default is `true`.
