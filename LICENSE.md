@@ -1,5 +1,9 @@
 
 #Cordova Background Geolocation
+- Copyright (c) 2015, Transistor Software (9224-2932 Quebec Inc)
+- All rights reserved.
+- sales@transistorsoft.com
+- http://transistorsoft.com
 
 ## Terms and conditions
 
@@ -66,8 +70,4 @@
 
 11. Governing Law, Jurisdiction:  Licensee hereby agrees not to initiate class-action lawsuits against Licensor in relation to this license and to compensate Licensor for any legal fees, cost or attorney fees should any claim brought by Licensee against Licensor be denied, in part or in full.
 
-- Copyright (c) 2015, Transistor Software (9224-2932 Quebec Inc)
-- All rights reserved.
-- sales@transistorsoft.com
-- http://transistorsoft.com
 
