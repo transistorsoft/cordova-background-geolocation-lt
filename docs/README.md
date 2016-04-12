@@ -96,7 +96,7 @@ bgGeo.setConfig({
 
 | Method Name | Arguments | Notes
 |---|---|---|
-| [`configure`](#configurelocationcallback-failurecallback-config) | `successFn`, `failureFn`, `{config}` | Configures the plugin's parameters (@see following Config section for accepted config params. The `success` callback will be executed after the plugin has successfully configured and provided with the current `state` object. |
+| [`configure`](#configureconfig-success-failure) | `successFn`, `failureFn`, `{config}` | Configures the plugin's parameters (@see following Config section for accepted config params. The `success` callback will be executed after the plugin has successfully configured and provided with the current `state` object. |
 | [`setConfig`](#setconfigconfig-successfn-failurefn) | `{config}`, `successFn`, `failureFn` | Re-configure the plugin with new values |
 | [`start`](#startsuccessfn-failurefn) | `callbackFn`| Enable location tracking.  Supplied `callbackFn` will be executed when tracking is successfully engaged.  This is the plugin's power **ON** button.  The plugin will initially start into its **stationary** state, fetching an initial location before turning off location services.  Android will be monitoring its **Activity Recognition System** while iOS will create a stationary geofence around the current location. |
 | [`stop`](#stopsuccessfn-failurefn) | `callbackFn` | Disable location tracking.  Supplied `callbackFn` will be executed when tracking is successfully halted.  This is the plugin's power **OFF** button. |
