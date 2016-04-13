@@ -20,7 +20,7 @@ bgGeo.setConfig({
     distanceFilter: 10
 }, function() {
     console.log('set config success');
-}, {
+}, function() {
     console.log('failed to setConfig');
 });
 
