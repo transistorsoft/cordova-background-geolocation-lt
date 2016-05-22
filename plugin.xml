@@ -20,7 +20,8 @@
 
     <!-- Cordova 5 npm-style plugin referernce.  Comment this out if you're not using Cordova 5 -->
     <dependency id="cordova-plugin-dialogs" />
-
+    <dependency id="cordova-plugin-background-fetch" />
+    
     <js-module src="www/BackgroundGeolocation.js" name="BackgroundGeolocation">
         <clobbers target="window.BackgroundGeolocation" />
     </js-module>
