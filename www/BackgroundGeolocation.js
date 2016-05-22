@@ -28,6 +28,8 @@ module.exports = {
                 return this.onMotionChange(success, fail);
             case 'heartbeat':
                 return this.onHeartbeat(success, fail);
+            case 'schedule':
+                return this.onSchedule(success, fail);
         }
     },
 
@@ -52,6 +54,26 @@ module.exports = {
              'configure',
              [config]
         );
+        // Detect if BackgroundFetch plugin is available and provide a default configuration for it too,
+        //  otherwise the fetchCompletionHander will never be called and iOS will kill your app.
+        if (window.BackgroundFetch && !window.BackgroundFetch.config) {
+            this.configureBackgroundFetch(config);
+        }
+    },
+    configureBackgroundFetch: function(config) {
+        var Fetch = window.BackgroundFetch;
+        
+        var callback = function() {
+            // Give it 10s before finish.
+            setTimeout(function() {
+                Fetch.finish();
+            }, 10000);
+        };
+        var failure = function() {};
+
+        Fetch.configure(callback, failure, {
+            stopOnTerminate: config.stopOnTerminate || true
+        });
     },
     getState: function(success, failure) {
         exec(success || function() {},
@@ -66,6 +88,20 @@ module.exports = {
              failure || function() {},
              'BackgroundGeolocation',
              'start',
+             []);
+    },
+    startSchedule: function(success, failure) {
+        exec(success || function() {},
+             failure || function() {},
+             'BackgroundGeolocation',
+             'startSchedule',
+             []);
+    },
+    stopSchedule: function(success, failure) {
+        exec(success || function() {},
+             failure || function() {},
+             'BackgroundGeolocation',
+             'stopSchedule',
              []);
     },
     stop: function(success, failure, config) {
@@ -200,6 +236,13 @@ module.exports = {
             failure || function() {},
             'BackgroundGeolocation',
             'addHeartbeatListener',
+            []);
+    },
+    onSchedule: function(success, failure) {
+        exec(success || function() {},
+            failure || function() {},
+            'BackgroundGeolocation',
+            'addScheduleListener',
             []);
     },
     getLocations: function(success, failure) {

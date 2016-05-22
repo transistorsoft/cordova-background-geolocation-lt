@@ -6,7 +6,7 @@
 	<dict>
 		<key>Headers/LocationDAO.h</key>
 		<data>
-		HaOBO/PRfP53EGgHdc+FQUnnC+o=
+		vK1YvglQmvMBZDB34H+0wrDbxgo=
 		</data>
 		<key>Headers/LocationManager.h</key>
 		<data>
@@ -14,15 +14,15 @@
 		</data>
 		<key>Headers/SOMotionDetector.h</key>
 		<data>
-		jLVvw3sOSeWn4pnNDpVDF70sy2E=
+		uXP051XOVlY2uAlauGoiCMeW86Y=
 		</data>
 		<key>Headers/Settings.h</key>
 		<data>
-		RrrWno+xiMcLzYadZpBXAsUpqy8=
+		yoxXao5Zj55wdOILFphXRENaNbU=
 		</data>
 		<key>Headers/TSLocationManager.h</key>
 		<data>
-		cxYSmlkRPJ3O1UnE/dgpZQqytNw=
+		pBKN3f9EZWEXW9201MDVrYquL2w=
 		</data>
 		<key>Headers/TSLogManager.h</key>
 		<data>
@@ -36,9 +36,17 @@
 		<data>
 		phX1PXfcvLUrjOWfyEn2tQCkxnM=
 		</data>
+		<key>Headers/TSSchedule.h</key>
+		<data>
+		l7gJ1bMBCvrAI0AsQBLYBHlAznk=
+		</data>
+		<key>Headers/TSScheduler.h</key>
+		<data>
+		3SGHmqVt8pVqQo9hP1Onopcxd/k=
+		</data>
 		<key>Info.plist</key>
 		<data>
-		T+w9XpTZOG6Whmz0I443L99dRXg=
+		uSNz73rFzvrhxkwIPydh2tthq6Q=
 		</data>
 		<key>Modules/module.modulemap</key>
 		<data>
@@ -48,41 +56,126 @@
 	<key>files2</key>
 	<dict>
 		<key>Headers/LocationDAO.h</key>
-		<data>
-		HaOBO/PRfP53EGgHdc+FQUnnC+o=
-		</data>
+		<dict>
+			<key>hash</key>
+			<data>
+			vK1YvglQmvMBZDB34H+0wrDbxgo=
+			</data>
+			<key>hash2</key>
+			<data>
+			C8CR8jTb5shIU09t1ljiZjDUr+MyloxcRcsN4FbXPlE=
+			</data>
+		</dict>
 		<key>Headers/LocationManager.h</key>
-		<data>
-		J2MRb8ZefvcvA9cQzSd7o7u2lOc=
-		</data>
+		<dict>
+			<key>hash</key>
+			<data>
+			J2MRb8ZefvcvA9cQzSd7o7u2lOc=
+			</data>
+			<key>hash2</key>
+			<data>
+			2GVbAxw/YgveMBW5JWOrnwHOiBSO8urK7fmLW3Chhbs=
+			</data>
+		</dict>
 		<key>Headers/SOMotionDetector.h</key>
-		<data>
-		jLVvw3sOSeWn4pnNDpVDF70sy2E=
-		</data>
+		<dict>
+			<key>hash</key>
+			<data>
+			uXP051XOVlY2uAlauGoiCMeW86Y=
+			</data>
+			<key>hash2</key>
+			<data>
+			RtqB6fXSny1+KhAEzSCWgwr5v61GyjoI5cqE8IG/uhU=
+			</data>
+		</dict>
 		<key>Headers/Settings.h</key>
-		<data>
-		RrrWno+xiMcLzYadZpBXAsUpqy8=
-		</data>
+		<dict>
+			<key>hash</key>
+			<data>
+			yoxXao5Zj55wdOILFphXRENaNbU=
+			</data>
+			<key>hash2</key>
+			<data>
+			FeoXG2wiXdVIfZs4JCdXDA+D+cOuPUzVJBK2yP1XoCc=
+			</data>
+		</dict>
 		<key>Headers/TSLocationManager.h</key>
-		<data>
-		cxYSmlkRPJ3O1UnE/dgpZQqytNw=
-		</data>
+		<dict>
+			<key>hash</key>
+			<data>
+			pBKN3f9EZWEXW9201MDVrYquL2w=
+			</data>
+			<key>hash2</key>
+			<data>
+			Rbtv/yRkDGSKNGrvBoaNBTcrUN9vI4XjGU2uAcBCnzY=
+			</data>
+		</dict>
 		<key>Headers/TSLogManager.h</key>
-		<data>
-		Xx/RAO9Ysw0P9Q2CAGnq8SpzboA=
-		</data>
+		<dict>
+			<key>hash</key>
+			<data>
+			Xx/RAO9Ysw0P9Q2CAGnq8SpzboA=
+			</data>
+			<key>hash2</key>
+			<data>
+			bOr8cNTwTHTm0Nufm2vAzSvxLBITbhSIWGDds6i2Qfc=
+			</data>
+		</dict>
 		<key>Headers/TSLogger.h</key>
-		<data>
-		2QxO9UFdlAzFVGQDxtviupFtvJM=
-		</data>
+		<dict>
+			<key>hash</key>
+			<data>
+			2QxO9UFdlAzFVGQDxtviupFtvJM=
+			</data>
+			<key>hash2</key>
+			<data>
+			KDNJNkKUGeYYbc4rrEXI0BbsOzO9IYyer/jgsZQsfU0=
+			</data>
+		</dict>
 		<key>Headers/TSReachability.h</key>
-		<data>
-		phX1PXfcvLUrjOWfyEn2tQCkxnM=
-		</data>
+		<dict>
+			<key>hash</key>
+			<data>
+			phX1PXfcvLUrjOWfyEn2tQCkxnM=
+			</data>
+			<key>hash2</key>
+			<data>
+			OPZNWK2I4idnET05pGnSz2bJ5i+qoNJXMjSJqK/rS/8=
+			</data>
+		</dict>
+		<key>Headers/TSSchedule.h</key>
+		<dict>
+			<key>hash</key>
+			<data>
+			l7gJ1bMBCvrAI0AsQBLYBHlAznk=
+			</data>
+			<key>hash2</key>
+			<data>
+			z/ddw6U/oQSX715tcPfpjec7gX7eyA5KiBjS3BueSBo=
+			</data>
+		</dict>
+		<key>Headers/TSScheduler.h</key>
+		<dict>
+			<key>hash</key>
+			<data>
+			3SGHmqVt8pVqQo9hP1Onopcxd/k=
+			</data>
+			<key>hash2</key>
+			<data>
+			XtNYm9cJTmpfic3xuG5OZXDigvHTlHwGC2NewnzHwos=
+			</data>
+		</dict>
 		<key>Modules/module.modulemap</key>
-		<data>
-		ZlH8rkma2jB7yWJU5dFqHfgbHZc=
-		</data>
+		<dict>
+			<key>hash</key>
+			<data>
+			ZlH8rkma2jB7yWJU5dFqHfgbHZc=
+			</data>
+			<key>hash2</key>
+			<data>
+			jIrgG/kJ63bRRctOY4TrN0HWWuvt4GulOzhO3I0OG3U=
+			</data>
+		</dict>
 	</dict>
 	<key>rules</key>
 	<dict>
