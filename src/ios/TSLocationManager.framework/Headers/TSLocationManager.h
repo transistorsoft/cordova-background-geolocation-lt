@@ -11,6 +11,8 @@
 #import "TSLogger.h"
 #import "TSLogManager.h"
 #import "Settings.h"
+#import "TSScheduler.h"
+#import "TSSchedule.h"
 
 @interface TSLocationManager : NSObject <CLLocationManagerDelegate>
 
@@ -28,7 +30,6 @@ typedef enum tsLocationError : NSInteger {
 } tsLocationError;
 
 @property (nonatomic) UIViewController* viewController;
-@property (nonatomic) CLLocationDistance odometer;
 @property (nonatomic, strong) CLLocationManager* locationManager;
 @property (nonatomic) NSDate *stoppedAt;
 @property (nonatomic) UIBackgroundTaskIdentifier preventSuspendTask;
@@ -38,14 +39,18 @@ typedef enum tsLocationError : NSInteger {
 @property (copy) void (^httpResponseBlock) (NSInteger statusCode, NSDictionary *requestData, NSData *responseData, NSError *error);
 @property (copy) void (^locationChangedBlock) (CLLocation *location, enum tsLocationType, BOOL isMoving);
 @property (copy) void (^motionChangedBlock) (CLLocation *location, BOOL isMoving);
-@property (copy) void (^heartbeatBlock) (int shakeCount, CLLocation *location);
+@property (copy) void (^heartbeatBlock) (int shakeCount, NSString* motionType, CLLocation *location);
 @property (copy) void (^geofenceBlock) (CLCircularRegion *region, CLLocation *location, NSString *action);
 @property (copy) void (^syncCompleteBlock) (NSArray *locations);
 @property (copy) void (^errorBlock) (NSString *type, NSError *error);
+@property (copy) void (^scheduleBlock) (TSSchedule* schedule);
 
-- (void) configure:(NSDictionary*)config;
+// Methods
+- (NSDictionary*) configure:(NSDictionary*)config;
 - (void) start;
 - (void) stop;
+- (void) startSchedule;
+- (void) stopSchedule;
 - (NSArray*) sync;
 - (NSArray*) getLocations;
 - (UIBackgroundTaskIdentifier) createBackgroundTask;
@@ -58,7 +63,6 @@ typedef enum tsLocationError : NSInteger {
 - (void) onSuspend:(NSNotification *)notification;
 - (void) onResume:(NSNotification *)notification;
 - (void) onAppTerminate;
-- (BOOL) isEnabled;
 - (NSMutableDictionary*) locationToDictionary:(CLLocation*)location;
 - (NSMutableDictionary*) locationToDictionary:(CLLocation*)location type:(tsLocationtype)type;
 - (void) addGeofence:(NSString*)identifier radius:(CLLocationDistance)radius latitude:(CLLocationDegrees)latitude longitude:(CLLocationDegrees)longitude notifyOnEntry:(BOOL)notifyOnEntry notifyOnExit:(BOOL)notifyOnExit;
@@ -74,6 +78,8 @@ typedef enum tsLocationError : NSInteger {
 - (int) getCount;
 - (NSString*) getLog;
 - (void) emailLog:(NSString*)to;
+
+- (CLLocationDistance)getOdometer;
 - (void) resetOdometer;
 
 @end
