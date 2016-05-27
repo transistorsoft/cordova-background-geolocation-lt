@@ -1,6 +1,6 @@
 {
   "name": "cordova-background-geolocation-lt",
-  "version": "1.6.1",
+  "version": "1.6.2",
   "description": "Cordova Background Geolocation.  Sophisticated, cross-platform location-tracking plugin.",
   "cordova": {
     "id": "cordova-background-geolocation-lt",

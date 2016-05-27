@@ -2,6 +2,8 @@
 # Change Log
 
 ## [Unreleased]
+
+## [1.6.2] - 2016-05-27
 - [Changed] `Scheduler` will use `Locale.US` in its Calendar operations, such that the days-of-week correspond to Sunday=1..Saturday=7.
 - [Fixed] **iOS** Added `event [motionchange|geofence]` to location-data returned to `onLocation` event. 
 - [Changed] Refactor odometer calculation for both iOS and Android.  No longer filters out locations based upon average location accuracy of previous 10 locations; instead, it will only use the current location for odometer calculation if it has accuracy < 100.
