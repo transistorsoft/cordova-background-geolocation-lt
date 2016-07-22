@@ -8,17 +8,29 @@
 @implementation CDVBackgroundGeolocation {
     TSLocationManager *bgGeo;
     NSDictionary *config;
+    
+    NSMutableArray *activityChangeListeners;
+    NSMutableArray *providerChangeListeners;
+    NSMutableArray *locationListeners;
+    NSMutableArray *geofenceListeners;
+    NSMutableArray *motionChangeListeners;
+    NSMutableArray *currentPositionListeners;
+    NSMutableArray *httpListeners;
+    NSMutableArray *heartbeatListeners;
+    NSMutableArray *scheduleListeners;
 }
 
-@synthesize syncCallbackId, syncTaskId, locationListeners, geofenceListeners, motionChangeListeners, currentPositionListeners, httpListeners, heartbeatListeners, scheduleListeners;
+@synthesize syncCallbackId, syncTaskId;
 
 - (void)pluginInitialize
 {
-    bgGeo = [[TSLocationManager alloc] init];
+    bgGeo = [TSLocationManager sharedInstance];
     bgGeo.viewController = self.viewController;
     // New style:  Use blocks instead of NSNotificationCenter
     bgGeo.locationChangedBlock  = [self createLocationChangedHandler];
     bgGeo.motionChangedBlock    = [self createMotionChangedHandler];
+    bgGeo.activityChangedBlock  = [self createActivityChangedHandler];
+    bgGeo.authorizationChangedBlock  = [self createAuthorizationChangedHandler];
     bgGeo.heartbeatBlock        = [self createHeartbeatHandler];
     bgGeo.geofenceBlock         = [self createGeofenceHandler];
     bgGeo.syncCompleteBlock     = [self createSyncCompleteHandler];
@@ -39,7 +51,7 @@
 - (void) configure:(CDVInvokedUrlCommand*)command
 {
     //self.locationCallbackId = command.callbackId;
-    [self.locationListeners addObject:command.callbackId];
+    [locationListeners addObject:command.callbackId];
     
     config = [command.arguments objectAtIndex:0];
     NSDictionary *state = [bgGeo configure:config];
@@ -188,7 +200,7 @@
 
 - (void) addLocationListener:(CDVInvokedUrlCommand*) command
 {
-    [self.locationListeners addObject:command.callbackId];
+    [locationListeners addObject:command.callbackId];
 }
 
 - (void) addHttpListener:(CDVInvokedUrlCommand*)command
@@ -213,6 +225,14 @@
         heartbeatListeners = [[NSMutableArray alloc] init];
     }
     [heartbeatListeners addObject:command.callbackId];
+}
+
+- (void) addActivityChangeListener:(CDVInvokedUrlCommand*)command
+{
+    if (activityChangeListeners == nil) {
+        activityChangeListeners = [[NSMutableArray alloc] init];
+    }
+    [activityChangeListeners addObject:command.callbackId];
 }
 
 - (void) addScheduleListener:(CDVInvokedUrlCommand*)command
@@ -331,6 +351,21 @@
     }];
 }
 
+- (void) watchPosition:(CDVInvokedUrlCommand*)command
+{
+    //NSDictionary *options  = [command.arguments objectAtIndex:0];
+    NSLog(@"watchPosition is not yet implemented for ios");
+    CDVPluginResult *result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:@"watchPosition is not yet implemented for ios"];
+    [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
+}
+- (void) stopWatchPosition:(CDVInvokedUrlCommand*)command
+{
+    //NSDictionary *options  = [command.arguments objectAtIndex:0];
+    NSLog(@"watchPosition is not yet implemented for ios");
+    CDVPluginResult *result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:@"watchPosition is not yet implemented for ios"];
+    [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
+}
+
 - (void) playSound:(CDVInvokedUrlCommand*)command
 {
     SystemSoundID soundId = [[command.arguments objectAtIndex:0] intValue];
@@ -437,13 +472,13 @@
             CDVPluginResult* result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:params];
             [result setKeepCallbackAsBool:YES];
             
-            for (NSString *callbackId in self.locationListeners) {
+            for (NSString *callbackId in locationListeners) {
                 [self.commandDelegate sendPluginResult:result callbackId:callbackId];
             }
         }];
         
-        if (type != TS_LOCATION_TYPE_SAMPLE && [self.currentPositionListeners count]) {
-            for (NSString *callbackId in self.currentPositionListeners) {
+        if (type != TS_LOCATION_TYPE_SAMPLE && [currentPositionListeners count]) {
+            for (NSString *callbackId in currentPositionListeners) {
                 NSDictionary *params = @{
                                          @"location": locationData,
                                          @"taskId": @([bgGeo createBackgroundTask])
@@ -454,19 +489,19 @@
                     [self.commandDelegate sendPluginResult:result callbackId:callbackId];
                 }];       
             }
-            [self.currentPositionListeners removeAllObjects];
+            [currentPositionListeners removeAllObjects];
         }
     };
 }
 
 -(void (^)(CLLocation *location, BOOL moving)) createMotionChangedHandler {
     return ^(CLLocation *location, BOOL moving) {
-        if (![self.motionChangeListeners count]) {
+        if (![motionChangeListeners count]) {
             return;
         }
         NSDictionary *locationData  = [bgGeo locationToDictionary:location];
 
-        for (NSString *callbackId in self.motionChangeListeners) {
+        for (NSString *callbackId in motionChangeListeners) {
             NSDictionary *params = @{
                 @"isMoving": @(moving),
                 @"location": locationData,
@@ -481,12 +516,44 @@
     };
 }
 
--(void (^)(CLCircularRegion *region, CLLocation *location, NSString *action)) createGeofenceHandler {
-    return ^(CLCircularRegion *region, CLLocation *location, NSString *action) {
-        if (![self.geofenceListeners count]) {
+-(void (^)(NSString* activityName)) createActivityChangedHandler {
+    return ^(NSString* activityName) {
+        if (![activityChangeListeners count]) {
             return;
         }
-        for (NSString *callbackId in self.geofenceListeners) {
+        for (NSString *callbackId in activityChangeListeners) {
+            CDVPluginResult *result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:activityName];
+            [result setKeepCallbackAsBool:YES];
+            [self.commandDelegate runInBackground:^{
+                [self.commandDelegate sendPluginResult:result callbackId:callbackId];
+            }];
+        }
+    };
+}
+
+-(void (^)(CLAuthorizationStatus status)) createAuthorizationChangedHandler {
+    return ^(CLAuthorizationStatus status) {
+        if (![providerChangeListeners count]) {
+            return;
+        }
+        BOOL enabled = (status == kCLAuthorizationStatusAuthorizedAlways);
+        NSDictionary *provider = @{@"enabled":@(enabled), @"network":@(YES), @"gps":@(YES)};
+        for (NSString *callbackId in providerChangeListeners) {
+            CDVPluginResult *result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:provider];
+            [result setKeepCallbackAsBool:YES];
+            [self.commandDelegate runInBackground:^{
+                [self.commandDelegate sendPluginResult:result callbackId:callbackId];
+            }];
+        }
+    };
+}
+
+-(void (^)(CLCircularRegion *region, CLLocation *location, NSString *action)) createGeofenceHandler {
+    return ^(CLCircularRegion *region, CLLocation *location, NSString *action) {
+        if (![geofenceListeners count]) {
+            return;
+        }
+        for (NSString *callbackId in geofenceListeners) {
             NSDictionary *params = @{
                 @"identifier": region.identifier,
                 @"action": action,
@@ -511,7 +578,7 @@
             @"location": [bgGeo locationToDictionary:location]
         };
 
-        for (NSString *callbackId in self.heartbeatListeners) {
+        for (NSString *callbackId in heartbeatListeners) {
             CDVPluginResult *result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:params];
             [result setKeepCallbackAsBool:YES];
             [self.commandDelegate runInBackground:^{
@@ -564,9 +631,9 @@
 
         if ([type isEqualToString:@"location"]) {
             CDVPluginResult *result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsInt:(int)error.code];
-            if ([self.currentPositionListeners count]) {
+            if ([currentPositionListeners count]) {
                 [result setKeepCallbackAsBool:NO];
-                for (NSString *callbackId in self.currentPositionListeners) {
+                for (NSString *callbackId in currentPositionListeners) {
                     [self.commandDelegate sendPluginResult:result callbackId:callbackId];
                 }
                 [currentPositionListeners removeAllObjects];
@@ -574,7 +641,7 @@
 
             [result setKeepCallbackAsBool:YES];
             
-            for (NSString *callbackId in self.locationListeners) {
+            for (NSString *callbackId in locationListeners) {
                 [self.commandDelegate sendPluginResult:result callbackId:callbackId];
             }
         }
@@ -587,7 +654,7 @@
         NSDictionary *state = [bgGeo getState];
         CDVPluginResult *result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:state];
         [result setKeepCallbackAsBool:YES];
-        for (NSString *callbackId in self.scheduleListeners) {
+        for (NSString *callbackId in scheduleListeners) {
             [self.commandDelegate sendPluginResult:result callbackId:callbackId];
         }
     };
@@ -603,6 +670,7 @@
  * Might be desirable in certain apps.
  */
 - (void)applicationWillTerminate:(UIApplication *)application {
+    bgGeo = nil;
 }
 
 @end

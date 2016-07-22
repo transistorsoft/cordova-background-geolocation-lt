@@ -1,3 +1,4 @@
+
 /**
 * cordova-background-geolocation
 * Copyright (c) 2015, Transistor Software (9224-2932 Quebec Inc)
@@ -30,6 +31,10 @@ module.exports = {
                 return this.onHeartbeat(success, fail);
             case 'schedule':
                 return this.onSchedule(success, fail);
+            case 'activitychange':
+                return this.onActivityChange(success, fail);
+            case 'providerchange':
+                return this.onProviderChange(success, fail);
         }
     },
 
@@ -90,6 +95,13 @@ module.exports = {
              'start',
              []);
     },
+    stop: function(success, failure, config) {
+        exec(success || function() {},
+            failure || function() {},
+            'BackgroundGeolocation',
+            'stop',
+            []);
+    },
     startSchedule: function(success, failure) {
         exec(success || function() {},
              failure || function() {},
@@ -104,12 +116,12 @@ module.exports = {
              'stopSchedule',
              []);
     },
-    stop: function(success, failure, config) {
+    startGeofences: function(success, failure) {
         exec(success || function() {},
-            failure || function() {},
-            'BackgroundGeolocation',
-            'stop',
-            []);
+             failure || function() {},
+             'BackgroundGeolocation',
+             'startGeofences',
+             []);
     },
     beginBackgroundTask: function(callback) {
         if (typeof(callback) !== 'function') {
@@ -231,6 +243,20 @@ module.exports = {
             'addMotionChangeListener',
             []);
     },
+    onActivityChange: function(success) {
+        exec(success || function() {},
+            function() {},
+            'BackgroundGeolocation',
+            'addActivityChangeListener',
+            []);
+    },
+    onProviderChange: function(success) {
+            exec(success || function() {},
+                function() {},
+                'BackgroundGeolocation',
+                'addProviderChangeListener',
+                []);
+        },
     onHeartbeat: function(success, failure) {
         exec(success || function() {},
             failure || function() {},
@@ -458,6 +484,38 @@ module.exports = {
             'getCurrentPosition',
             [options]);
     },
+    watchPosition: function(success, failure, options) {
+        var me = this;
+        options = options || {};
+        success = success || function(location, taskId) {
+            me.finish(taskId);
+        };
+        var mySuccess = function(params) {
+            var location    = params.location || params;
+            var taskId      = params.taskId || 'task-id-undefined';
+            // Transform timestamp to Date instance.
+            if (location.timestamp) {
+                location.timestamp = new Date(location.timestamp);
+            }
+            me._runBackgroundTask(taskId, function() {
+                success.call(this, location, taskId);
+            });
+        }
+        exec(mySuccess || function() {},
+            failure || function() {},
+            'BackgroundGeolocation',
+            'watchPosition',
+            [options]);
+    },
+    stopWatchPosition: function(success, failure, options) {
+        var success = success || function() {};
+        var failure = failure || function() {};
+        exec(success,
+            failure,
+            'BackgroundGeolocation',
+            'stopWatchPosition',
+        []);
+    },
     getLog: function(success, failure) {
         var success = success || function() {};
         var failure = failure || function() {};
@@ -528,3 +586,4 @@ module.exports = {
         return destination;
     }
 };
+
