@@ -235,6 +235,15 @@
     [activityChangeListeners addObject:command.callbackId];
 }
 
+- (void) addProviderChangeListener:(CDVInvokedUrlCommand*)command
+{
+    if (providerChangeListeners == nil) {
+        providerChangeListeners = [[NSMutableArray alloc] init];
+    }
+    [providerChangeListeners addObject:command.callbackId];
+}
+
+
 - (void) addScheduleListener:(CDVInvokedUrlCommand*)command
 {
     if (scheduleListeners == nil) {
