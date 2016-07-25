@@ -22,6 +22,8 @@
 - (void) changePace:(CDVInvokedUrlCommand*)command;
 - (void) setConfig:(CDVInvokedUrlCommand*)command;
 - (void) addMotionChangeListener:(CDVInvokedUrlCommand*)command;
+- (void) addActivityChangeListener:(CDVInvokedUrlCommand*)command;
+- (void) addProviderChangeListener:(CDVInvokedUrlCommand*)command;
 - (void) addHeartbeatListener:(CDVInvokedUrlCommand*)command;
 - (void) getStationaryLocation:(CDVInvokedUrlCommand *)command;
 - (void) getLocations:(CDVInvokedUrlCommand *)command;
