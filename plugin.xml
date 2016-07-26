@@ -3,7 +3,7 @@
 <plugin xmlns="http://www.phonegap.com/ns/plugins/1.0"
     xmlns:android="http://schemas.android.com/apk/res/android"
     id="com.transistorsoft.cordova.background-geolocation"
-    version="2.0.1">
+    version="2.0.2">
     <name>BackgroundGeolocation</name>
     <description>Sophisticated, battery-efficient background-geolocation plugin for Cordova</description>
     <license>MIT</license>
