@@ -1,5 +1,13 @@
 
 # Change Log
+## [2.0.3] - 2016-07-27
+- Disable start-detection system when no accelerometer detected (ie: running in Simulator)
+
+## [2.0.2] - 2016-07-26
+- Fix bugs with Android
+
+## [2.0.1] - 2016-07-23
+- Fix bugs with Android
 
 ## [2.0.0] - 2016-07.22
 - Implement new event `providerchange` allowing you to listen to Location-services change events (eg: user turns off GPS, user turns off location services).  Whenever a `providerchange` event occurs, the plugin will automatically fetch the current position and persist the location adding the event: "providerchange" as well as append the provider state-object to the location.
