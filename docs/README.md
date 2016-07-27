@@ -72,7 +72,7 @@ bgGeo.setConfig({
 
 | Option | Type | Opt/Required | Default | Note |
 |---|---|---|---|---|
-| [`debug`](#param-boolean-debug-false) | `Boolean` | Optional | `false` | When enabled, the plugin will emit sounds for life-cycle events of background-geolocation!  **NOTE iOS**:  In addition, you must manually enable the *Audio and Airplay* background mode in *Background Capabilities* to hear these debugging sounds. |
+| [`debug`](#param-boolean-debug-false) | `Boolean` | Optional | `false` | When enabled, the plugin will emit sounds for life-cycle events of background-geolocation!  **NOTE iOS**:  In addition, you must manually enable the *Audio and Airplay* background mode in *Background Capabilities* to hear these debugging sounds. If disabled, no logging or local notifications will occur. |
 | [`stopOnTerminate`](#param-boolean-stoponterminate-true) | `Boolean` | Optional | `true` | Enable this in order to force a stop() when the application is terminated |
 | [`startOnBoot`](#param-boolean-startonboot-false) | `Boolean` | Optional | `false` | Set to `true` to enable background-tracking after the device reboots. |
 | [`preventSuspend`](#param-boolean-preventsuspend-false) | `Boolean` | Optional **iOS** | `false` | Enable this to prevent **iOS** from suspending.  Must be used in conjunction with a `heartbeatInterval`.  **WARNING**: `preventSuspend` should only be used in **very** specific use-cases and should typically **not** be used as it will have a **very serious impact on battery performance.** |
@@ -335,7 +335,7 @@ Maximum number of records to persist in plugin's SQLite database.  Default `-1` 
 
 ####`@param {Boolean} debug [false]`
 
-When enabled, the plugin will emit sounds for life-cycle events of background-geolocation!  **NOTE iOS**:  In addition, you must manually enable the *Audio and Airplay* background mode in *Background Capabilities* to hear these [debugging sounds](../../../wiki/Debug-Sounds).  See the ../../../wiki [Debug Sounds](wiki/Debug-Sounds) for a detailed description of these sounds.
+When enabled, the plugin will emit sounds for life-cycle events of background-geolocation!  **NOTE iOS**:  In addition, you must manually enable the *Audio and Airplay* background mode in *Background Capabilities* to hear these [debugging sounds](../../../wiki/Debug-Sounds).  See the ../../../wiki [Debug Sounds](wiki/Debug-Sounds) for a detailed description of these sounds. If disabled, no logging or local notifications will occur.
 
 ####`@param {Boolean} stopOnTerminate [true]`
 Enable this in order to force a stop() when the application terminated (e.g. on iOS, double-tap home button, swipe away the app).  On Android, ```stopOnTerminate: false``` will cause the plugin to operate as a headless background-service (in this case, you should configure an #url in order for the background-service to send the location to your server)
