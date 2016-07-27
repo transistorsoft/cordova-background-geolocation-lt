@@ -777,6 +777,10 @@ An optional location-timeout.  If the timeout expires before a location is retri
 Accept the last-recorded-location if no older than supplied value in milliseconds.
 ######@param {Boolean} persist [true]
 Defaults to `true`.  Set `false` to disable persisting the retrieved location in the plugin's SQLite database.
+######@param {Integer} samples [3]
+Sets the maximum number of location-samples to fetch.  The plugin will return the location having the best accuracy to your `successFn`.  Defaults to `3`.  Only the final location will be persisted.
+######@param {Integer} desiredAccuracy [stationaryRadius]
+Sets the desired accuracy of location you're attempting to fetch.  When a location having `accuracy <= desiredAccuracy` is retrieved, the plugin will stop sampling and immediately return that location.  Defaults to your configured `stationaryRadius`.
 ######@param {Object} extras
 Optional extra-data to attach to the location.  These `extras {Object}` will be merged to the recorded `location` and persisted / POSTed to your server (if you've configured the HTTP Layer).
 
@@ -795,10 +799,11 @@ bgGeo.getCurrentPosition(function(location, taskId) {
 }, function(errorCode) {
     alert('An location error occurred: ' + errorCode);
 }, {
-  timeout: 30,    // 30 second timeout to fetch location
-  maximumAge: 5000, // Accept the last-known-location if not older than 5000 ms.
-  minimumAccuracy: 10,  // Fetch a location with a minimum accuracy of `10` meters.
-  extras: {       // [Optional] Attach your own custom `metaData` to this location.  This metaData will be persisted to SQLite and POSTed to your server
+  timeout: 30,    	// 30 second timeout to fetch location
+  maximumAge: 5000,	// Accept the last-known-location if not older than 5000 ms.
+  desiredAccuracy: 10,	// Try to fetch a location with an accuracy of `10` meters.
+  samples: 3,		// How many location samples to attempt.
+  extras: {       	// [Optional] Attach your own custom `metaData` to this location.  This metaData will be persisted to SQLite and POSTed to your server
     foo: "bar"  
   }
 });
@@ -826,16 +831,16 @@ If a location failed to be retrieved, you `failureFn` will be executed with an e
 Eg:
 
 ```Javascript
-bgGeo.getLocation(succesFn, function(errorCode) {
-    switch (errorCode) {
-        case 0:
-            alert('Failed to retrieve location');
-            break;
-        case 1:
-            alert('You must enable location services in Settings');
-            break;
+bgGeo.getCurrentPosition(succesFn, function(errorCode) {
+	switch (errorCode) {
+		case 0:
+			alert('Failed to retrieve location');
+			break;
+		case 1:
+			alert('You must enable location services in Settings');
+			break;
 
-    }
+	}
 })
 ```
 
