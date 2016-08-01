@@ -1,8 +1,13 @@
 
 # Change Log
+
+## [Unreleased]
+- [Fixed] Android `addGeofences` error
+- [Fixed] iOS setting `method` not being respected (was always doing `POST`).  Issue #770
+
 ## [2.0.4] - 2016-07-28
 - [Changed] Disable start-detection system when no accelerometer detected (ie: running in Simulator)
-- [Changed] Improve iOS location-authorization system.  Show an alert if user changes location-authorization state (eg: 'Always' -> 'When in use') or disables location-services.  Alert directs user to [Settings] screen.
+- [Changed] Improve iOS location-authorization system.  Show an alert if user changes location-authorization state (eg: 'Always' -> 'When in use') or disables location-services.  Alert directs user to [Settings] screen.  Add new config param `#locationAuthorizationAlert`, allowing you to configure all the text-strings on Alert popup.
 - [Fixed] Incorrect Android binary uploaded in previous version
 
 ## [2.0.3] - 2016-07-27
