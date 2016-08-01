@@ -1,7 +1,7 @@
 
 # Change Log
 
-## [Unreleased]
+## [2.0.5] - 2016-08-01
 - [Fixed] Android `addGeofences` error
 - [Fixed] iOS setting `method` not being respected (was always doing `POST`).  Issue #770
 
