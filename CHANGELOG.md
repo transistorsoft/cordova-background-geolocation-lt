@@ -1,7 +1,8 @@
 
 # Change Log
 
-## [Unreleased]
+## [1.6.3] - 2016-08-06
+- [Changed] Pinned dependency plugin `cordova-plugin-background-fetch` @ 3.0.4
 
 ## [1.6.2] - 2016-05-27
 - [Changed] `Scheduler` will use `Locale.US` in its Calendar operations, such that the days-of-week correspond to Sunday=1..Saturday=7.
