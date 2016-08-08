@@ -1,5 +1,8 @@
 
 # Change Log
+## [2.0.7] - 2016-08-08
+- [Fixed] Fixed parse error in Scheduler.
+
 ## [2.0.6] - 2016-08-06
 - [Changed] Implement latest `cordova-plugin-background-fetch` dependency v4.0.0.
 - [Changed] Execute HTTP sync on background-fetch event
