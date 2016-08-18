@@ -1,5 +1,18 @@
 
 # Change Log
+
+## [2.0.9] - 2016-08-17
+- [Fixed] Issue #804, null pointer exeception on mGoogleApiClient
+- [Fixed] Issue #806.  PlayServices connect error event was fired before listeners arrive; Dialog to fix problem was never shown.
+- [Changed] Removed `app-compat` from Gradle dependencies.
+- [Changed] Fire http error callback when HTTP request is not 200ish (ie: 200, 201, 204).  Fixes issue #819.  Contradicts #774.
+- [Changed] Remove `play-services:app-compat-v7` from Gradle dependencies
+- [Fixed] Android heartbeat location wasn't having its meta-data updated (ie: `event: 'heartbeat', battery:<current-data>, uuid: <new uuid>`)
+- [Changed] Reduce Android `minimumActivityRecognitionConfidence` default from `80` to `75` (issue #825)
+- [Changed] Android will ask for location-permission when `#configure` is executed, rather than waiting for `#start`.
+- [Changeed] Android will catch `java.lang.SecurityException` when attempting to request location-updates without "Location Permission"
+- [Fixed] `removeGeofences` was removing stationary-region.  This would prevent stationary-exit if called while device is in stationary-mode
+
 ## [2.0.7] - 2016-08-08
 - [Fixed] Fixed parse error in Scheduler.
 
