@@ -59,26 +59,6 @@ module.exports = {
              'configure',
              [config]
         );
-        // Detect if BackgroundFetch plugin is available and provide a default configuration for it too,
-        //  otherwise the fetchCompletionHander will never be called and iOS will kill your app.
-        if (window.BackgroundFetch && !window.BackgroundFetch.config) {
-            this.configureBackgroundFetch(config);
-        }
-    },
-    configureBackgroundFetch: function(config) {
-        var Fetch = window.BackgroundFetch;
-        
-        var callback = function() {
-            // Give it 10s before finish.
-            setTimeout(function() {
-                Fetch.finish();
-            }, 10000);
-        };
-        var failure = function() {};
-
-        Fetch.configure(callback, failure, {
-            stopOnTerminate: config.stopOnTerminate || true
-        });
     },
     getState: function(success, failure) {
         exec(success || function() {},
