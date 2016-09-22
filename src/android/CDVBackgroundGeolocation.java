@@ -115,19 +115,7 @@ public class CDVBackgroundGeolocation extends CordovaPlugin {
             public void error(Object o) {
 
             }
-        }));
-
-        getAdapter().on(BackgroundGeolocation.EVENT_SECURITY_EXCEPTION, (new TSCallback() {
-            @Override
-            public void success(Object exception) {
-                onSecurityException((TSEvent.SecurityException) exception);
-            }
-            @Override
-            public void error(Object o) {
-
-            }
-        }));
-
+        }));        
     }
 
     public boolean execute(String action, JSONArray data, CallbackContext callbackContext) throws JSONException {
@@ -950,10 +938,6 @@ public class CDVBackgroundGeolocation extends CordovaPlugin {
     private void onPlayServicesConnectError(Integer errorCode) {
         Activity activity = cordova.getActivity();
         GoogleApiAvailability.getInstance().getErrorDialog(activity, errorCode, 1001).show();
-    }
-
-    private void onSecurityException(TSEvent.SecurityException event) {
-        TSLog.e("CDVBackgroundGeolocation Rx SecurityException " + event.action);
     }
 
     private BackgroundGeolocation getAdapter() {

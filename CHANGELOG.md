@@ -1,6 +1,15 @@
 
 # Change Log
 
+## [2.10.0] - 2016-09-22
+- [Fixed] Issue where iOS crashes when configured with null url.
+- [Added] `#watchPosition`, `#stopWatchPosition` mechanism for both iOS & Android
+- [Changed] Refactored iOS motion-detection system.  Improved iOS motion-triggering when using `CMMotionActivityManager` (ie: when not using `disableMotionActivityUpdates: true`).  iOS can now trigger out of stationary-mode just like android, where it sees a 'moving-type' motion-activity (eg: 'on_foot', 'in_vehicle', etc).  Note: this will still occur only when your app isn't suspended (eg: app is in foreground, `preventSuspend: true`, or `#watchPosition` is engaged).
+- [Changed] Refactored iOS "prevent suspend" system to be more robust.
+- [Fixed] iOS locations sent to Javascript client had a different `uuid` than the one persisted to database (and synced to server).
+-[Added] new iOS 10 .plist required key for accelerometer updates `NSMmotionUsageDescription` to `config.xml`
+- [Added] New required android permission `<uses-feature android:name="android.hardware.location.gps" />`.
+
 ## [2.0.9] - 2016-08-17
 - [Fixed] Issue #804, null pointer exeception on mGoogleApiClient
 - [Fixed] Issue #806.  PlayServices connect error event was fired before listeners arrive; Dialog to fix problem was never shown.
