@@ -467,19 +467,13 @@ module.exports = {
     watchPosition: function(success, failure, options) {
         var me = this;
         options = options || {};
-        success = success || function(location, taskId) {
-            me.finish(taskId);
-        };
-        var mySuccess = function(params) {
-            var location    = params.location || params;
-            var taskId      = params.taskId || 'task-id-undefined';
+        success = success || function(location) {};
+        var mySuccess = function(location) {
             // Transform timestamp to Date instance.
             if (location.timestamp) {
                 location.timestamp = new Date(location.timestamp);
-            }
-            me._runBackgroundTask(taskId, function() {
-                success.call(this, location, taskId);
-            });
+            }            
+            success(location);
         }
         exec(mySuccess || function() {},
             failure || function() {},
@@ -527,7 +521,7 @@ module.exports = {
             failure,
             'BackgroundGeolocation',
             'playSound',
-            [soundId]);  
+            [soundId]);
     },
 
     _setTimestamp: function(rs) {
