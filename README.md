@@ -52,7 +52,7 @@ The plugin creates the object `window.BackgroundGeolocation`.  See [API Document
 
 ## Example
 
-```
+```Javascript
 
 ////
 // As with all Cordova plugins, you must configure within an #deviceready callback.
@@ -61,7 +61,6 @@ function onDeviceReady() {
     // Get a reference to the plugin.
     var bgGeo = window.BackgroundGeolocation;
     
-
     //This callback will be executed every time a geolocation is recorded in the background.
     var callbackFn = function(location, taskId) {
         var coords = location.coords;
