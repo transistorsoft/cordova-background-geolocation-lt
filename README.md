@@ -52,7 +52,7 @@ The plugin creates the object `window.BackgroundGeolocation`.  See [API Document
 
 ## Example
 
-```
+```javascript
 
 ////
 // As with all Cordova plugins, you must configure within an #deviceready callback.
