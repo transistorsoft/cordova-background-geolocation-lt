@@ -45,6 +45,7 @@ The plugin creates the object `window.BackgroundGeolocation`.  See [API Document
 ## Documentation
 - [API Documentation](docs)
 - [Location Data Schema](../../wiki/Location-Data-Schema)
+- [Advanced Geofencing Features](./docs/geofencing.md)
 - [Error Codes](../../wiki/Location-Error-Codes)
 - [Debugging Sounds](../../wiki/Debug-Sounds)
 - [Geofence Features](../../wiki/Geofence-Features)

@@ -34,8 +34,9 @@ bgGeo.setConfig({
 | [`fastestLocationUpdateInterval`](#param-integer-millis-fastestlocationupdateinterval) | `Integer` | Optional (**Android**)| `10000` | Explicitly set the fastest interval for location updates, in milliseconds.  This controls the fastest rate at which your application will receive location updates, which might be faster than #locationUpdateInterval in some situations (for example, if other applications are triggering location updates).  This allows your application to passively acquire locations at a rate faster than it actively acquires locations, saving power.  Unlike #locationUpdateInterval, this parameter is exact. Your application will never receive updates faster than this value.  If you don't call this method, a fastest interval will be set to 30000 (30s).  An interval of 0 is allowed, but not recommended, since location updates may be extremely fast on future implementations.  If #fastestLocationUpdateInterval is set slower than #locationUpdateInterval, then your effective fastest interval is #locationUpdateInterval. |
 | [`stopAfterElapsedMinutes`](#param-integer-stopafterelapsedminutes) | `Integer`  |  Optional | `0`  | The plugin can optionally auto-stop monitoring location when some number of minutes elapse after being the #start method was called. |
 | [`stationaryRadius`](#param-integer-stationaryradius-meters) | `Integer`  |  Required | `25`  |When stopped, the minimum distance the device must move beyond the stationary location for aggressive background-tracking to engage.  Note, since the plugin uses iOS significant-changes API, the plugin cannot detect the exact moment the device moves out of the stationary-radius. In normal conditions, it can take as much as 3 city-blocks to 1/2 km before staionary-region exit is detected.  **WARNING:** It's a really **BAD** idea to set this any lower than `20` because you'll mess up the "stop-detection" system.  The stop-detection system uses `stationaryRadius` to determine when the device is stopped:  anything lower than `20` will cause false positives and prevent "stop-detection" from occuring.  You will **not** get any better results with iOS stationary-exit with a `stationaryRadius: 0` vs `stationaryRadius: 200`.  **DO NOT SET** `stationaryRadius < 20`, **NO, NO, NO**. |
+| [`geofenceProximityRadius`](#param-integer-geofenceproximityradius-meters) | `Integer`  |  Optional | `1000`  | When using Geofences, the plugin activates only thoses in proximity (the maximim geofences allowed to be simultaneously monitored is limited by the platform, where **iOS** allows only 20 and **Android**.  However, the plugin allows you to create as many geofences as you wish (thousands even).  It stores these in its database and uses spatial queries to determine which **20** or **100** geofences to activate. |
 | [`disableElasticity`](#param-boolean-disableelasticity-false) | `bool`  |  Optional | `false`  | Set true to disable automatic speed-based `#distanceFilter` elasticity. eg: When device is moving at highway speeds, locations are returned at ~ 1 / km. |
-| [`activityType`](#param-string-activitytype-automotivenavigation-othernavigation-fitness-other) | `String` | Required (**iOS**)| `Other` | Presumably, this affects ios GPS algorithm.  See [Apple docs](https://developer.apple.com/library/ios/documentation/CoreLocation/Reference/CLLocationManager_Class/CLLocationManager/CLLocationManager.html#//apple_ref/occ/instp/CLLocationManager/activityType) for more information | Set the desired interval for active location updates, in milliseconds. |
+
 | [`useSignificantChangesOnly`](#param-boolean-usesignificantchangesonly-false) | `Boolean` | Optional (**iOS**)| `false` | Defaults to `false`.  Set `true` in order to disable constant background-tracking and use only the iOS [Significant Changes API](https://developer.apple.com/library/ios/documentation/CoreLocation/Reference/CLLocationManager_Class/index.html#//apple_ref/occ/instm/CLLocationManager/startMonitoringSignificantLocationChanges).  If Apple has denied your application due to background-tracking, this can be a solution.  **NOTE** The Significant Changes API will report a location only when a significant change from the last location has occurred.  Many of the configuration parameters **will be ignored**, such as `#distanceFilter`, `#stationaryRadius`, `#activityType`, etc. |
 | [`deferTime`](#param-integer-defertime) | `Integer` | Optional (**Android**)| `0` | Sets the maximum wait time in milliseconds for location updates.  If you pass a value at least 2x larger than the interval specified with `locationUpdateInterval`, then location delivery may be delayed and multiple locations can be delivered at once. Locations are determined at the `locationUpdateInterval` rate, but can be delivered in batch after the interval you set in this method. This can consume less battery and give more accurate locations, depending on the device's hardware capabilities. You should set this value to be as large as possible for your needs if you don't need immediate location delivery. |
 | [`pausesLocationUpdatesAutomatically`](#param-boolean-pauseslocationupdatesautomatically-true) | `Boolean` | Optional (**iOS**)| `true` | The default behaviour of the plugin is to turn off location-services automatically when the device is detected to be stationary.  When set to `false`, location-services will **never** be turned off (and `disableStopDetection` will automatically be set to `true`) -- it's your responsibility to turn them off when you no longer need to track the device.  This feature should **not** generally be used.  `preventSuspend` will no longer work either.| 
@@ -50,6 +51,7 @@ bgGeo.setConfig({
 | [`stopTimeout`](#param-integer-minutes-stoptimeout) | `Integer` | Required | `5 minutes` | The number of miutes to wait before turning off the GPS after the ActivityRecognition System (ARS) detects the device is `STILL` (**Android:** defaults to 0, no timeout, **iOS:** defaults to 5min).  If you don't set a value, the plugin is eager to turn off the GPS ASAP.  An example use-case for this configuration is to delay GPS OFF while in a car waiting at a traffic light.  **WARNING** Setting a value > 15 min is **not** recommended, particularly for Android.|
 | [`minimumActivityRecognitionConfidence`](#param-integer-millis-minimumactivityrecognitionconfidence) | `Integer` | Optional (**Android**)| `80` | Each activity-recognition-result returned by the API is tagged with a "confidence" level expressed as a %.  You can set your desired confidence to trigger a state-change.  Defaults to `80`.|
 | [`stopDetectionDelay`](#param-integer-minutes-stopdetectiondelay-0) | `Integer` | Optional (**iOS**)| 0 | Allows the stop-detection system to be delayed from activating.  When the stop-detection system is engaged, the GPS is off and only the accelerometer is monitored.  Stop-detection will only engage if this timer expires.  The timer is cancelled if any movement is detected before expiration | 
+| [`activityType`](#param-string-activitytype-automotivenavigation-othernavigation-fitness-other) | `String` | Required (**iOS**)| `Other` | Presumably, this affects ios GPS algorithm.  See [Apple docs](https://developer.apple.com/library/ios/documentation/CoreLocation/Reference/CLLocationManager_Class/CLLocationManager/CLLocationManager.html#//apple_ref/occ/instp/CLLocationManager/activityType) for more information | Set the desired interval for active location updates, in milliseconds. |
 | [`disableMotionActivityUpdates`](#param-boolean-disablemotionactivityupdates-false) | `Boolean` | Optional (**iOS**)| 0 | Disable iOS motion-activity updates (eg: "walking", "in_vehicle").  This feature requires a device having the **M7** co-processor (ie: iPhone 5s and up).  **NOTE** This feature will ask the user for "Health updates".  If you do not wish to ask the user for the "Health updates", set this option to `false`; However, you will no longer recieve activity data in the recorded locations. | 
 | [`disableStopDetection`](#param-boolean-disablestopdetection-false) | `Boolean` | Optional | `false` | Disable iOS accelerometer-based **Stop-detection System**.  When disabled, the plugin will use the default iOS behaviour of automatically turning off location-services when the device has stopped for exactly 15 minutes.  When disabled, you will no longer have control over `stopTimeout`| 
 
@@ -68,13 +70,15 @@ bgGeo.setConfig({
 | [`batchSync`](#param-string-batchsync-false) | `Boolean` | Optional | `false` | Default is `false`.  If you've enabled HTTP feature by configuring an `#url`, `batchSync: true` will POST all the locations currently stored in native SQLite datbase to your server in a single HTTP POST request.  With `batchSync: false`, an HTTP POST request will be initiated for **each** location in database. |
 | [`maxBatchSize`](#param-integer-maxbatchsize-undefined) | `Integer` | Optional | `-1` | If you've enabled HTTP feature by configuring an `#url` and `batchSync: true`, this parameter will limit the number of records attached to each batch.  If the current number of records exceeds the `maxBatchSize`, multiple HTTP requests will be generated until the location queue is empty. |
 | [`maxDaysToPersist`](#param-integer-maxdaystopersist-1) | `Integer` | Optional | `1` |  Maximum number of days to store a geolocation in plugin's SQLite database when your server fails to respond with `HTTP 200 OK`.  The plugin will continue attempting to sync with your server until `maxDaysToPersist` when it will give up and remove the location from the database. |
-| [`maxRecordsToPersist`](#param-integer-maxrecordstopersist--1) | `Integer` | Optional | `-1` |  Maximum number of records to persist in plugin's SQLite database.|
+| [`maxRecordsToPersist`](#param-integer-maxrecordstopersist--1) | `Integer` | Optional | `-1` |  Maximum number of records to persist in plugin's SQLite database.  Defaults to `-1` (no limit)|
 
 ## Application Options
 
 | Option | Type | Opt/Required | Default | Note |
 |---|---|---|---|---|
 | [`debug`](#param-boolean-debug-false) | `Boolean` | Optional | `false` | When enabled, the plugin will emit sounds for life-cycle events of background-geolocation!  **NOTE iOS**:  In addition, you must manually enable the *Audio and Airplay* background mode in *Background Capabilities* to hear these debugging sounds. |
+| [`logLevel`](#param-integer-loglevel-5) | `Integer` | Optional **iOS** | `LOG_LEVEL_VERBOSE` | Filters the logs by `logLevel`: `LOG_LEVEL_OFF`, `LOG_LEVEL_ERROR`, `LOG_LEVEL_WARNING`, `LOG_LEVEL_INFO`, `LOG_LEVEL_DEBUG`, `LOG_LEVEL_VERBOSE` |
+| [`logMaxDays`](#param-integer-logmaxdays-3) | `Integer` | Optional **iOS** | `3` | Maximum days to persist a log-entry in database. |
 | [`stopOnTerminate`](#param-boolean-stoponterminate-true) | `Boolean` | Optional | `true` | Enable this in order to force a stop() when the application is terminated |
 | [`startOnBoot`](#param-boolean-startonboot-false) | `Boolean` | Optional | `false` | Set to `true` to enable background-tracking after the device reboots. |
 | [`preventSuspend`](#param-boolean-preventsuspend-false) | `Boolean` | Optional **iOS** | `false` | Enable this to prevent **iOS** from suspending.  Must be used in conjunction with a `heartbeatInterval`.  **WARNING**: `preventSuspend` should only be used in **very** specific use-cases and should typically **not** be used as it will have a **very serious impact on battery performance.** |
@@ -105,9 +109,10 @@ bgGeo.on("location", onLocation, onLocationError);
 | [`onActivityChange`](#onactivitychangecallbackfn-failurefn) | `activitychange` | Fired when the activity-recognition system detects a *change* in detected-activity (`still, on_foot, in_vehicle, on_bicycle, running`)|
 | [`onProviderChange`](#onproviderchangecallbackfn-failurefn) | `providerchange` | Fired when the state of device's **Location Services** changes|
 | [`onGeofence`](#ongeofencecallbackfn) | `geofence` | Fired when a geofence crossing event occurs |
+| [`onGeofencesChange`](#geofenceschange-callbackfn) | `geofenceschange` | Fired when the lists of monitored geofences changed.| 
 | [`onHttp`](#onhttpsuccessfn-failurefn) | `http` | Fired after a successful HTTP response. `response` object is provided with `status` and `responseText`|
 | [`onHeartbeat`](#onheartbeatsuccessfn-failurefn) | `heartbeat` | Fired each `heartbeatInterval` while the plugin is in the **stationary** state with (iOS requires `preventSuspend: true` in addition).  Your callback will be provided with a `params {}` containing the parameters `shakes {Integer}`, `motionType {String}` and current location object `location {Object}` |
-| [`onSchedule`](#onschedulecallbackFn) | `schedule` | Fired when a schedule event occurs.  Your `callbackFn` will be provided with the current `state` Object. | 
+| [`onSchedule`](#onschedulesuccessfn-failurefn) | `schedule` | Fired when a schedule event occurs.  Your `callbackFn` will be provided with the current `state` Object. | 
 
 ## Methods
 
@@ -127,7 +132,8 @@ bgGeo.on("location", onLocation, onLocationError);
 | [`changePace`](#changepaceenabled-successfn-failurefn) | `isMoving` | Initiate or cancel immediate background tracking. When set to true, the plugin will begin aggressively tracking the devices Geolocation, bypassing stationary monitoring. If you were making a "Jogging" application, this would be your [Start Workout] button to immediately begin GPS tracking. Send false to disable aggressive GPS monitoring and return to stationary-monitoring mode. |
 | [`getLocations`](#getlocationscallbackfn-failurefn) | `callbackFn` | Fetch all the locations currently stored in native plugin's SQLite database. Your callbackFn`` will receive an `Array` of locations in the 1st parameter |
 | [`getCount`](#getcountcallbackfn-failurefn) | `callbackFn` | Fetches count of SQLite locations table `SELECT count(*) from locations` |
-| [`clearDatabase`](#cleardatabasecallbackfn-failurefn) | `callbackFn` | Delete all records in plugin's SQLite database |
+| [`clearDatabase`](#destroylocationscallbackfn-failurefn) | `callbackFn` | **DEPRECATED** use `#destroyLocations` |
+| [`destroyLocations`](#destroylocationscallbackfn-failurefn) | `callbackFn` | Delete all records in plugin's SQLite database |
 | [`sync`](#synccallbackfn-failurefn) | - | If the plugin is configured for HTTP with an `#url` and `#autoSync: false`, this method will initiate POSTing the locations currently stored in the native SQLite database to your configured `#url`|
 | [`getOdometer`](#getodometercallbackfn-failurefn) | `callbackFn` | The plugin constantly tracks distance travelled. The supplied callback will be executed and provided with a `distance` as the 1st parameter.|
 | [`resetOdometer`](#resetodometercallbackfn-failurefn) | `callbackFn` | Reset the **odometer** to `0`.  The plugin never automatically resets the odometer -- this is **up to you** |
@@ -137,7 +143,9 @@ bgGeo.on("location", onLocation, onLocationError);
 | [`removeGeofence`](#removegeofenceidentifier-callbackfn-failurefn) | `identifier` | Removes a geofence identified by the provided `identifier` |
 | [`removeGeofences`](#removegeofences-callbackfn-failurefn) |  | Removes all geofences |
 | [`getGeofences`](#getgeofencescallbackfn-failurefn) | `callbackFn` | Fetch the list of monitored geofences. Your callbackFn will be provided with an Array of geofences. If there are no geofences being monitored, you'll receive an empty `Array []`.|
-| [`getLog`](#getlogcallbackfn) | `calbackFn` | Fetch the entire contents of the current circular log and return it as a String.|
+| [`setLogLevel`](#setloglevelcallbackfn) | `calbackFn` | Set the Log filter:  `LOG_LEVEL_OFF`, `LOG_LEVEL_ERROR`, `LOG_LEVEL_WARNING`, `LOG_LEVEL_INFO`, `LOG_LEVEL_DEBUG`, `LOG_LEVEL_VERBOSE`|
+| [`getLog`](#getlogcallbackfn) | `calbackFn` | Fetch the entire contents of the current log database as a `String`.|
+| [`destroyLog`](#destroylogcallbackfnfailurefn) | `calbackFn`,`failureFn` | Destroy the contents of the Log database. |
 | [`emailLog`](#emaillogemail-callbackfn) | `email`, `callbackFn` | Fetch the entire contents of the current circular log and email it to a recipient using the device's native email client.|
 
 # Geolocation Options
@@ -201,9 +209,9 @@ When stopped, the minimum distance the device must move beyond the stationary lo
 
 **WARNING:** It's a really **BAD** idea to set this any lower than `20` because you'll mess up the "stop-detection" system.  The stop-detection system uses `stationaryRadius` to determine when the device is stopped:  anything lower than `20` will cause false positives and prevent "stop-detection" from occuring.  You will **not** get any better results with iOS stationary-exit with a `stationaryRadius: 0` vs `stationaryRadius: 200`.  **DO NOT SET** `stationaryRadius < 20`, **NO, NO, NO**.
 
-####`@param {String} activityType [AutomotiveNavigation, OtherNavigation, Fitness, Other]`
+####`@param {Integer} geofenceProximityRadius (meters)`
 
-Presumably, this affects ios GPS algorithm.  See [Apple docs](https://developer.apple.com/library/ios/documentation/CoreLocation/Reference/CLLocationManager_Class/CLLocationManager/CLLocationManager.html#//apple_ref/occ/instp/CLLocationManager/activityType) for more information
+When using Geofences, the plugin activates only thoses in proximity (the maximim geofences allowed to be simultaneously monitored is limited by the platform, where **iOS** allows only 20 and **Android**.  However, the plugin allows you to create as many geofences as you wish (thousands even).  It stores these in its database and uses spatial queries to determine which **20** or **100** geofences to activate. |
 
 ####`@param {Boolean} useSignificantChangesOnly [false]`
 
@@ -313,6 +321,10 @@ For Android, location-services **will never turn OFF** if you set this to `true`
 
 ## iOS Options
 
+####`@param {String} activityType [AutomotiveNavigation, OtherNavigation, Fitness, Other]`
+
+Presumably, this affects ios GPS algorithm.  See [Apple docs](https://developer.apple.com/library/ios/documentation/CoreLocation/Reference/CLLocationManager_Class/CLLocationManager/CLLocationManager.html#//apple_ref/occ/instp/CLLocationManager/activityType) for more information
+
 ####`@param {Integer minutes} stopDetectionDelay [0]` 
 
 Allows the stop-detection system to be delayed from activating.  When the stop-detection system is engaged, the GPS is off and only the accelerometer is monitored.  Stop-detection will only engage if this timer expires.  The timer is cancelled if any movement is detected before expiration.  If a value of `0` is specified, the stop-detection system will engage as soon as the device is detected to be stationary.
@@ -375,7 +387,7 @@ Maximum number of days to store a geolocation in plugin's SQLite database when y
 
 ####`@param {Integer} maxRecordsToPersist [-1]`
 
-Maximum number of records to persist in plugin's SQLite database.  Default `-1` means no limit.
+Maximum number of records to persist in plugin's SQLite database.  Default `-1` means **no limit**.
 
 # Application Options
 
@@ -471,6 +483,31 @@ bgGeo.setConfig({
 ```
 
 ## iOS Options
+
+####`@param {Integer} logLevel [5]`
+
+Set the log-filter `logLevel`.  @see [`getLog`](#getlogcallbackfn) / [`emailLog`](#emaillogemail-callbackfn).
+
+| logLevel | Label |
+|---|---|
+|`0`|`LOG_LEVEL_OFF`|
+|`1`|`LOG_LEVEL_ERROR`|
+|`2`|`LOG_LEVEL_WARNING`|
+|`3`|`LOG_LEVEL_INFO`|
+|`4`|`LOG_LEVEL_DEBUG`|
+|`5`|`LOG_LEVEL_VERBOSE`|
+
+These log-levels are defined as **constants** on the `BackgroundGeolocation` object:
+
+```Javascript
+bgGeo.configure({
+  logLevel: bgGeo.LOG_LEVEL_WARNING
+});
+```
+
+####`@param {Integer} logMaxDays [3]`
+
+Maximum number of days to persist a log-entry in database.  Defaults to `3` days.
 
 ####`@param {Boolean} preventSuspend [false]`
 
@@ -592,14 +629,14 @@ Your `callbackFn` fill be executed when a change in the state of the device's **
 
 ######@param {Boolean} enabled Whether location-services is enabled
 ######@param {Boolean} gps Whether gps is enabled
-######@param {Boolean} wifi Whether wifi geolocation is enabled.
+######@param {Boolean} network Whether wifi geolocation is enabled.
 
 ```Javascript
 bgGeo.on('providerchange', function(provider) {
     console.log('- Provider Change: ', provider);
     console.log('  enabled: ', provider.enabled);
     console.log('  gps: ', provider.gps);
-    console.log('  wifi: ', provider.wifi);
+    console.log('  network: ', provider.network);
 });
 ```
 
@@ -627,6 +664,60 @@ bgGeo.onGeofence(function(params, taskId) {
     // IF YOU DON'T, iOS WILL KILL YOUR APP
     bgGeo.finish(taskId);
 });
+```
+
+####`onGeofencesChange(callbackFn)`
+
+Fired when the list of monitored-geofences changed.  For more information, see [Geofencing](./geofencing.md).  The Background Geolocation contains powerful geofencing features that allow you to monitor any number of circular geofences you wish (thousands even), in spite of limits imposed by the native platform APIs (**20 for iOS; 100 for Android**).
+
+The plugin achieves this by storing your geofences in its database, using a [geospatial query](https://en.wikipedia.org/wiki/Spatial_query) to determine those geofences in proximity (@see config [geofenceProximityRadius](#param-integer-geofenceproximityradius-meters)), activating only those geofences closest to the device's current location (according to limit imposed by the corresponding platform).
+
+When the device is determined to be moving, the plugin periodically queries for geofences in proximity (eg. every minute) using the latest recorded location.  This geospatial query is **very fast**, even with tens-of-thousands geofences in the database.
+
+It's when this list of monitored geofences *changes*, the plugin will fire the `geofenceschange` event.
+
+######@param {Array} on The list of geofences just activated.
+######@param {Array off The list of geofences just de-activated
+
+```Javascript
+bgGeo.on('geofenceschange', function(event) {
+  var on = event.on;   //<-- new geofences activiated.
+  var off = event.off; //<-- geofences that were de-activated.
+
+  // Create map circles
+  for (var n=0,len=on.length;n<len;n++) {
+    var geofence = on[n];
+    createGeofenceMarker(geofence)
+  }
+
+  // Remove map circles
+  for (var n=0,len=off.length;n<len;n++) {
+    var identifier = off[n];
+    removeGeofenceMarker(identifier);
+  }
+});
+```
+
+This `event` object provides only the *changed* geofences, those which just activated or de-activated.
+
+When **all** geofences have been removed, the event object will provide an empty-array `[]` for both `#on` and `#off` keys, ie:
+```Javascript
+{
+    on: [{}, {}, ...],  // <-- Entire geofence objects {}
+    off: ['identifier_foo', 'identifier_bar']  <-- just the identifiers
+}
+```
+
+```Javascript
+bgGeo.on('geofenceschange', function(event) {
+  console.log("geofenceschange fired! ", event);
+});
+
+// calling remove geofences will cause the `geofenceschange` event to fire
+bgGeo.removeGeofences();
+
+=> geofenceschange fired! {on: [], off: []}
+
 ```
 
 ####`onHttp(successFn, failureFn)`
@@ -978,7 +1069,9 @@ bgGeo.changePace(false); // <-- Disable aggressive GPS monitoring.  Engages stat
 ```
 
 ####`addGeofence(config, callbackFn, failureFn)`
-Adds a geofence to be monitored by the native plugin.  Monitoring of a geofence is halted after a crossing occurs.  The `config` object accepts the following params.
+Adds a geofence to be monitored by the native plugin.  The `config` object accepts the following params.  See [Geofencing](./geofencing.md) for more information.
+
+**Note**: when adding a list-of-geofences, it's about **10* faster** to use `[addGeofences](#addgeofencesgeofences-callbackfn-failurefn)` instead.
 
 ######@config {String} identifier The name of your geofence, eg: "Home", "Office"
 ######@config {Float} radius The radius (meters) of the geofence.  In practice, you should make this >= 100 meters.
@@ -986,8 +1079,8 @@ Adds a geofence to be monitored by the native plugin.  Monitoring of a geofence 
 ######@config {Float} longitude Longitude of the center-point of the circular geofence.
 ######@config {Boolean} notifyOnExit Whether to listen to EXIT events
 ######@config {Boolean} notifyOnEntry Whether to listen to ENTER events
-######@config {Boolean} notifyOnDwell (Android only) Whether to listen to DWELL events
-######@config {Integer milliseconds} loiteringDelay (Android only) When `notifyOnDwell` is `true`, the delay before DWELL event is fired after entering a geofence.
+######@config {Boolean} notifyOnDwell (**Android only**) Whether to listen to DWELL events
+######@config {Integer milliseconds} loiteringDelay (**Android only**) When `notifyOnDwell` is `true`, the delay before DWELL event is fired after entering a geofence (@see [Creating and Monitoring Geofences](https://developer.android.com/training/location/geofencing.html))
 
 ```Javascript
 bgGeo.addGeofence({
@@ -1144,12 +1237,14 @@ Manually insert a location into the native plugin's SQLite database.  Your ```ca
     });
 ```
 
-
 ####`clearDatabase(callbackFn, failureFn)`
+**DEPRECATED**.  Use `#destroyLocations`.
+
+####`destroyLocations(callbackFn, failureFn)`
 Remove all records in plugin's SQLite database.
 
 ```Javascript
-    bgGeo.clearDatabase(function() {
+    bgGeo.destroyLocations(function() {
       console.log('- cleared database'); 
     });
 ```
@@ -1206,6 +1301,24 @@ Here's a fun one.  The plugin can play a number of OS system sounds for each pla
     bgGeo.playSound(90);
 ```
 
+####`setLogLevel(callbackFn)`
+
+Set the log filter `logLevel`
+| logLevel | Label |
+|---|---|
+|`0`|`LOG_LEVEL_OFF`|
+|`1`|`LOG_LEVEL_ERROR`|
+|`2`|`LOG_LEVEL_WARNING`|
+|`3`|`LOG_LEVEL_INFO`|
+|`4`|`LOG_LEVEL_DEBUG`|
+|`5`|`LOG_LEVEL_VERBOSE`|
+
+```Javascript
+    bgGeo.setLogLevel(bgGeo.LOG_LEVEL_VERBOSE, function() {
+        console.log("Changed logLevel success");
+    });
+```
+
 ####`getLog(callbackFn)`
 
 Fetches the entire contents of the current circular-log and return it as a String.
@@ -1213,6 +1326,18 @@ Fetches the entire contents of the current circular-log and return it as a Strin
 ```Javascript
     bgGeo.getLog(function(log) {
         console.log(log);
+    });
+```
+
+####`destroyLog(callbackFn, failureFn)`
+
+Destory the entire contents of Log database.
+
+```Javascript
+    bgGeo.destroyLog(function() {
+        console.log('- Destroyed log');
+    }, function() {
+        console.log('- Destroy log failure');
     });
 ```
 

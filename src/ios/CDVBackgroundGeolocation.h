@@ -21,9 +21,11 @@
 - (void) error:(CDVInvokedUrlCommand*)command;
 - (void) changePace:(CDVInvokedUrlCommand*)command;
 - (void) setConfig:(CDVInvokedUrlCommand*)command;
+- (void) addListener:(CDVInvokedUrlCommand*)command;
 - (void) addMotionChangeListener:(CDVInvokedUrlCommand*)command;
 - (void) addActivityChangeListener:(CDVInvokedUrlCommand*)command;
 - (void) addProviderChangeListener:(CDVInvokedUrlCommand*)command;
+- (void) addGeofencesChangeListener:(CDVInvokedUrlCommand*)command;
 - (void) addHeartbeatListener:(CDVInvokedUrlCommand*)command;
 - (void) getStationaryLocation:(CDVInvokedUrlCommand *)command;
 - (void) getLocations:(CDVInvokedUrlCommand *)command;
@@ -42,9 +44,12 @@
 - (void) watchPosition:(CDVInvokedUrlCommand *)command;
 - (void) stopWatchPosition:(CDVInvokedUrlCommand *)command;
 - (void) clearDatabase:(CDVInvokedUrlCommand *) command;
+- (void) destroyLocations:(CDVInvokedUrlCommand *) command;
 - (void) insertLocation:(CDVInvokedUrlCommand *) command;
 - (void) getCount:(CDVInvokedUrlCommand *) command;
 - (void) getLog:(CDVInvokedUrlCommand *) command;
+- (void) destroyLog:(CDVInvokedUrlCommand *) command;
+- (void) setLogLevel:(CDVInvokedUrlCommand *) command;
 - (void) emailLog:(CDVInvokedUrlCommand*) command;
 - (void) playSound:(CDVInvokedUrlCommand *)command;
 @end
