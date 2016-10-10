@@ -3,41 +3,15 @@
 #import <CoreData/CoreData.h>
 #import <CoreLocation/CoreLocation.h>
 #import <AudioToolbox/AudioToolbox.h>
-
-#import "SOMotionDetector.h"
-#import "TSReachability.h"
-#import "LocationDAO.h"
-#import "LocationManager.h"
-#import "TSLogger.h"
-#import "TSLogManager.h"
-#import "Settings.h"
-#import "TSScheduler.h"
 #import "TSSchedule.h"
-#import "LocationAuthorization.h"
-#import "TSHttpService.h"
+#import "LocationManager.h"
 
 @interface TSLocationManager : NSObject <CLLocationManagerDelegate>
-
-// Location types
-typedef enum tsLocationType : NSInteger {
-    TS_LOCATION_TYPE_MOTIONCHANGE   = 0,
-    TS_LOCATION_TYPE_TRACKING       = 1,
-    TS_LOCATION_TYPE_CURRENT        = 2,
-    TS_LOCATION_TYPE_SAMPLE         = 3,
-    TS_LOCATION_TYPE_WATCH          = 4
-} tsLocationtype;
-
-// Error codes
-typedef enum tsLocationError : NSInteger {
-    TS_LOCATION_ERROR_ACCEPTABLE_ACCURACY = 100,
-    TS_LOCATION_ERROR_TIMEOUT = 408
-} tsLocationError;
 
 @property (nonatomic) UIViewController* viewController;
 @property (nonatomic, strong) CLLocationManager* locationManager;
 @property (nonatomic) NSDate *stoppedAt;
 @property (nonatomic) UIBackgroundTaskIdentifier preventSuspendTask;
-@property (nonatomic) SOMotionType motionType;
 
 // Blocks
 @property (nonatomic, copy) void (^httpResponseBlock) (NSInteger statusCode, NSDictionary *requestData, NSData *responseData, NSError *error);
@@ -55,6 +29,7 @@ typedef enum tsLocationError : NSInteger {
 
 // Methods
 - (NSDictionary*) configure:(NSDictionary*)config;
+- (void) addListener:(NSString*)event callback:(void (^)(NSDictionary*))callback;
 - (void) start;
 - (void) stop;
 - (void) startSchedule;
@@ -73,10 +48,10 @@ typedef enum tsLocationError : NSInteger {
 - (void) onAppTerminate;
 - (NSMutableDictionary*) locationToDictionary:(CLLocation*)location;
 - (NSMutableDictionary*) locationToDictionary:(CLLocation*)location type:(tsLocationtype)type extras:(NSDictionary*)extras;
-- (void) addGeofence:(NSString*)identifier radius:(CLLocationDistance)radius latitude:(CLLocationDegrees)latitude longitude:(CLLocationDegrees)longitude notifyOnEntry:(BOOL)notifyOnEntry notifyOnExit:(BOOL)notifyOnExit;
-- (void) addGeofences:(NSArray*)geofences;
-- (BOOL) removeGeofence:(NSString*)identifier;
-- (BOOL) removeGeofences;
+- (void) addGeofence:(NSDictionary*)params success:(void (^)(NSString*))success error:(void (^)(NSString*))error;
+- (void) addGeofences:(NSArray*)geofences success:(void (^)(NSString*))success error:(void (^)(NSString*))error;
+- (void) removeGeofence:(NSString*)identifier success:(void (^)(NSString*))success error:(void (^)(NSString*))error;
+- (void) removeGeofences:(NSArray*)identifiers success:(void (^)(NSString*))success error:(void (^)(NSString*))error;;
 - (NSArray*) getGeofences;
 - (void) updateCurrentPosition:(NSDictionary*)options;
 - (void) watchPosition:(NSDictionary*)options;
@@ -84,11 +59,13 @@ typedef enum tsLocationError : NSInteger {
 - (void) playSound:(SystemSoundID)soundId;
 - (void) notify:(NSString*)message;
 - (BOOL) clearDatabase;
+- (BOOL) destroyLocations;
 - (BOOL) insertLocation:(NSDictionary*)params;
 - (int) getCount;
 - (NSString*) getLog;
+- (BOOL) destroyLog;
 - (void) emailLog:(NSString*)to;
-
+- (void) setLogLevel:(NSInteger)level;
 - (CLLocationDistance)getOdometer;
 - (void) resetOdometer;
 
