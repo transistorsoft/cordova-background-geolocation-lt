@@ -193,6 +193,12 @@ Compare now background-geolocation in the scope of a city.  In this image, the l
 
 ![distanceFilter at city scale](https://dl.dropboxusercontent.com/u/2319755/cordova-background-geolocaiton/distance-filter-city.png)
 
+####`@param {Integer} geofenceProximityRadius (meters)`
+
+When using Geofences, the plugin activates only thoses in proximity (the maximim geofences allowed to be simultaneously monitored is limited by the platform, where **iOS** allows only 20 and **Android**.  However, the plugin allows you to create as many geofences as you wish (thousands even).  It stores these in its database and uses spatial queries to determine which **20** or **100** geofences to activate.
+
+![](https://dl.dropboxusercontent.com/u/2319755/background-geolocation/images/geofenceProximityRadius_iphone6_spacegrey_portrait.png)
+
 ####`@param {Boolean} disableElasticity [false]`
 
 Defaults to ```false```.  Set ```true``` to disable automatic speed-based ```#distanceFilter``` elasticity.  eg:  When device is moving at highway speeds, locations are returned at ~ 1 / km.
@@ -208,10 +214,6 @@ The plugin can optionally auto-stop monitoring location when some number of minu
 When stopped, the minimum distance the device must move beyond the stationary location for aggressive background-tracking to engage.  Note, since the plugin uses iOS significant-changes API, the plugin cannot detect the exact moment the device moves out of the stationary-radius. In normal conditions, it can take as much as 3 city-blocks to 1/2 km before staionary-region exit is detected.
 
 **WARNING:** It's a really **BAD** idea to set this any lower than `20` because you'll mess up the "stop-detection" system.  The stop-detection system uses `stationaryRadius` to determine when the device is stopped:  anything lower than `20` will cause false positives and prevent "stop-detection" from occuring.  You will **not** get any better results with iOS stationary-exit with a `stationaryRadius: 0` vs `stationaryRadius: 200`.  **DO NOT SET** `stationaryRadius < 20`, **NO, NO, NO**.
-
-####`@param {Integer} geofenceProximityRadius (meters)`
-
-When using Geofences, the plugin activates only thoses in proximity (the maximim geofences allowed to be simultaneously monitored is limited by the platform, where **iOS** allows only 20 and **Android**.  However, the plugin allows you to create as many geofences as you wish (thousands even).  It stores these in its database and uses spatial queries to determine which **20** or **100** geofences to activate. |
 
 ####`@param {Boolean} useSignificantChangesOnly [false]`
 
