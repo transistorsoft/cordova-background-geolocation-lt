@@ -3,7 +3,7 @@
 <plugin xmlns="http://www.phonegap.com/ns/plugins/1.0"
     xmlns:android="http://schemas.android.com/apk/res/android"
     id="com.transistorsoft.cordova.background-geolocation"
-    version="2.1.0">
+    version="2.2.0">
 
     <name>BackgroundGeolocation</name>
     <description>Sophisticated, battery-efficient background-geolocation plugin for Cordova</description>
@@ -22,19 +22,20 @@
     </js-module>
 
      <platform name="ios">
-        <!-- required background modes:  App registers for location updates -->        
+        <dependency id="cordova-plugin-cocoalumberjack" version="^0.0.2" />
+        <!-- required background modes:  App registers for location updates -->
+        <config-file target="*-Info.plist" parent="UIBackgroundModes">
+            <array>
+                <string>location</string>
+            </array>
+        </config-file>
+
         <config-file target="*-Info.plist" parent="NSLocationAlwaysUsageDescription">
             <string>App requires background location tracking</string>
         </config-file>
 
         <config-file target="*-Info.plist" parent="NSLocationWhenInUseUsageDescription">
             <string>App requires background location tracking</string>
-        </config-file>
-
-        <config-file target="*-Info.plist" parent="UIBackgroundModes">
-            <array>
-                <string>location</string>
-            </array>
         </config-file>
 
         <config-file target="*-Info.plist" parent="NSMotionUsageDescription">
@@ -46,6 +47,7 @@
                 <param name="ios-package" value="CDVBackgroundGeolocation"/>
             </feature>
         </config-file>
+
         <framework src="AudioToolbox.framework" weak="true" />
         <framework src="SystemConfiguration.framework" weak="true" />
         <framework src="AVFoundation.framework" weak="true" />
@@ -61,13 +63,12 @@
         <resource-file src="src/android/libs/tslocationmanager.aar" target="src/android/libs/tslocationmanager.aar" />
 
         <source-file src="src/android/CDVBackgroundGeolocation.java" target-dir="src/com/transistorsoft/cordova/bggeo" />
-        
+
         <config-file target="AndroidManifest.xml" parent="/manifest/application">
             <service android:name="com.transistorsoft.locationmanager.BackgroundGeolocationService" />
             <service android:name="com.transistorsoft.locationmanager.LocationService" />
             <service android:name="com.transistorsoft.locationmanager.ActivityRecognitionService" />
             <service android:name="com.transistorsoft.locationmanager.geofence.GeofenceService" />
-            <service android:name="com.transistorsoft.locationmanager.scheduler.ScheduleService" />
             <service android:name="com.transistorsoft.locationmanager.scheduler.ScheduleAlarmService" />
             <receiver android:name="com.transistorsoft.locationmanager.BootReceiver">
                 <intent-filter>
@@ -87,11 +88,11 @@
             <uses-permission android:name="android.permission.WAKE_LOCK" />
             <uses-permission android:name="com.google.android.gms.permission.ACTIVITY_RECOGNITION" />
             <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
-        </config-file>   
+        </config-file>
         <config-file target="res/xml/config.xml" parent="/*">
             <feature name="BackgroundGeolocation">
                 <param name="android-package" value="com.transistorsoft.cordova.bggeo.CDVBackgroundGeolocation"/>
             </feature>
-        </config-file> 
-     </platform>          
+        </config-file>
+     </platform>
 </plugin>

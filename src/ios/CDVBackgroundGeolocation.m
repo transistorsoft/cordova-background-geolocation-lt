@@ -51,9 +51,6 @@
  */
 - (void) configure:(CDVInvokedUrlCommand*)command
 {
-    //self.locationCallbackId = command.callbackId;
-    [locationListeners addObject:command.callbackId];
-
     config = [command.arguments objectAtIndex:0];
     NSDictionary *state = [bgGeo configure:config];
 
@@ -62,14 +59,28 @@
     [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
 }
 
+- (void) removeListeners:(CDVInvokedUrlCommand*) command
+{
+    [activityChangeListeners removeAllObjects];
+    [providerChangeListeners removeAllObjects];
+    [locationListeners removeAllObjects];
+    [geofenceListeners removeAllObjects];
+    [motionChangeListeners removeAllObjects];
+    [httpListeners removeAllObjects];
+    [heartbeatListeners removeAllObjects];
+    [scheduleListeners removeAllObjects];
+
+    CDVPluginResult* result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK];
+    [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
+}
 - (void) setConfig:(CDVInvokedUrlCommand*)command
 {
     NSDictionary *cfg  = [command.arguments objectAtIndex:0];
 
     [self.commandDelegate runInBackground:^{
-        [bgGeo setConfig:cfg];
+        NSDictionary *state = [bgGeo setConfig:cfg];
         CDVPluginResult* result = nil;
-        result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK];
+        result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:state];
         [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
     }];
 }
@@ -88,11 +99,10 @@
     [self.commandDelegate runInBackground:^{
         [bgGeo start];
         dispatch_sync(dispatch_get_main_queue(), ^{
-            CDVPluginResult* result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsBool: true];
+            CDVPluginResult* result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:[bgGeo getState]];
             [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
         });
     }];
-
 }
 /**
  * Turn it off
@@ -100,24 +110,30 @@
 - (void) stop:(CDVInvokedUrlCommand*)command
 {
     [bgGeo stop];
-    CDVPluginResult* result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsBool: false];
+    CDVPluginResult* result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:[bgGeo getState]];
     [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
 }
 
 - (void) startSchedule:(CDVInvokedUrlCommand*)command
 {
     [bgGeo startSchedule];
-    CDVPluginResult* result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsBool: false];
+    CDVPluginResult* result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:[bgGeo getState]];
     [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
 }
 
 - (void) stopSchedule:(CDVInvokedUrlCommand*)command
 {
     [bgGeo stopSchedule];
-    CDVPluginResult* result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsBool: false];
+    CDVPluginResult* result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:[bgGeo getState]];
     [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
 }
 
+- (void) startGeofences:(CDVInvokedUrlCommand*)command
+{
+    [bgGeo startGeofences];
+    CDVPluginResult* result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:[bgGeo getState]];
+    [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
+}
 
 - (void) getOdometer:(CDVInvokedUrlCommand*)command
 {
@@ -629,14 +645,14 @@
     };
 }
 
--(void (^)(CLCircularRegion *region, NSDictionary *locationData, NSString *action)) createGeofenceHandler {
-    return ^(CLCircularRegion *region, NSDictionary *locationData, NSString *action) {
+-(void (^)(NSString *identifier, NSString *action, NSDictionary *locationData)) createGeofenceHandler {
+    return ^(NSString *identifier, NSString *action, NSDictionary *locationData) {
         if (![geofenceListeners count]) {
             return;
         }
         for (NSString *callbackId in geofenceListeners) {
             NSDictionary *params = @{
-                @"identifier": region.identifier,
+                @"identifier": identifier,
                 @"action": action,
                 @"location": locationData,
                 @"taskId": @([bgGeo createBackgroundTask])
