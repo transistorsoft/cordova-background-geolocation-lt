@@ -74,6 +74,26 @@ module.exports = {
              [config]
         );
     },
+    removeListeners: function(success, failure) {
+        success = success || function(){};
+        failure = failure || function(){};
+        var re = /^BackgroundGeolocation.*/;
+        var mySuccess = function(response) {
+            var callbacks = window.cordova.callbacks;
+            for (var callbackId in callbacks) {
+                if (callbacks.hasOwnProperty(callbackId) && callbackId.match(re)) {
+                    delete callbacks[callbackId];
+                }
+            }
+            success(response);
+        }
+        exec(mySuccess,
+             failure,
+             'BackgroundGeolocation',
+             'removeListeners',
+             []
+        );
+    },
     getState: function(success, failure) {
         exec(success || function() {},
              failure || function() {},

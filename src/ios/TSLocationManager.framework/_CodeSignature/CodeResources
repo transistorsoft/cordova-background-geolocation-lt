@@ -6,19 +6,19 @@
 	<dict>
 		<key>Headers/LocationManager.h</key>
 		<data>
-		IOkt4hCVp3CSRpvEHaQhIzAwRvY=
+		g0mUx4Xt6DQpXvsH22XVlCdk4Pg=
 		</data>
 		<key>Headers/TSLocationManager.h</key>
 		<data>
-		Lw/bjxpvbivNnpWkN4onHK/VSPM=
+		fxJ2A30kuRhg3dWdp6NyE8uzymA=
 		</data>
 		<key>Headers/TSSchedule.h</key>
 		<data>
-		l7gJ1bMBCvrAI0AsQBLYBHlAznk=
+		QCQijL359mtz3vYZOz3lU6+pQiY=
 		</data>
 		<key>Info.plist</key>
 		<data>
-		yZIAKjwe79B26HoZx7eKyJXilMQ=
+		G2gmEHU6zqjnAIgfedperZTb/uk=
 		</data>
 		<key>Modules/module.modulemap</key>
 		<data>
@@ -31,33 +31,33 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			IOkt4hCVp3CSRpvEHaQhIzAwRvY=
+			g0mUx4Xt6DQpXvsH22XVlCdk4Pg=
 			</data>
 			<key>hash2</key>
 			<data>
-			8eTs5sIB8Zx1ozDwuhAvQ4vPsejQCfIQLHdX+n9wls0=
+			CYgwNo/szYFk3HGSwQIBagce5hrNzWvKsPpsu0ri3s8=
 			</data>
 		</dict>
 		<key>Headers/TSLocationManager.h</key>
 		<dict>
 			<key>hash</key>
 			<data>
-			Lw/bjxpvbivNnpWkN4onHK/VSPM=
+			fxJ2A30kuRhg3dWdp6NyE8uzymA=
 			</data>
 			<key>hash2</key>
 			<data>
-			LqjjBtg4mWI1TFGMorWBfv4eHM33gwStQzk9/Et1Lyw=
+			VCODH9E12J1QRWfTtlbNUpXHn+pwvghJWen16+0BpZs=
 			</data>
 		</dict>
 		<key>Headers/TSSchedule.h</key>
 		<dict>
 			<key>hash</key>
 			<data>
-			l7gJ1bMBCvrAI0AsQBLYBHlAznk=
+			QCQijL359mtz3vYZOz3lU6+pQiY=
 			</data>
 			<key>hash2</key>
 			<data>
-			z/ddw6U/oQSX715tcPfpjec7gX7eyA5KiBjS3BueSBo=
+			Qv/pbWa9haQidGkJqtKX4LLHBJgyclApsj5wrhpK74g=
 			</data>
 		</dict>
 		<key>Modules/module.modulemap</key>
@@ -89,6 +89,11 @@
 			<true/>
 			<key>weight</key>
 			<real>1100</real>
+		</dict>
+		<key>^Base\.lproj/</key>
+		<dict>
+			<key>weight</key>
+			<real>1010</real>
 		</dict>
 		<key>^version.plist$</key>
 		<true/>
@@ -134,6 +139,11 @@
 			<true/>
 			<key>weight</key>
 			<real>1100</real>
+		</dict>
+		<key>^Base\.lproj/</key>
+		<dict>
+			<key>weight</key>
+			<real>1010</real>
 		</dict>
 		<key>^Info\.plist$</key>
 		<dict>

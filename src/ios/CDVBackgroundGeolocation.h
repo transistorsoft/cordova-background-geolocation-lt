@@ -13,10 +13,12 @@
 @property (nonatomic) UIBackgroundTaskIdentifier syncTaskId;
 
 - (void) configure:(CDVInvokedUrlCommand*)command;
+- (void) removeListeners:(CDVInvokedUrlCommand*)command;
 - (void) start:(CDVInvokedUrlCommand*)command;
 - (void) stop:(CDVInvokedUrlCommand*)command;
 - (void) startSchedule:(CDVInvokedUrlCommand*)command;
 - (void) stopSchedule:(CDVInvokedUrlCommand*)command;
+- (void) startGeofences:(CDVInvokedUrlCommand*)command;
 - (void) finish:(CDVInvokedUrlCommand*)command;
 - (void) error:(CDVInvokedUrlCommand*)command;
 - (void) changePace:(CDVInvokedUrlCommand*)command;
