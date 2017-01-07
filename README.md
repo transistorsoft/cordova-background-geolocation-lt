@@ -38,7 +38,7 @@ $ cordova plugin add <git.url>#1.5.0
 
 ![](https://dl.dropboxusercontent.com/u/2319755/cordova-background-geolocaiton/screenshot-github-tagged-branches.png)
 
-#### Building Android
+## Building Android
 
 While using the Android version requires [purchasing a license](http://www.transistorsoft.com/shop/products/cordova-background-geolocation), there is a way to try it in your own app: simply modify your `config.xml` as follows (your app **must** be named `com.transistorsoft.backgroundgeolocation.ionic`:
 
