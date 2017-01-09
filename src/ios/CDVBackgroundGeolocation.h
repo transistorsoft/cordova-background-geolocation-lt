@@ -19,6 +19,7 @@
 - (void) startSchedule:(CDVInvokedUrlCommand*)command;
 - (void) stopSchedule:(CDVInvokedUrlCommand*)command;
 - (void) startGeofences:(CDVInvokedUrlCommand*)command;
+- (void) startBackgroundTask:(CDVInvokedUrlCommand*)command;
 - (void) finish:(CDVInvokedUrlCommand*)command;
 - (void) error:(CDVInvokedUrlCommand*)command;
 - (void) changePace:(CDVInvokedUrlCommand*)command;
@@ -35,7 +36,6 @@
 - (void) addLocationListener:(CDVInvokedUrlCommand *)command;
 - (void) addHttpListener:(CDVInvokedUrlCommand *)command;
 - (void) getOdometer:(CDVInvokedUrlCommand *)command;
-- (void) resetOdometer:(CDVInvokedUrlCommand *)command;
 - (void) addGeofence:(CDVInvokedUrlCommand *)command;
 - (void) addGeofences:(CDVInvokedUrlCommand *)command;
 - (void) removeGeofence:(CDVInvokedUrlCommand *)command;

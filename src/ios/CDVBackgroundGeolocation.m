@@ -14,8 +14,7 @@
     NSMutableArray *locationListeners;
     NSMutableArray *geofenceListeners;
     NSMutableArray *motionChangeListeners;
-    NSMutableArray *currentPositionListeners;
-    NSMutableArray *watchPositionListeners;
+    NSMutableArray *watchPositionCallbacks;
     NSMutableArray *httpListeners;
     NSMutableArray *heartbeatListeners;
     NSMutableArray *scheduleListeners;
@@ -54,8 +53,12 @@
     config = [command.arguments objectAtIndex:0];
     NSDictionary *state = [bgGeo configure:config];
 
-    CDVPluginResult* result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:state];
-
+    CDVPluginResult *result;
+    if (state != nil) {
+        result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:state];
+    } else {
+        result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR];
+    }
     [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
 }
 
@@ -141,13 +144,24 @@
     [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
 }
 
-- (void) resetOdometer:(CDVInvokedUrlCommand*)command
+- (void) setOdometer:(CDVInvokedUrlCommand*)command
 {
-    [self.commandDelegate runInBackground:^{
-        [bgGeo resetOdometer];
+    __typeof(self.commandDelegate) __weak delegate = self.commandDelegate;
+    double value  = [[command.arguments objectAtIndex:0] doubleValue];
+
+    [delegate runInBackground:^{
+        [bgGeo setOdometer:value success:^(NSDictionary* locationData) {
+            CDVPluginResult *result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:locationData];
+            runOnMainQueueWithoutDeadlocking(^{
+                [delegate sendPluginResult:result callbackId:command.callbackId];
+            });
+        } failure:^(NSError* error) {
+            CDVPluginResult *result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsInt:(int)error.code];
+            runOnMainQueueWithoutDeadlocking(^{
+                [delegate sendPluginResult:result callbackId:command.callbackId];
+            });
+        }];
     }];
-    CDVPluginResult* result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK];
-    [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
 }
 
 /**
@@ -227,16 +241,11 @@
     __typeof(self.commandDelegate) __weak delegate = self.commandDelegate;
 
     [bgGeo addListener:event callback:^(NSDictionary* event) {
-        dispatch_block_t block = ^{
+        runOnMainQueueWithoutDeadlocking(^{
             CDVPluginResult *result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:event];
             [result setKeepCallbackAsBool:YES];
             [delegate sendPluginResult:result callbackId:command.callbackId];
-        };
-        if ([NSThread isMainThread]) {
-            block();
-        } else {
-            dispatch_sync(dispatch_get_main_queue(), block);
-        }
+        });
     }];
 }
 
@@ -407,44 +416,58 @@
 - (void) getCurrentPosition:(CDVInvokedUrlCommand*)command
 {
     NSDictionary *options  = [command.arguments objectAtIndex:0];
-    if (currentPositionListeners == nil) {
-        currentPositionListeners = [[NSMutableArray alloc] init];
-    }
-    [currentPositionListeners addObject:command.callbackId];
-
+    __typeof(self.commandDelegate) __weak delegate = self.commandDelegate;
+    
     [self.commandDelegate runInBackground:^{
-        [bgGeo updateCurrentPosition:options];
+        [bgGeo getCurrentPosition:options success:^(NSDictionary* event) {
+            runOnMainQueueWithoutDeadlocking(^{
+                CDVPluginResult *result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:event];
+                [delegate sendPluginResult:result callbackId:command.callbackId];
+            });
+        } failure:^(NSError* error) {
+            runOnMainQueueWithoutDeadlocking(^{
+                CDVPluginResult *result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsInt:(int)error.code];
+                [delegate sendPluginResult:result callbackId:command.callbackId];
+            });
+        }];
     }];
 }
 
 - (void) watchPosition:(CDVInvokedUrlCommand*)command
 {
     NSDictionary *options  = [command.arguments objectAtIndex:0];
-
-    if (watchPositionListeners == nil) {
-        watchPositionListeners = [[NSMutableArray alloc] init];
+    __typeof(self.commandDelegate) __weak delegate = self.commandDelegate;
+    
+    if (!watchPositionCallbacks) {
+        watchPositionCallbacks = [NSMutableArray new];
     }
-    [watchPositionListeners addObject:command.callbackId];
-
+    [watchPositionCallbacks addObject:command.callbackId];
+    
     [self.commandDelegate runInBackground:^{
-        [bgGeo watchPosition:options];
+        [bgGeo watchPosition:options success:^(NSDictionary* locationData) {
+            runOnMainQueueWithoutDeadlocking(^{
+                CDVPluginResult *result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:locationData];
+                [result setKeepCallbackAsBool:YES];
+                [delegate sendPluginResult:result callbackId:command.callbackId];
+            });
+        } failure:^(NSError* error) {
+            runOnMainQueueWithoutDeadlocking(^{
+                CDVPluginResult *result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsInt:(int)error.code];
+                [delegate sendPluginResult:result callbackId:command.callbackId];
+            });
+        }];
     }];
-
-    //CDVPluginResult *result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:@"watchPosition is not yet implemented for ios"];
-    //[self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
 }
 - (void) stopWatchPosition:(CDVInvokedUrlCommand*)command
 {
     [self.commandDelegate runInBackground:^{
         [bgGeo stopWatchPosition];
     }];
-    if (watchPositionListeners) {
-        CDVPluginResult *result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsInt:-1];
-        [result setKeepCallbackAsBool:NO];
-        for (NSString *callbackId in watchPositionListeners) {
-            [self.commandDelegate sendPluginResult:result callbackId:callbackId];
-        }
+    if (!watchPositionCallbacks) {
+        watchPositionCallbacks = [NSMutableArray new];
     }
+    [self.commandDelegate sendPluginResult:[CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsArray:watchPositionCallbacks] callbackId:command.callbackId];
+    [watchPositionCallbacks removeAllObjects];
 }
 
 - (void) playSound:(CDVInvokedUrlCommand*)command
@@ -453,6 +476,15 @@
     [bgGeo playSound: soundId];
     CDVPluginResult *result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK];
     [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
+}
+
+/**
+ * Called by js to signify the end of a background-geolocation event
+ */
+-(void) startBackgroundTask:(CDVInvokedUrlCommand*)command
+{
+    UIBackgroundTaskIdentifier taskId = [bgGeo createBackgroundTask];
+    [self.commandDelegate sendPluginResult:[CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsInt:(int)taskId] callbackId:command.callbackId];
 }
 
 /**
@@ -566,27 +598,6 @@
 
         for (NSString *callbackId in locationListeners) {
             [self.commandDelegate sendPluginResult:result callbackId:callbackId];
-        }
-
-        if (type == TS_LOCATION_TYPE_WATCH) {
-            @synchronized(watchPositionListeners) {
-                for (NSString *callbackId in watchPositionListeners) {
-                    CDVPluginResult *result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:locationData];
-                    [result setKeepCallbackAsBool:YES];
-                    [self.commandDelegate sendPluginResult:result callbackId:callbackId];
-                }
-            }
-        } else if (type != TS_LOCATION_TYPE_SAMPLE && [currentPositionListeners count]) {
-            @synchronized(currentPositionListeners) {
-                if ([currentPositionListeners count]) {
-                    NSString *callbackId = [currentPositionListeners firstObject];
-                    NSDictionary *params = @{@"location": locationData, @"taskId": @([bgGeo createBackgroundTask])};
-                    CDVPluginResult *result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:params];
-                    [result setKeepCallbackAsBool:NO];
-                    [self.commandDelegate sendPluginResult:result callbackId:callbackId];
-                    [currentPositionListeners removeObject:callbackId];
-                }
-            }
         }
     };
 }
@@ -727,20 +738,9 @@
 
         if ([type isEqualToString:@"location"]) {
             CDVPluginResult *result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsInt:(int)error.code];
-            if ([currentPositionListeners count]) {
-                [result setKeepCallbackAsBool:NO];
-                for (NSString *callbackId in currentPositionListeners) {
-                    [self.commandDelegate sendPluginResult:result callbackId:callbackId];
-                }
-                [currentPositionListeners removeAllObjects];
-            }
-
             [result setKeepCallbackAsBool:YES];
 
             for (NSString *callbackId in locationListeners) {
-                [self.commandDelegate sendPluginResult:result callbackId:callbackId];
-            }
-            for (NSString *callbackId in watchPositionListeners) {
                 [self.commandDelegate sendPluginResult:result callbackId:callbackId];
             }
         }
@@ -763,6 +763,19 @@
 {
     dispatch_async(dispatch_get_main_queue(), block);
 }
+
+void runOnMainQueueWithoutDeadlocking(void (^block)(void))
+{
+    if ([NSThread isMainThread])
+    {
+        block();
+    }
+    else
+    {
+        dispatch_sync(dispatch_get_main_queue(), block);
+    }
+}
+
 /**
  * If you don't stopMonitoring when application terminates, the app will be awoken still when a
  * new location arrives, essentially monitoring the user's location even when they've killed the app.

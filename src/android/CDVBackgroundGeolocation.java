@@ -60,6 +60,7 @@ public class CDVBackgroundGeolocation extends CordovaPlugin {
      */
 
     public static final String ACTION_FINISH            = "finish";
+    public static final String ACTION_START_BACKGROUND_TASK = "startBackgroundTask";
     public static final String ACTION_ERROR             = "error";
     public static final String ACTION_CONFIGURE         = "configure";
     public static final String ACTION_SET_CONFIG        = "setConfig";
@@ -137,6 +138,9 @@ public class CDVBackgroundGeolocation extends CordovaPlugin {
             // No implementation to stop background-tasks with Android.  Just say "success"
             result      = true;
             stop(callbackContext);
+        } else if (ACTION_START_BACKGROUND_TASK.equalsIgnoreCase(action)) {
+            result = true;
+            callbackContext.success(0);
         } else if (ACTION_FINISH.equalsIgnoreCase(action)) {
             result = true;
             callbackContext.success();
@@ -182,9 +186,9 @@ public class CDVBackgroundGeolocation extends CordovaPlugin {
         } else if (BackgroundGeolocation.ACTION_GET_ODOMETER.equalsIgnoreCase(action)) {
             result = true;
             getOdometer(callbackContext);
-        } else if (BackgroundGeolocation.ACTION_RESET_ODOMETER.equalsIgnoreCase(action)) {
+        } else if (BackgroundGeolocation.ACTION_SET_ODOMETER.equalsIgnoreCase(action)) {
             result = true;
-            resetOdometer(callbackContext);
+            setOdometer((float) data.getDouble(0), callbackContext);
         } else if (BackgroundGeolocation.ACTION_ADD_GEOFENCE.equalsIgnoreCase(action)) {
             result = true;
             addGeofence(callbackContext, data.getJSONObject(0));
@@ -343,10 +347,23 @@ public class CDVBackgroundGeolocation extends CordovaPlugin {
 
     private void stop(CallbackContext callbackContext) {
         startCallback = null;
-        setEnabled(false);
-        callbackContext.success();
+        getAdapter().stop(new StopCallback(callbackContext));
     }
 
+    private class StopCallback implements TSCallback {
+        private CallbackContext mCallbackContext;
+        public StopCallback(CallbackContext callback) {
+            mCallbackContext = callback;
+        }
+        @Override
+        public void success(Object state) {
+            mCallbackContext.success((JSONObject) state);
+        }
+        @Override
+        public void error(Object error) {
+            mCallbackContext.error((String) error);
+        }
+    }
     private void changePace(final CallbackContext callbackContext, JSONArray data) throws JSONException {
         TSCallback callback = new TSCallback() {
             public void success(Object result) {
@@ -365,7 +382,7 @@ public class CDVBackgroundGeolocation extends CordovaPlugin {
                 try {
                     JSONObject params = new JSONObject();
                     params.put("locations", result);
-                    params.put("taskId", "android-bg-task-id");
+                    params.put("taskId", 0);
                     callbackContext.sendPluginResult(new PluginResult(PluginResult.Status.OK, params));
                 } catch (JSONException e) {
                     callbackContext.error(e.getMessage());
@@ -399,7 +416,7 @@ public class CDVBackgroundGeolocation extends CordovaPlugin {
                 try {
                     JSONObject params = new JSONObject();
                     params.put("locations", result);
-                    params.put("taskId", "android-bg-task-id");
+                    params.put("taskId", 0);
                     callbackContext.success(params);
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -456,24 +473,21 @@ public class CDVBackgroundGeolocation extends CordovaPlugin {
         }
     }
 
-    private void stopWatchPosition(final CallbackContext callbackContext) {
+    private void stopWatchPosition(CallbackContext callbackContext) {
         TSCallback callback = new TSCallback() {
-            public void success(Object result) {
-                callbackContext.success();
-            }
-            public void error(Object error) {
-                callbackContext.error((Integer) error);
-            }
+            public void success(Object result) {}
+            public void error(Object error) {}
         };
-        // Call success() on all CordovaCallbacks so that client removes callback.  A bit hacky.
         getAdapter().stopWatchPosition(callback);
+
+        JSONArray callbackIds = new JSONArray();
         Iterator<CallbackContext> iterator = watchPositionCordovaCallbacks.iterator();
         while (iterator.hasNext()) {
             CallbackContext cb = iterator.next();
-            PluginResult response = new PluginResult(PluginResult.Status.OK, false);
-            cb.sendPluginResult(response);
+            callbackIds.put(cb.getCallbackId());
             iterator.remove();
         }
+        callbackContext.success(callbackIds);
     }
 
     private void addGeofence(final CallbackContext callbackContext, JSONObject config) {
@@ -516,9 +530,16 @@ public class CDVBackgroundGeolocation extends CordovaPlugin {
         callbackContext.sendPluginResult(result);
     }
 
-    private void resetOdometer(CallbackContext callbackContext) {
-        getAdapter().resetOdometer();
-        callbackContext.success();
+    private void setOdometer(Float value, final CallbackContext callbackContext) {
+        TSCallback callback = new TSCallback() {
+            public void success(Object result) {
+                callbackContext.success((JSONObject) result);
+            }
+            public void error(Object result) {
+                callbackContext.error((String) result);
+            }
+        };
+        getAdapter().setOdometer(value, callback);
     }
 
     private class AddListenerCallback implements TSCallback {
@@ -775,8 +796,6 @@ public class CDVBackgroundGeolocation extends CordovaPlugin {
                 }
             };
             adapter.start(callback);
-        } else {
-            adapter.stop();
         }
     }
 
