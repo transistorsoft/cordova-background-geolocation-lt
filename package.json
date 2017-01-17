@@ -15,7 +15,9 @@
   "keywords": [
     "gps",
     "location",
+    "tracking",
     "geolocation",
+    "geofencing",
     "background",
     "ecosystem:cordova",
     "cordova-android",

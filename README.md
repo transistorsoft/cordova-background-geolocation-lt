@@ -49,7 +49,7 @@ While using the Android version requires [purchasing a license](http://www.trans
 
 This license key is bound to the bundle id `com.transistorsoft.backgroundgeolocation.ionic` -- it will not work with any other id.
 
-## Using the plugin
+## Using the Plugin
 
 The plugin creates the object `window.BackgroundGeolocation`.  See [API Documentation](docs) for details
 
@@ -61,6 +61,38 @@ interface Window {
 }
 var bgGeo = Window.BackgroundGeolocation;
 
+```
+
+### Configuring the Plugin
+There are **three** simple steps to using `BackgroundGeolocation`:
+1. Listen to events
+2. `#configure` the plugin
+3. `#start` the plugin
+
+```Javascript
+// 1.  Listen to events
+bgGeo.on('location', onLocation, onLocationFailure);
+bgGeo.on('motionchange', onMotionChange);
+bgGeo.on('providerchange', onProviderChange);
+
+// 2. Configure the plugin.  
+bgGeo.configure({
+  desiredAccuracy: 0,   // <-- Config params
+  distanceFilter: 50
+}, function(state) {    // <-- Current state provided to #configure callback
+  // 3.  Start tracking
+  console.log('BackgroundGeolocation is configured and ready to use');
+  if (!state.enabled) {
+    bgGeo.start(function() {
+      console.log('- BackgroundGeolocation tracking started');
+    });
+  }
+});
+// NOTE:  Do NOT execute any API methods until the callback to #configure
+// method above executes!
+// For example, do not do this here:
+// bgGeo.getCurrentPosition()   // <-- NO!
+// bgGeo.getState();            // <-- NO!
 ```
 
 ## Documentation
