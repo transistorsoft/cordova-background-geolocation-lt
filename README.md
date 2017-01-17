@@ -65,6 +65,7 @@ var bgGeo = Window.BackgroundGeolocation;
 
 ### Configuring the Plugin
 There are **three** simple steps to using `BackgroundGeolocation`:
+
 1. Listen to events
 2. `#configure` the plugin
 3. `#start` the plugin
