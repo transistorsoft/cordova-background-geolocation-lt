@@ -53,6 +53,16 @@ This license key is bound to the bundle id `com.transistorsoft.backgroundgeoloca
 
 The plugin creates the object `window.BackgroundGeolocation`.  See [API Documentation](docs) for details
 
+### Ionic 2 and Typescript
+
+```Javascript
+interface Window {
+    BackgroundGeolocation: any;
+}
+var bgGeo = Window.BackgroundGeolocation;
+
+```
+
 ## Documentation
 - [API Documentation](docs)
 - [Location Data Schema](../../wiki/Location-Data-Schema)
