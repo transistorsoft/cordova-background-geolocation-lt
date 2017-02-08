@@ -6,11 +6,11 @@ The following **Options** can all be provided to the plugin's `#configure` metho
 
 ```Javascript
 bgGeo.configure({
-    desiredAccuracy: 0,
-    distanceFilter: 50,
-    .
-    .
-    .
+	desiredAccuracy: 0,
+	distanceFilter: 50,
+	.
+	.
+	.
 }, success, fail);
 
 // Use #setConfig if you need to change options after you've executed #configure
@@ -65,7 +65,7 @@ bgGeo.setConfig({
 |---|---|---|---|---|
 | [`url`](#param-string-url-undefined) | `String` | Optional | `null` | Your server url where you wish to HTTP POST recorded-locations to |
 | [`params`](#param-object-params) | `Object` | Optional | `null` | Optional HTTP params sent along in HTTP request to above `#url` |
-| [`extras`](#param-object-extras) | `Object` | Optional | | Optional `null` to attach to each recorded location |
+| [`extras`](#param-object-extras) | `Object` | Optional | `null` | Optional meta-data to attach to each recorded location |
 | [`headers`](#param-object-headers) | `Object` | Optional | `null` | Optional HTTP headers sent along in HTTP request to above `#url` |
 | [`method`](#param-string-method-post) | `String` | Optional | `POST` | The HTTP method.  Defaults to `POST`.  Some servers require `PUT`.|
 | [`autoSync`](#param-string-autosync-true) | `Boolean` | Optional | `true` | If you've enabeld HTTP feature by configuring an `#url`, the plugin will attempt to HTTP POST each location to your server **as it is recorded**.  If you set `autoSync: false`, it's up to you to **manually** execute the `#sync` method to initate the HTTP POST (**NOTE** The plugin will continue to persist **every** recorded location in the SQLite database until you execute `#sync`). |
@@ -558,6 +558,10 @@ If the closes the app with a configured `heartbeatInterval`, `forceReloadOnHeart
 
 If the user reboots the device, setting `forceReloadOnBoot: true` will cause the foreground application (where your Javascript lives) to reload after the device is rebooted.  This option should be used in conjunction with `forceReloadOnLocationChange: true` or `forceReloadOnMotionChange: true`.
 
+####`@param {Boolean} forceReloadOnSchedule [false]`
+
+If a `schedule` event occurs after the user terminates the app with `stopOnTerminate: false`, setting `forceReloadOnSchedule: true` will cause the foreground application (where your Javascript lives) to reboot.
+
 ####`@param {Boolean} foregroundService [false]`
 
 Make the Android service [run in the foreground](http://developer.android.com/intl/ru/reference/android/app/Service.html#foregroundService(int, android.app.Notification)), supplying the ongoing notification to be shown to the user while in this state.  Running as a foreground-service makes the tracking-service **much** more inmmune to OS killing it due to memory/battery pressure.  By default services are background, meaning that if the system needs to kill them to reclaim more memory (such as to display a large page in a web browser).  @see `notificationTitle`, `notificationText` & `notificatinoColor`
@@ -655,6 +659,17 @@ Your `callbackFn` fill be executed when a change in the state of the device's **
 ######@param {Boolean} enabled Whether location-services is enabled
 ######@param {Boolean} gps Whether gps is enabled
 ######@param {Boolean} network Whether wifi geolocation is enabled.
+######@param {Integer} status Location authorization status.
+
+| Name | Value | Platform |
+|------|-------|----------|
+| `AUTHORIZATION_STATUS_NOT_DETERMINED` | `0` | iOS only |
+| `AUTHORIZATION_STATUS_RESTRICTED` | `1` | iOS only |
+| `AUTHORIZATION_STATUS_DENIED` | `2` | iOS & Android |
+| `AUTHORIZATION_STATUS_ALWAYS` | `3` | iOS & Android |
+| `AUTHORIZATION_STATUS_WHEN_IN_USE` | `4` | iOS only |
+
+**Note:** When Android location permission is **granted**, `status == AUTHORIZATION_STATUS_ALWAYS`, otherwise, `AUTHORIZATION_DENIED`.
 
 ```Javascript
 bgGeo.on('providerchange', function(provider) {
@@ -662,6 +677,22 @@ bgGeo.on('providerchange', function(provider) {
     console.log('  enabled: ', provider.enabled);
     console.log('  gps: ', provider.gps);
     console.log('  network: ', provider.network);
+    console.log('  status: ', provider.status);
+
+    switch(provider.status) {
+        case bgGeo.AUTHORIZATION_STATUS_DENIED:
+            // Android & iOS
+            console.log('- Location authorization denied');
+            break;
+        case bgGeo.AUTHORIZATION_STATUS_ALWAYS:
+            // Android & iOS
+            console.log('- Location always granted');
+            break;
+        case bgGeo.AUTHORIZATION_STATUS_WHEN_IN_USE:
+            // iOS only
+            console.log('- Location WhenInUse granted');
+            break;
+    }
 });
 ```
 
@@ -755,16 +786,16 @@ The `successFn` will be executed for each successful HTTP request where the resp
 Example:
 ```Javascript
 bgGeo.onHttp(function(response) {
-    var status = response.status;
-    var responseText = response.responseText;
-    var res = JSON.parse(responseText);  // <-- if your server returns JSON
+	var status = response.status;
+	var responseText = response.responseText;
+	var res = JSON.parse(responseText);  // <-- if your server returns JSON
 
-    console.log("- HTTP success", status, res);
+	console.log("- HTTP success", status, res);
 
 }, function(response) {
-    var status = response.status;
-    var responseText = response.responseText;
-    console.log("- HTTP failure: ", status, responseText);
+	var status = response.status;
+	var responseText = response.responseText;
+	console.log("- HTTP failure: ", status, responseText);
 })
 ```
 
@@ -779,21 +810,21 @@ The `successFn` will be executed for each `heartbeatInterval` while the device i
 Example:
 ```Javascript
 bgGeo.onHeartbeat(function(params) {
-    console.log('- hearbeat');
+	console.log('- hearbeat');
 
-    var shakes = params.shakes;
-    var location = params.location;
+	var shakes = params.shakes;
+	var location = params.location;
 
-    // Attach some arbitrary data to the location extras.
-    location.extras = {
-        foo: 'bar',
-        shakes: shakes
-    };
+	// Attach some arbitrary data to the location extras.
+	location.extras = {
+		foo: 'bar',
+		shakes: shakes
+	};
 
-    // You can manually insert a location if you wish.
-    bgGeo.insertLocation(location, function() {
-        console.log('- inserted location during heartbeat');
-    });
+	// You can manually insert a location if you wish.
+	bgGeo.insertLocation(location, function() {
+    	console.log('- inserted location during heartbeat');
+	});
 
     // OR you could request a new location:
     bgGeo.getCurrentPosition(function(location, taskId) {
@@ -801,9 +832,9 @@ bgGeo.onHeartbeat(function(params) {
         bgGeo.finish(taskId);
     });
 }, function(response) {
-    var status = response.status;
-    var responseText = response.responseText;
-    console.log("- HTTP failure: ", status, responseText);
+	var status = response.status;
+	var responseText = response.responseText;
+	console.log("- HTTP failure: ", status, responseText);
 })
 ```
 
@@ -935,13 +966,13 @@ bgGeo.configure(config, function(state) {
 });
 
 // Listen to geofences
-bgGeo.onGeofence(function(params, taskId) {
+bgGeo.on('geofence', function(params, taskId) {
     if (params.identifier == 'ZONE_OF_INTEREST') {
         // If you wish, you can choose to engage location-tracking mode when a 
         // particular geofence event occurs.
         bgGeo.start();
     }
-    bgGeo.finish();
+    bgGeo.finish(taskId);
 });
 ```
 
@@ -1023,11 +1054,11 @@ bgGeo.getCurrentPosition(function(location, taskId) {
 }, function(errorCode) {
     alert('An location error occurred: ' + errorCode);
 }, {
-  timeout: 30,      // 30 second timeout to fetch location
-  maximumAge: 5000, // Accept the last-known-location if not older than 5000 ms.
-  desiredAccuracy: 10,  // Try to fetch a location with an accuracy of `10` meters.
-  samples: 3,       // How many location samples to attempt.
-  extras: {         // [Optional] Attach your own custom `metaData` to this location.  This metaData will be persisted to SQLite and POSTed to your server
+  timeout: 30,    	// 30 second timeout to fetch location
+  maximumAge: 5000,	// Accept the last-known-location if not older than 5000 ms.
+  desiredAccuracy: 10,	// Try to fetch a location with an accuracy of `10` meters.
+  samples: 3,		// How many location samples to attempt.
+  extras: {       	// [Optional] Attach your own custom `metaData` to this location.  This metaData will be persisted to SQLite and POSTed to your server
     foo: "bar"  
   }
 });
@@ -1056,15 +1087,15 @@ Eg:
 
 ```Javascript
 bgGeo.getCurrentPosition(succesFn, function(errorCode) {
-    switch (errorCode) {
-        case 0:
-            alert('Failed to retrieve location');
-            break;
-        case 1:
-            alert('You must enable location services in Settings');
-            break;
+	switch (errorCode) {
+		case 0:
+			alert('Failed to retrieve location');
+			break;
+		case 1:
+			alert('You must enable location services in Settings');
+			break;
 
-    }
+	}
 })
 ```
 
@@ -1137,7 +1168,7 @@ bgGeo.addGeofence({
     notifyOnEntry: true,
     notifyOnExit: false,
     notifyOnDwell: true,
-    loiteringDelay: 30000,  // 30 seconds
+    loiteringDelay: 30000,	// 30 seconds
     extras: {               // Optional arbitrary meta-data
         zone_id: 1234
     }
@@ -1262,31 +1293,31 @@ Manually insert a location into the native plugin's SQLite database.  Your ```ca
 
 ```Javascript
     bgGeo.insertLocation({
-        "uuid": "f8424926-ff3e-46f3-bd48-2ec788c9e761", // <-- required
-        "coords": {                                     // <-- required
-            "latitude": 45.5192746,
-            "longitude": -73.616909,
-            "accuracy": 22.531999588012695,
-            "speed": 0,
-            "heading": 0,
-            "altitude": 0
-        },
-        "timestamp": "2016-02-10T22:25:54.905Z"         // <-- required
+		"uuid": "f8424926-ff3e-46f3-bd48-2ec788c9e761",	// <-- required
+		"coords": {										// <-- required
+			"latitude": 45.5192746,
+			"longitude": -73.616909,
+			"accuracy": 22.531999588012695,
+			"speed": 0,
+			"heading": 0,
+			"altitude": 0
+		},
+		"timestamp": "2016-02-10T22:25:54.905Z"			// <-- required
     }, function() {
         console.log('- Inserted location success');
     }, function(error) {
-        console.warn('- Failed to insert location: ', error);
+    	console.warn('- Failed to insert location: ', error);
     });
 
     // insertLocation can easily consume any location which it returned.  Note that #getCurrentPosition ALWAYS persists so this example
     // will manually persist a 2nd version of the same location.  The purpose here is to show that the plugin can consume any location object which it generated.
     bgGeo.getCurrentPosition(function(location, taskId) {
-        location.extras = {foo: 'bar'}; // <-- add some arbitrary extras-data
+    	location.extras = {foo: 'bar'};	// <-- add some arbitrary extras-data
 
-        // Insert it.
-        bgGeo.insertLocation(location, function() {
-            bgGeo.finish(taskId);
-        });
+    	// Insert it.
+    	bgGeo.insertLocation(location, function() {
+    		bgGeo.finish(taskId);
+    	});
     });
 ```
 
@@ -1314,8 +1345,8 @@ Your callback will be provided with the following params
 ```Javascript
     bgGeo.sync(function(locations, taskId) {
         try {
-            // Here are all the locations from the database.  The database is now EMPTY.
-            console.log('synced locations: ', locations);
+        	// Here are all the locations from the database.  The database is now EMPTY.
+        	console.log('synced locations: ', locations);
         } catch(e) {
             console.error('An error occurred in my application code', e);
         }

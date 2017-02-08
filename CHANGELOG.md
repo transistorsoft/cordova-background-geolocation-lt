@@ -1,5 +1,25 @@
 
 # Change Log
+
+## [2.4.0] - 2017-02-08
+- [Changed] **BREAKING** I've *finally* figured out how to configure a number of key variables required by the plugin within your `config.xml` file, namely the `NSLocationAlwaysUsageDescription`, `NSLocationWhenInUseUsageDescription`, `NSMotionUsageDescription`.  The plugin now requires a `<plugin />` config within your `config.xml`.  **BREAKING:** With the introduction of this new config mechanism, I decided to use this also for the Android `license` config.  You will no longer provide the `<parameter name="cordova-background-geolocation-license" />`.  See the [README](https://github.com/transistorsoft/cordova-background-geolocation/tree/config-xml-variables#configuring-the-plugin) for details.
+
+```xml
+<widget id="com.your.company.app.id">
+  <plugin name="cordova-background-geolocation" spec="^2.4.0">
+    <variable name="LOCATION_ALWAYS_USAGE_DESCRIPTION" value="Background location-tracking is required" />
+    <variable name="LOCATION_WHEN_IN_USE_USAGE_DESCRIPTION" value="Background location-tracking is required" />
+    <variable name="MOTION_USAGE_DESCRIPTION" value="Using the accelerometer increases battery-efficiency by intelligently toggling location-tracking only when the device is detected to be moving" />
+  </plugin>
+```
+- [Fixed] Migrate Android `providerchange` mechanism out of the `Service` (which only runs when the plugin is `#start`ed) to a place where it will be monitored all the time, regardless if the plugin is enabled or not.
+- [Fixed] Catch `IllegalStateException` reported when using `#getLog`
+- [Changed] With new Android "Doze-mode", override "idle" on `stopTimeout` and `schedule` alarms
+- [Changed] Tweak iOS accelerometer-only motion-detection system.
+- [Fixed] Location-authorization alert being popped up after a `suspend` event because the plugin always attempts to ensure it has a stationary-region here.  Simply check current authorization-status is not == `Denied`.
+- [Fixed] iOS Location Authorization alert is shown multiple time.  Also discovered a bug where the `providerchange` `enabled` value was calculated based upon hard-coded `Always` where it should have compared to the configured `locationAuthorizationRequest`.
+- [Added] If plugin's `#stop` method is called, the Location Authorization Alert will be hidden (if currently visible).
+
 ## [2.3.0] - 2017-01-09
 - [Fixed] Locale issue when formatting Floats.  Some locale use "," as decimal separator.  Force Locale -> US when performing rounding.  Proper locale will be applied during the JSON encoding.
 - [Added] Ability to provide optional arbitrary meta-data `extras` on geofences.
