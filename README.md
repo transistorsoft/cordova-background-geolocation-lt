@@ -38,16 +38,70 @@ $ cordova plugin add <git.url>#1.5.0
 
 ![](https://dl.dropboxusercontent.com/u/2319755/cordova-background-geolocaiton/screenshot-github-tagged-branches.png)
 
+## Configuring the plugin
+
+The plugin requires configuration within your App's `config.xml`:
+
+```xml
+<widget id="com.your.company.app.id">
+  <plugin name="cordova-background-geolocation">
+    <variable name="LOCATION_ALWAYS_USAGE_DESCRIPTION" value="Background location-tracking is required" />
+    <variable name="LOCATION_WHEN_IN_USE_USAGE_DESCRIPTION" value="Background location-tracking is required" />
+    <variable name="MOTION_USAGE_DESCRIPTION" value="Using the accelerometer increases battery-efficiency by intelligently toggling location-tracking only when the device is detected to be moving" />
+  </plugin>
+  .
+  .
+  .
+</widget>
+```
+---
+
+:exclamation:**NOTE:** To apply changes to these `<variable />`, you **must** remove/re-add the plugin.
+
+---
+
+### Disabling Background "location"
+
+For those using `useSignificantChangesOnly: true`, possibly because Apple *denied* your use of the background `location` capability, you can disable background `location` by providing the `BACKGROUND_MODE_LOCATION` `<variable />` with an empty-string:
+
+```xml
+<plugin name="cordova-background-geolocation">
+  .
+  .
+  .
+  <!-- Disable background "location" capability with empty-string -->
+  <variable name="BACKGROUND_MODE_LOCATION" value="" />
+</plugin>
+```
+
+##### `@variable LOCATION_ALWAYS_USAGE_DESCRIPTION ["Background location-tracking is required"]` iOS
+
+**[iOS]** Customize the message displayed to the user when `Always` location authorization is requested.  This variable is added to your iOS `.plist` in the `NSLocationAlwaysUsageDescription` key.
+
+##### `@variable LOCATION_WHEN_IN_USE_USAGE_DESCRIPTION ["Background location-tracking is required"` iOS
+
+**[iOS]** Customize the message displayed to the user when `WhenInUse` location authorization is requested.  This variable is added to your iOS `.plist` in the `NSLocationWhenInUseUsageDescription` key.
+
+##### `@variable MOTION_USAGE_DESCRIPTION ["Using the accelerometer increases battery-efficiency by..."` iOS
+
+**[iOS]** Customize the message displayed to the user when "Motion & Fitness" permission is requested.  The plugin is **highly** optimized to use iOS `CMMotionActivityManager` API for intelligently toggling location-services only when the plugin is detected to be moving.
+
+##### `@variable BACKGROUND_MODE_LOCATION ["&lt;string&gt;location&lt;/string&gt;"]` iOS
+**[iOS]** Adds the iOS background-mode `location` to your iOS `.plist` file.  This is the default behaviour.  To disable this, (ie: for those using `useSignificantChangesOnly`), provide an empty-string:
+
+```xml
+  <variable name="BACKGROUND_MODE_LOCATION" value="" />
+```
+
+**WARNING** If you *do* want the default behaviour of background-location updates, simply **IGNORE** this variable -- Do **NOT** even provide it.  If you *do* provide it, you must provide the full escaped XML value of `&lt;string&gt;location&lt;/string&gt;` (the default value when not provided), not just `location`.
+
 ## Building Android
 
 While using the Android version requires [purchasing a license](http://www.transistorsoft.com/shop/products/cordova-background-geolocation), there is a way to try it in your own app: simply modify your `config.xml` as follows (your app **must** be named `com.transistorsoft.backgroundgeolocation.ionic`:
 
 ```xml
 <widget id="com.transistorsoft.backgroundgeolocation.ionic" version="2.0.0" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
-  <preference name="cordova-background-geolocation-license" value="4bbb513c013111eae951647fd4f9e79f127fce6f7a00e9d327db9ea2a053a0df" />
 ```
-
-This license key is bound to the bundle id `com.transistorsoft.backgroundgeolocation.ionic` -- it will not work with any other id.
 
 ## Using the Plugin
 
@@ -63,7 +117,7 @@ var bgGeo = Window.BackgroundGeolocation;
 
 ```
 
-### Configuring the Plugin
+### `#configure` the Plugin
 There are **three** simple steps to using `BackgroundGeolocation`:
 
 1. Listen to events

@@ -2,8 +2,8 @@
 
 <plugin xmlns="http://www.phonegap.com/ns/plugins/1.0"
     xmlns:android="http://schemas.android.com/apk/res/android"
-    id="com.transistorsoft.cordova.background-geolocation"
-    version="2.3.0">
+    id="cordova-background-geolocation"
+    version="2.4.0">
 
     <name>BackgroundGeolocation</name>
     <description>Sophisticated, battery-efficient background-geolocation plugin for Cordova</description>
@@ -22,24 +22,29 @@
     </js-module>
 
      <platform name="ios">
+        <preference name="BACKGROUND_MODE_LOCATION" default="&lt;string&gt;location&lt;/string&gt;" />
+        <preference name="LOCATION_ALWAYS_USAGE_DESCRIPTION" default="Background location-tracking is required" />
+        <preference name="LOCATION_WHEN_IN_USE_USAGE_DESCRIPTION" default="Background location-tracking is required" />
+        <preference name="MOTION_USAGE_DESCRIPTION" default="Using the accelerometer increases battery-efficiency by intelligently toggling location-tracking only when the device is detected to be moving" />
+
         <dependency id="cordova-plugin-cocoalumberjack" version="^0.0.2" />
         <!-- required background modes:  App registers for location updates -->
         <config-file target="*-Info.plist" parent="UIBackgroundModes">
             <array>
-                <string>location</string>
+                $BACKGROUND_MODE_LOCATION
             </array>
         </config-file>
 
         <config-file target="*-Info.plist" parent="NSLocationAlwaysUsageDescription">
-            <string>App requires background location tracking</string>
+            <string>$LOCATION_ALWAYS_USAGE_DESCRIPTION</string>
         </config-file>
 
         <config-file target="*-Info.plist" parent="NSLocationWhenInUseUsageDescription">
-            <string>App requires background location tracking</string>
+            <string>$LOCATION_WHEN_IN_USE_USAGE_DESCRIPTION</string>
         </config-file>
 
         <config-file target="*-Info.plist" parent="NSMotionUsageDescription">
-            <string>Accelerometer use increases battery efficiency by intelligently toggling location-tracking</string>
+            <string>$MOTION_USAGE_DESCRIPTION</string>
         </config-file>
 
         <config-file target="config.xml" parent="/*">
@@ -59,6 +64,11 @@
 
      <!-- android -->
     <platform name="android">
+        <preference name="LICENSE" default="4bbb513c013111eae951647fd4f9e79f127fce6f7a00e9d327db9ea2a053a0df" />
+        <config-file target="AndroidManifest.xml" parent="/manifest/application">
+            <meta-data android:name="com.transistorsoft.locationmanager.license" android:value="$LICENSE" />
+        </config-file>
+
         <framework src="src/android/build.gradle" custom="true" type="gradleReference" />
         <resource-file src="src/android/libs/tslocationmanager.aar" target="src/android/libs/tslocationmanager.aar" />
 

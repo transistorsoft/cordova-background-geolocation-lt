@@ -644,8 +644,25 @@
         if (![providerChangeListeners count]) {
             return;
         }
-        BOOL enabled = (status == kCLAuthorizationStatusAuthorizedAlways);
-        NSDictionary *provider = @{@"enabled":@(enabled), @"network":@(YES), @"gps":@(YES)};
+        NSDictionary *state = [bgGeo getState];
+        NSString *authorizationRequest = [state objectForKey:@"locationAuthorizationRequest"];
+
+        BOOL enabled = NO;
+        switch (status) {
+            case kCLAuthorizationStatusAuthorizedAlways:
+                enabled = [authorizationRequest isEqualToString:@"Always"];
+                break;
+            case kCLAuthorizationStatusAuthorizedWhenInUse:
+                enabled = [authorizationRequest isEqualToString:@"WhenInUse"];
+                break;
+            case kCLAuthorizationStatusDenied:
+            case kCLAuthorizationStatusRestricted:
+            case kCLAuthorizationStatusNotDetermined:
+                enabled = NO;
+                break;
+        }
+
+        NSDictionary *provider = @{@"enabled":@(enabled), @"network":@(YES), @"gps":@(YES), @"status":@(status)};
         for (NSString *callbackId in providerChangeListeners) {
             CDVPluginResult *result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:provider];
             [result setKeepCallbackAsBool:YES];
