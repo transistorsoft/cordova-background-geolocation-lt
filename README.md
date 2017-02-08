@@ -17,9 +17,12 @@ Cross-platform background geolocation module for Cordova with battery-saving **"
 ```bash
 $ cordova plugin add cordova-background-geolocation-lt
 ```
+
 #### Phonegap Build
 ```xml
-  <plugin name="cordova-background-geolocation-lt" source="npm" />
+  <plugin name="cordova-background-geolocation-lt" source="npm">
+
+  </plugin>
 ```
 
 #### From master (latest, greatest.)
@@ -44,7 +47,7 @@ The plugin requires configuration within your App's `config.xml`:
 
 ```xml
 <widget id="com.your.company.app.id">
-  <plugin name="cordova-background-geolocation">
+  <plugin name="cordova-background-geolocation-lt">
     <variable name="LOCATION_ALWAYS_USAGE_DESCRIPTION" value="Background location-tracking is required" />
     <variable name="LOCATION_WHEN_IN_USE_USAGE_DESCRIPTION" value="Background location-tracking is required" />
     <variable name="MOTION_USAGE_DESCRIPTION" value="Using the accelerometer increases battery-efficiency by intelligently toggling location-tracking only when the device is detected to be moving" />
@@ -65,7 +68,7 @@ The plugin requires configuration within your App's `config.xml`:
 For those using `useSignificantChangesOnly: true`, possibly because Apple *denied* your use of the background `location` capability, you can disable background `location` by providing the `BACKGROUND_MODE_LOCATION` `<variable />` with an empty-string:
 
 ```xml
-<plugin name="cordova-background-geolocation">
+<plugin name="cordova-background-geolocation-lt">
   .
   .
   .
