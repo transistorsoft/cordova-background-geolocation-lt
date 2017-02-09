@@ -112,6 +112,8 @@ The plugin creates the object `window.BackgroundGeolocation`.  See [API Document
 
 ### Ionic 2 and Typescript
 
+[Sample Implementation](https://gist.github.com/christocracy/2abf5587cc12b83e15aa12958de7a7d2)
+
 ```Javascript
 platform.ready().then(() => {
   var bgGeo = (<any>window).BackgroundGeolocation;
