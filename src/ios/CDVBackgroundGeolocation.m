@@ -607,7 +607,6 @@
         if (![motionChangeListeners count]) {
             return;
         }
-        //NSDictionary *locationData  = [bgGeo locationToDictionary:location];
 
         for (NSString *callbackId in motionChangeListeners) {
             NSDictionary *params = @{

@@ -27,6 +27,7 @@
 
 + (TSLocationManager *)sharedInstance;
 
+
 // Methods
 - (NSDictionary*) configure:(NSDictionary*)config;
 - (void) addListener:(NSString*)event callback:(void (^)(NSDictionary*))callback;
@@ -47,8 +48,6 @@
 - (void) onSuspend:(NSNotification *)notification;
 - (void) onResume:(NSNotification *)notification;
 - (void) onAppTerminate;
-- (NSMutableDictionary*) locationToDictionary:(CLLocation*)location;
-- (NSMutableDictionary*) locationToDictionary:(CLLocation*)location type:(tsLocationtype)type extras:(NSDictionary*)extras;
 - (void) addGeofence:(NSDictionary*)params success:(void (^)(NSString*))success error:(void (^)(NSString*))error;
 - (void) addGeofences:(NSArray*)geofences success:(void (^)(NSString*))success error:(void (^)(NSString*))error;
 - (void) removeGeofence:(NSString*)identifier success:(void (^)(NSString*))success error:(void (^)(NSString*))error;

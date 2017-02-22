@@ -262,19 +262,6 @@ public class CDVBackgroundGeolocation extends CordovaPlugin {
     }
 
     private void configure(JSONObject config, final CallbackContext callbackContext) {
-        try {
-            if (preferences.contains("cordova-background-geolocation-license")) {
-                config.put("license", preferences.getString("cordova-background-geolocation-license", null));
-            }
-            if (preferences.contains("cordova-background-geolocation-orderId")) {
-                config.put("orderId", preferences.getString("cordova-background-geolocation-orderId", null));
-            }
-        } catch (JSONException e) {
-            callbackContext.error(e.getMessage());
-            e.printStackTrace();
-            return;
-        }
-
         TSCallback callback = new TSCallback() {
             public void success(Object state) {
                 PluginResult response = new PluginResult(PluginResult.Status.OK, (JSONObject) state);
@@ -866,12 +853,6 @@ public class CDVBackgroundGeolocation extends CordovaPlugin {
 
                 try {
                     JSONObject state = getState();
-                    if (state.has("license")) {
-                        state.put("license", "<SECRET>");
-                    }
-                    if (state.has("orderId")) {
-                        state.put("orderId", "<SECRET>");
-                    }
                     mailer.putExtra(Intent.EXTRA_TEXT, state.toString(4));
                 } catch (JSONException e) {
                     Log.w(TAG, "- Failed to write state to email body");
