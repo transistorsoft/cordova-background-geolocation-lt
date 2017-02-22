@@ -11,15 +11,22 @@ Cross-platform background geolocation module for Cordova with battery-saving **"
 ![Home](https://dl.dropboxusercontent.com/u/2319755/cordova-background-geolocaiton/screenshot-iphone5-geofences-framed-README.png)
 ![Settings](https://dl.dropboxusercontent.com/u/2319755/cordova-background-geolocaiton/screenshot-iphone5-settings-framed-README.png)
 
-# :books: Documentation
-- [API Documentation](docs/README.md)
-- [Location Data Schema](../../wiki/Location-Data-Schema)
-- [HTTP Features](./docs/http.md)
-- [Advanced Geofencing Features](./docs/geofencing.md)
-- [Error Codes](../../wiki/Location-Error-Codes)
-- [Debugging Sounds](../../wiki/Debug-Sounds)
-- [Background Tasks](../../wiki/Background-Tasks)
-
+## :books: API Documentation
+- :wrench: [Configuration Options](./docs/README.md#wrench-configuration-options)
+  + [Geolocation Options](./docs/README.md#wrench-geolocation-options)
+  + [Activity Recognition Options](./docs/README.md#wrench-activity-recognition-options)
+  + [HTTP & Persistence Options](./docs/README.md#wrench-http--persistence-options)
+  + [Geofencing Options](./docs/README.md#wrench-geofencing-options)
+  + [Application Options](./docs/README.md#wrench-application-options)
+- :zap: [Events](./docs/README.md#zap-events)
+- :small_blue_diamond: [Methods](./docs/README.md#large_blue_diamond-methods)
+- :blue_book: Guides
+  + [Philosophy of Operation](../../wiki/Philosophy-of-Operation)
+  + [Geofencing](./docs/geofencing.md)
+  + [HTTP Features](./docs/http.md)
+  + [Location Data Schema](../../wiki/Location-Data-Schema)
+  + [Debugging](../../wiki/Debugging)
+ 
 ## Installing the plugin ##
 
 #### From npm 
