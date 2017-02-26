@@ -672,19 +672,13 @@
     };
 }
 
--(void (^)(NSString *identifier, NSString *action, NSDictionary *locationData)) createGeofenceHandler {
-    return ^(NSString *identifier, NSString *action, NSDictionary *locationData) {
+-(void (^)(NSDictionary *geofenceData)) createGeofenceHandler {
+    return ^(NSDictionary *geofenceData) {
         if (![geofenceListeners count]) {
             return;
         }
         for (NSString *callbackId in geofenceListeners) {
-            NSDictionary *params = @{
-                @"identifier": identifier,
-                @"action": action,
-                @"location": locationData,
-                @"taskId": @([bgGeo createBackgroundTask])
-            };
-            CDVPluginResult *result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:params];
+            CDVPluginResult *result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:geofenceData];
             [result setKeepCallbackAsBool:YES];
             [self.commandDelegate runInBackground:^{
                 [self.commandDelegate sendPluginResult:result callbackId:callbackId];

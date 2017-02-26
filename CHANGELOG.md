@@ -1,6 +1,24 @@
 
 # Change Log
 
+## [2.5.1]
+- [Changed] Refactor iOS settings-management.  Plugin will always load previously known state as soon as plugin comes alive.  `#configure` will reset all settings to default before applying supplied `{Config}`.
+- [Fixed] iOS Schedule evaluation edge-case when a current-schedule is referenced but expired: When evaulating, always check if current-schedule is expired; query for next if so.
+- [Fixed] GeofenceManager edge-case:  GeofenceManager should not receive current location when plugin is disabled (eg: executing `#getCurrentPosition` when plugin is disabled).
+- [Fixed] `geofence` event not passing configured geofence `#extras`.
+- [Changed] Removed `taskId` from `geofence` event callback.  This change is backwards compatible.  If you want to do a long-running task, create your own `bgTask` with `#startBackgroundTask` (the plan is to remove `taskId` from **all** callbacks. Eg:
+
+```javascript
+bgGeo.on('geofence', function(geofence) {  // <-- taskId no longer provided!
+  // Start your own bgTask:
+  bgGeo.startBackgroundTask(function(taskId) {
+    performLongRunningTask(function() {
+      bgGeo.finish(taskId);
+    });
+  });
+});
+```
+
 ## [2.5.0] - 2017-02-22
 - [Fixed] iOS geofence identifiers containing ":" character were split and only the last chunk returned.  The plugin itself prefixes all geofences it creates with the string `TSGeofenceManager:` and the string-splitter was too naive.  Uses a `RegExp` replace to clear the plugin's internal prefix.
 - [Changed] Refactored API Documentation

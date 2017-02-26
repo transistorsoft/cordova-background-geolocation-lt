@@ -156,10 +156,7 @@ module.exports = {
             []);
     },
     finish: function(taskId, success, failure) {
-        if (typeof(taskId) !== 'number') {
-            throw "BackgroundGeolocation#finish must now be provided with a taskId as 1st param, eg: bgGeo.finish(taskId).  taskId is provided by 2nd param in callback";
-        }
-        if (taskId === 0) {
+        if ((typeof(taskId) !== 'number') || taskId === 0) {
             return;
         }
         exec(success || function() {},
@@ -488,12 +485,9 @@ module.exports = {
         }
         var me = this;
         var mySuccess = function(params) {
-            var taskId = params.taskId || 0;
+            var taskId = 0;  // <-- taskId removed from geofence event in 2.5.1
             delete(params.taskId);
-
-            me._runBackgroundTask(taskId, function() {
-                success.call(me, params, taskId);
-            }, failure);
+            success.call(me, params, taskId);
         };
         exec(mySuccess,
             failure || function() {},
