@@ -1,7 +1,11 @@
 
 # Change Log
 
-## [2.5.1]
+## [2.5.3] - 2017-03-01
+- [Changed] Refactor Android settings-management.  Plugin will always load previously known state as soon as plugin comes alive.  `#configure` will reset all settings to default before applying supplied `{Config}`.
+- [Fixed] Android database migration issue when upgrading from a very old version missed `geofences` table migration.
+
+## [2.5.1] - 2017-02-26
 - [Changed] Refactor iOS settings-management.  Plugin will always load previously known state as soon as plugin comes alive.  `#configure` will reset all settings to default before applying supplied `{Config}`.
 - [Fixed] iOS Schedule evaluation edge-case when a current-schedule is referenced but expired: When evaulating, always check if current-schedule is expired; query for next if so.
 - [Fixed] GeofenceManager edge-case:  GeofenceManager should not receive current location when plugin is disabled (eg: executing `#getCurrentPosition` when plugin is disabled).
