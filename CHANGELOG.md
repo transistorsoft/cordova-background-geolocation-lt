@@ -1,6 +1,13 @@
 
 # Change Log
 
+## [2.6.0] - 2017-03-10
+- [Fixed] iOS bug when composing geofence data for peristence.  Sometimes it appended a `location.geofence.location` due to a shared `NSDictionary`
+- [Fixed] Android issue with applying default settings the first time an app boots.  If you execute `#getState` before `#configure` is called, `#getState` would return an empty `{}`.
+- [Changed] The licensing model of Android now enforces license only for **release** builds.  If an invalid license is configured while runningin **debug** mode, a Toast warning will appear **"BackgroundGeolocation is running in evaluation mode."**, but the plugin *will* work.
+- [Fixed] iOS bug with HTTP `401` handling.
+- [Added] The Android plugin now broadcasts all its events using the Android `BroadcastReceiver` mechanism.  You're free to implement your own native Android handler to receive and react to these events as you wish.
+
 ## [2.5.3] - 2017-03-01
 - [Changed] Refactor Android settings-management.  Plugin will always load previously known state as soon as plugin comes alive.  `#configure` will reset all settings to default before applying supplied `{Config}`.
 - [Fixed] Android database migration issue when upgrading from a very old version missed `geofences` table migration.
