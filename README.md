@@ -1,12 +1,15 @@
-[Premium Version (iOS)](http://www.transistorsoft.com/shop/products/cordova-background-geolocation)
-==========================
+Cordova Background Geolocation
+===========================================================================
 
-This repo hosts the **iOS** platform available in the **[Premium Version](http://www.transistorsoft.com/shop/products/cordova-background-geolocation)**.  **Android** functionality is available only in the **[Premium Version](http://www.transistorsoft.com/shop/products/cordova-background-geolocation)**.
+The *most* sophisticated background **location-tracking & geofencing** module with battery-conscious motion-detection intelligence for **iOS** and **Android**.
 
-Background Geolocation
-==============================
+Also available for [React Native](https://github.com/transistorsoft/react-native-background-geolocation), [NativeScript](https://github.com/transistorsoft/nativescript-background-geolocation-lt) and pure native apps.
 
-Cross-platform background geolocation module for Cordova with battery-saving **"circular stationary-region monitoring"** and **"stop detection"**.
+-----------------------------------------------------------------------------
+
+:new: The **[Android plugin](http://www.transistorsoft.com/shop/products/cordova-background-geolocation)** requires [purchasing a license](http://www.transistorsoft.com/shop/products/cordova-background-geolocation).  However, it *will* work for **DEBUG** builds.  It will **not** work with **RELEASE** builds [without purchasing a license](http://www.transistorsoft.com/shop/products/cordova-background-geolocation).
+
+-----------------------------------------------------------------------------
 
 ![Home](https://dl.dropboxusercontent.com/u/2319755/cordova-background-geolocaiton/screenshot-iphone5-geofences-framed-README.png)
 ![Settings](https://dl.dropboxusercontent.com/u/2319755/cordova-background-geolocaiton/screenshot-iphone5-settings-framed-README.png)
@@ -27,14 +30,16 @@ Cross-platform background geolocation module for Cordova with battery-saving **"
   + [Location Data Schema](../../wiki/Location-Data-Schema)
   + [Debugging](../../wiki/Debugging)
  
-## Installing the plugin ##
+## :large_blue_diamond: Installing the plugin ##
 
 #### From npm 
+
 ```bash
 $ cordova plugin add cordova-background-geolocation-lt
 ```
 
 #### Phonegap Build
+
 ```xml
   <plugin name="cordova-background-geolocation-lt" source="npm">
 
@@ -51,13 +56,13 @@ $ cordova plugin add https://github.com/transistorsoft/cordova-background-geoloc
 
 This plugin has tagged stable versions.  To install a particular version, append a version code to the github url prefixed by `#`.
 
-```
-$ cordova plugin add <git.url>#1.5.0
+```bash
+$ cordova plugin add <git.url>#2.7.0
 ```
 
 ![](https://dl.dropboxusercontent.com/u/2319755/cordova-background-geolocaiton/screenshot-github-tagged-branches.png)
 
-## Configuring the plugin
+## :large_blue_diamond: Configuring the plugin
 
 The plugin requires configuration within your App's `config.xml`:
 
@@ -67,19 +72,22 @@ The plugin requires configuration within your App's `config.xml`:
     <variable name="LOCATION_ALWAYS_USAGE_DESCRIPTION" value="Background location-tracking is required" />
     <variable name="LOCATION_WHEN_IN_USE_USAGE_DESCRIPTION" value="Background location-tracking is required" />
     <variable name="MOTION_USAGE_DESCRIPTION" value="Using the accelerometer increases battery-efficiency by intelligently toggling location-tracking only when the device is detected to be moving" />
+    <!-- Android only -->
+    <variable name="LICENSE" value="YOUR_LICENSE_KEY" />
   </plugin>
   .
   .
   .
 </widget>
 ```
----
 
-:exclamation:**NOTE:** To apply changes to these `<variable />`, you **must** remove/re-add the plugin.
+-----------------------------------------------------------------------------
 
----
+:exclamation: To apply changes to these `<variable />`, you **must** remove/re-add the plugin.
 
-### Disabling Background "location"
+-----------------------------------------------------------------------------
+
+### :large_blue_diamond: Disabling Background "location"
 
 For those using `useSignificantChangesOnly: true`, possibly because Apple *denied* your use of the background `location` capability, you can disable background `location` by providing the `BACKGROUND_MODE_LOCATION` `<variable />` with an empty-string:
 
@@ -114,23 +122,16 @@ For those using `useSignificantChangesOnly: true`, possibly because Apple *denie
 
 **WARNING** If you *do* want the default behaviour of background-location updates, simply **IGNORE** this variable -- Do **NOT** even provide it.  If you *do* provide it, you must provide the full escaped XML value of `&lt;string&gt;location&lt;/string&gt;` (the default value when not provided), not just `location`.
 
-## Building Android
 
-While using the Android version requires [purchasing a license](http://www.transistorsoft.com/shop/products/cordova-background-geolocation), there is a way to try it in your own app: simply modify your `config.xml` as follows (your app **must** be named `com.transistorsoft.backgroundgeolocation.ionic`:
+## :large_blue_diamond: Using the Plugin
 
-```xml
-<widget id="com.transistorsoft.backgroundgeolocation.ionic" version="2.0.0" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
-```
-
-## Using the Plugin
-
-The plugin creates the object `window.BackgroundGeolocation`.  See [API Documentation](docs) for details
+The plugin creates the object **`window.BackgroundGeolocation`**.  See [API Documentation](docs) for details
 
 ### Ionic 2 and Typescript
 
 [Sample Implementation](https://gist.github.com/christocracy/2abf5587cc12b83e15aa12958de7a7d2)
 
-```Javascript
+```javascript
 platform.ready().then(() => {
   var bgGeo = (<any>window).BackgroundGeolocation;
 });
@@ -144,7 +145,7 @@ There are **three** simple steps to using `BackgroundGeolocation`:
 2. `#configure` the plugin
 3. `#start` the plugin
 
-```Javascript
+```javascript
 // 1.  Listen to events
 bgGeo.on('location', onLocation, onLocationFailure);
 bgGeo.on('motionchange', onMotionChange);
@@ -170,10 +171,11 @@ bgGeo.configure({
 // bgGeo.getState();            // <-- NO!
 ```
 
+:warning: Do not execute *any* API method (aside from `#getState` or adding event-listeners with `#on`) *before* the `callbackFn` to the `#configure` method fires, as noted above.
 
-## Example
+## :large_blue_diamond: Example
 
-```Javascript
+```javascript
 
 ////
 // As with all Cordova plugins, you must configure within an #deviceready callback.
@@ -181,14 +183,14 @@ bgGeo.configure({
 function onDeviceReady() {
     // Get a reference to the plugin.
     var bgGeo = window.BackgroundGeolocation;
-    
+
     //This callback will be executed every time a geolocation is recorded in the background.
     var callbackFn = function(location, taskId) {
         var coords = location.coords;
         var lat    = coords.latitude;
         var lng    = coords.longitude;
         console.log('- Location: ', JSON.stringify(location));
-        
+
         // Must signal completion of your callbackFn.
         bgGeo.finish(taskId);
     };
@@ -200,10 +202,19 @@ function onDeviceReady() {
 
     // Listen to location events & errors.
     bgGeo.on('location', callbackFn, failureFn);
-
     // Fired whenever state changes from moving->stationary or vice-versa.
     bgGeo.on('motionchange', function(isMoving) {
       console.log('- onMotionChange: ', isMoving);
+    });
+    // Fired whenever a geofence transition occurs.
+    bgGeo.on('geofence', function(geofence) {
+      console.log('- onGeofence: ', geofence.identifier, geofence.location);
+    });
+    // Fired whenever an HTTP response is received from your server.
+    bgGeo.on('http', function(response) {
+      console.log('http success: ', response.responseText);
+    }, function(response) {
+      console.log('http failure: ', response.status);
     });
 
     // BackgroundGeoLocation is highly configurable.
@@ -211,34 +222,28 @@ function onDeviceReady() {
         // Geolocation config
         desiredAccuracy: 0,
         distanceFilter: 10,
-        stationaryRadius: 50,
-        locationUpdateInterval: 1000,
-        fastestLocationUpdateInterval: 5000,
-
+        stationaryRadius: 25,
         // Activity Recognition config
-        activityType: 'AutomotiveNavigation',
-        activityRecognitionInterval: 5000,
+        activityRecognitionInterval: 10000,
         stopTimeout: 5,
-
         // Application config
-        debug: true,
+        debug: true,  // <-- Debug sounds & notifications.
         stopOnTerminate: false,
         startOnBoot: true,
-
         // HTTP / SQLite config
-        url: 'http://posttestserver.com/post.php?dir=cordova-background-geolocation',
-        method: 'POST',
+        url: "http://your.server.com/locations",
+        method: "POST",
         autoSync: true,
-        maxDaysToPersist: 1,
-        headers: {
+        maxDaysToPersist: 3,
+        headers: {  // <-- Optional HTTP headers
             "X-FOO": "bar"
         },
-        params: {
+        params: {   // <-- Optional HTTP params
             "auth_token": "maybe_your_server_authenticates_via_token_YES?"
         }
     }, function(state) {
         // This callback is executed when the plugin is ready to use.
-        console.log('BackgroundGeolocation ready: ', state);
+        console.log("BackgroundGeolocation ready: ", state);
         if (!state.enabled) {
             bgGeo.start();
         }
@@ -257,7 +262,7 @@ function onDeviceReady() {
 ```
 
 
-## [Advanced Sample Application](https://github.com/christocracy/cordova-background-geolocation-SampleApp)
+## :large_blue_diamond: [Advanced Sample Application](https://github.com/christocracy/cordova-background-geolocation-SampleApp)
 
 A fully-featured [SampleApp](https://github.com/christocracy/cordova-background-geolocation-SampleApp) is available in its own public repo.  After first cloning that repo, follow the installation instructions in the **README** there.  This SampleApp includes a settings-screen allowing you to quickly experiment with all the different settings available for each platform.
 
@@ -265,7 +270,7 @@ If you're using XCode, boot the SampleApp in the iOS Simulator and enable ```Deb
 
 ![](https://dl.dropboxusercontent.com/u/2319755/cordova-background-geolocaiton/simulate-location.png)
 
-## Simple Testing Server
+## :large_blue_diamond: Simple Testing Server
 
 A simple Node-based [web-application](https://github.com/transistorsoft/background-geolocation-console) with SQLite database is available for field-testing and performance analysis.  If you're familiar with Node, you can have this server up-and-running in about **one minute**.
 
