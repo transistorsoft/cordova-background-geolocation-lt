@@ -11,7 +11,7 @@
     <keywords>cordova, phonegap, background geolocation, background, geolocation, location, tracking, geofencing, geofence</keywords>
 
     <engines>
-        <engine name="cordova" version=">=3.4.0" />
+        <engine name="cordova" version=">=5.0.0" />
     </engines>
 
     <dependency id="cordova-plugin-dialogs" />
