@@ -11,8 +11,8 @@ Also available for [React Native](https://github.com/transistorsoft/react-native
 
 -----------------------------------------------------------------------------
 
-![Home](https://dl.dropboxusercontent.com/u/2319755/cordova-background-geolocaiton/screenshot-iphone5-geofences-framed-README.png)
-![Settings](https://dl.dropboxusercontent.com/u/2319755/cordova-background-geolocaiton/screenshot-iphone5-settings-framed-README.png)
+![Home](https://www.dropbox.com/s/fal0rrs4v7y0svg/home.png?dl=1)
+![Settings](https://www.dropbox.com/s/7bxqcn5e9k379eu/settings.png?dl=1)
 
 ## [:books: API Documentation](./docs/README.md)
 - :wrench: [Configuration Options](./docs/README.md#wrench-configuration-options)
