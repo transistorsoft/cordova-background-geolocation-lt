@@ -11,8 +11,8 @@ Also available for [React Native](https://github.com/transistorsoft/react-native
 
 -----------------------------------------------------------------------------
 
-![Home](https://www.dropbox.com/s/20c1sad2c7pr75w/home-framed-350.png?dl=1)
-![Settings](https://www.dropbox.com/s/shue4d46ddx6bgq/settings-framed-350.png?dl=1)
+![Home](https://www.dropbox.com/s/vd7fx94p0zz2yvo/home-framed-350.png?dl=1)
+![Settings](https://www.dropbox.com/s/4llyrcmdz8h5wgb/settings-framed-350.png?dl=1)
 
 ## [:books: API Documentation](./docs/README.md)
 - :wrench: [Configuration Options](./docs/README.md#wrench-configuration-options)
