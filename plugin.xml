@@ -3,7 +3,7 @@
 <plugin xmlns="http://www.phonegap.com/ns/plugins/1.0"
     xmlns:android="http://schemas.android.com/apk/res/android"
     id="cordova-background-geolocation-lt"
-    version="2.6.0">
+    version="2.7.0">
 
     <name>BackgroundGeolocation</name>
     <description>The most sophisticated, battery-efficient background geolocation and geofencing plugin for Cordova</description>
@@ -27,7 +27,7 @@
         <preference name="LOCATION_WHEN_IN_USE_USAGE_DESCRIPTION" default="Background location-tracking is required" />
         <preference name="MOTION_USAGE_DESCRIPTION" default="Using the accelerometer increases battery-efficiency by intelligently toggling location-tracking only when the device is detected to be moving" />
 
-        <dependency id="cordova-plugin-cocoalumberjack" version="^0.0.2" />
+        <dependency id="cordova-plugin-cocoalumberjack" version="~0.0.4" />
         <!-- required background modes:  App registers for location updates -->
         <config-file target="*-Info.plist" parent="UIBackgroundModes">
             <array>
