@@ -592,6 +592,9 @@
  */
 -(void (^)(NSDictionary *locationData, enum tsLocationType, BOOL isMoving)) createLocationChangedHandler {
     return ^(NSDictionary *locationData, enum tsLocationType type, BOOL isMoving) {
+        if (![locationListeners count]) {
+            return;
+        }
         NSDictionary *params = @{@"location": locationData, @"taskId": @([bgGeo createBackgroundTask])};
         CDVPluginResult* result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:params];
         [result setKeepCallbackAsBool:YES];
