@@ -219,7 +219,7 @@ BackgroundGeolocation.on("location", successFn, failureFn);
 
 | Method Name      | Arguments       | Notes                                |
 |------------------|-----------------|--------------------------------------|
-| [`configure`](#configureconfig-successfn-failurefn) | `{config}`, `successFn`, `failureFn` | Initializes the plugin and configures the its config options The **`success`** callback will be executed after the plugin has successfully configured and provided with the current **`state`** `Object`. |
+| [`configure`](#configureconfig-successfn-failurefn) | `{config}`, `successFn`, `failureFn` | Initializes the plugin and configures its config options. The **`success`** callback will be executed after the plugin has successfully configured and provided with the current **`state`** `Object`. |
 | [`setConfig`](#setconfigconfig-successfn-failurefn) | `{config}`, `successFn`, `failureFn` | Re-configure the plugin with new config options. |
 | [`start`](#startsuccessfn-failurefn) | `callbackFn`| Enable location tracking.  Supplied **`callbackFn`** will be executed when tracking is successfully engaged.  This is the plugin's power **ON** button. |
 | [`stop`](#stopsuccessfn-failurefn) | `callbackFn` | Disable location tracking.  Supplied **`callbackFn`** will be executed when tracking is successfully halted.  This is the plugin's power **OFF** button. |
@@ -369,7 +369,7 @@ BackgroundGeolocation.configure({
 
 The plugin can optionally automatically stop tracking when the `stopTimeout` timer elapses.  For example, when the plugin first detects a `motionchange` into the "moving" state, the next time a `motionchange` event occurs into the "stationary" state, the plugin will have automatically called `#stop` upon itself.
 
-:warning: `stopOnStationary` will **only** occur due to `stopTimeout` elapse.  It will **not** occur by manually executing `changePace(false)`.
+:warning: `stopOnStationary` will **only** occur due to `stopTimeout` timer elapse.  It will **not** occur by manually executing `changePace(false)`.
 
 ```javascript
 BackgroundGeolocation.configure({
