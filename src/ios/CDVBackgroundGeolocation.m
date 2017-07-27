@@ -8,7 +8,7 @@
 @implementation CDVBackgroundGeolocation {
     TSLocationManager *bgGeo;
     NSDictionary *config;
-
+    
     NSMutableArray *activityChangeListeners;
     NSMutableArray *providerChangeListeners;
     NSMutableArray *locationListeners;
@@ -37,7 +37,7 @@
     bgGeo.httpResponseBlock     = [self createHttpResponseHandler];
     bgGeo.errorBlock            = [self createErrorHandler];
     bgGeo.scheduleBlock         = [self createScheduleHandler];
-
+    
     locationListeners   = [NSMutableArray new];
 }
 
@@ -52,7 +52,7 @@
 {
     config = [command.arguments objectAtIndex:0];
     NSDictionary *state = [bgGeo configure:config];
-
+    
     CDVPluginResult *result;
     if (state != nil) {
         result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:state];
@@ -72,14 +72,14 @@
     [httpListeners removeAllObjects];
     [heartbeatListeners removeAllObjects];
     [scheduleListeners removeAllObjects];
-
+    
     CDVPluginResult* result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK];
     [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
 }
 - (void) setConfig:(CDVInvokedUrlCommand*)command
 {
     NSDictionary *cfg  = [command.arguments objectAtIndex:0];
-
+    
     [self.commandDelegate runInBackground:^{
         NSDictionary *state = [bgGeo setConfig:cfg];
         CDVPluginResult* result = nil;
@@ -148,7 +148,7 @@
 {
     __typeof(self.commandDelegate) __weak delegate = self.commandDelegate;
     double value  = [[command.arguments objectAtIndex:0] doubleValue];
-
+    
     [delegate runInBackground:^{
         [bgGeo setOdometer:value success:^(NSDictionary* locationData) {
             CDVPluginResult *result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:locationData];
@@ -170,7 +170,7 @@
 - (void) getStationaryLocation:(CDVInvokedUrlCommand *)command
 {
     NSDictionary* location = [bgGeo getStationaryLocation];
-
+    
     CDVPluginResult *result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:location];
     [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
 }
@@ -182,9 +182,9 @@
 {
     [self.commandDelegate runInBackground:^{
         NSDictionary *params = @{
-            @"locations": [bgGeo getLocations],
-            @"taskId": @([bgGeo createBackgroundTask])
-        };
+                                 @"locations": [bgGeo getLocations],
+                                 @"taskId": @([bgGeo createBackgroundTask])
+                                 };
         CDVPluginResult *result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:params];
         dispatch_sync(dispatch_get_main_queue(), ^{
             [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
@@ -192,8 +192,8 @@
     }];
 }
 /**
-* @deprecated
-*/
+ * @deprecated
+ */
 - (void) clearDatabase:(CDVInvokedUrlCommand*)command
 {
     [self destroyLocations:command];
@@ -218,11 +218,11 @@
         [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
         return;
     }
-
+    
     // Important to set these before we execute #sync since this fires a *very fast* async NSNotification event!
     syncCallbackId  = command.callbackId;
     syncTaskId      = [bgGeo createBackgroundTask];
-
+    
     [self.commandDelegate runInBackground:^{
         NSArray* locations = [bgGeo sync];
         if (locations == nil) {
@@ -239,7 +239,7 @@
 {
     NSString *event = [command.arguments objectAtIndex:0];
     __typeof(self.commandDelegate) __weak delegate = self.commandDelegate;
-
+    
     [bgGeo addListener:event callback:^(NSDictionary* event) {
         runOnMainQueueWithoutDeadlocking(^{
             CDVPluginResult *result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:event];
@@ -587,6 +587,18 @@
     [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
 }
 
+-(void) getSensors:(CDVInvokedUrlCommand*)command
+{
+    NSDictionary *sensors = @{
+        @"platform": @"ios",
+        @"accelerometer": @([bgGeo isAccelerometerAvailable]),
+        @"gyroscope": @([bgGeo isGyroAvailable]),
+        @"magnetometer": @([bgGeo isMagnetometerAvailable]),
+        @"motion_hardware": @([bgGeo isMotionHardwareAvailable])
+    };
+    CDVPluginResult *result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:sensors];
+    [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
+}
 /**
  * location handler from BackgroundGeolocation
  */
@@ -598,7 +610,7 @@
         NSDictionary *params = @{@"location": locationData, @"taskId": @([bgGeo createBackgroundTask])};
         CDVPluginResult* result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:params];
         [result setKeepCallbackAsBool:YES];
-
+        
         for (NSString *callbackId in locationListeners) {
             [self.commandDelegate sendPluginResult:result callbackId:callbackId];
         }
@@ -610,13 +622,13 @@
         if (![motionChangeListeners count]) {
             return;
         }
-
+        
         for (NSString *callbackId in motionChangeListeners) {
             NSDictionary *params = @{
-                @"isMoving": @(moving),
-                @"location": locationData,
-                @"taskId": @([bgGeo createBackgroundTask])
-            };
+                                     @"isMoving": @(moving),
+                                     @"location": locationData,
+                                     @"taskId": @([bgGeo createBackgroundTask])
+                                     };
             CDVPluginResult *result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:params];
             [result setKeepCallbackAsBool:YES];
             [self.commandDelegate runInBackground:^{
@@ -626,13 +638,13 @@
     };
 }
 
--(void (^)(NSString* activityName)) createActivityChangedHandler {
-    return ^(NSString* activityName) {
+-(void (^)(NSDictionary* activity)) createActivityChangedHandler {
+    return ^(NSDictionary* activity) {
         if (![activityChangeListeners count]) {
             return;
         }
         for (NSString *callbackId in activityChangeListeners) {
-            CDVPluginResult *result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:activityName];
+            CDVPluginResult *result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:activity];
             [result setKeepCallbackAsBool:YES];
             [self.commandDelegate runInBackground:^{
                 [self.commandDelegate sendPluginResult:result callbackId:callbackId];
@@ -648,7 +660,7 @@
         }
         NSDictionary *state = [bgGeo getState];
         NSString *authorizationRequest = [state objectForKey:@"locationAuthorizationRequest"];
-
+        
         BOOL enabled = NO;
         switch (status) {
             case kCLAuthorizationStatusAuthorizedAlways:
@@ -663,7 +675,7 @@
                 enabled = NO;
                 break;
         }
-
+        
         NSDictionary *provider = @{@"enabled":@(enabled), @"network":@(YES), @"gps":@(YES), @"status":@(status)};
         for (NSString *callbackId in providerChangeListeners) {
             CDVPluginResult *result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:provider];
@@ -692,12 +704,12 @@
 
 -(void (^)(NSString* motionType, NSDictionary *locationData)) createHeartbeatHandler {
     return ^(NSString* motionType, NSDictionary *locationData) {
-
+        
         NSDictionary *params = @{
-            @"motionType": motionType,
-            @"location": locationData
-        };
-
+                                 @"motionType": motionType,
+                                 @"location": locationData
+                                 };
+        
         for (NSString *callbackId in heartbeatListeners) {
             CDVPluginResult *result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:params];
             [result setKeepCallbackAsBool:YES];
@@ -709,21 +721,21 @@
 }
 
 /*
-- (void) onSyncComplete:(NSNotification*)notification
-{
-*/
+ - (void) onSyncComplete:(NSNotification*)notification
+ {
+ */
 -(void (^)(NSArray *locations)) createSyncCompleteHandler {
     return ^(NSArray *locations) {
         if (syncCallbackId == nil) {
             return;
         }
         NSDictionary *params = @{
-            @"locations": locations,
-            @"taskId": @(syncTaskId)
-        };
+                                 @"locations": locations,
+                                 @"taskId": @(syncTaskId)
+                                 };
         CDVPluginResult *result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:params];
         [self.commandDelegate sendPluginResult:result callbackId:syncCallbackId];
-
+        
         // Ready for another sync task.
         syncCallbackId  = nil;
         syncTaskId      = UIBackgroundTaskInvalid;
@@ -743,16 +755,16 @@
 }
 
 /*- (void) onLocationManagerError:(NSNotification*)notification
-{
-*/
+ {
+ */
 -(void (^)(NSString *type, NSError *error)) createErrorHandler {
     return ^(NSString *type, NSError *error) {
         NSLog(@" - onLocationManagerError: %@", error);
-
+        
         if ([type isEqualToString:@"location"]) {
             CDVPluginResult *result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsInt:(int)error.code];
             [result setKeepCallbackAsBool:YES];
-
+            
             for (NSString *callbackId in locationListeners) {
                 [self.commandDelegate sendPluginResult:result callbackId:callbackId];
             }

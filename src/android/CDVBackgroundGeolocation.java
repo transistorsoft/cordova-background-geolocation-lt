@@ -4,6 +4,7 @@ import com.transistorsoft.locationmanager.adapter.BackgroundGeolocation;
 import com.transistorsoft.locationmanager.adapter.TSCallback;
 import com.transistorsoft.locationmanager.location.TSLocationManager;
 import com.transistorsoft.locationmanager.settings.Settings;
+import com.transistorsoft.locationmanager.util.Sensors;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -246,6 +247,9 @@ public class CDVBackgroundGeolocation extends CordovaPlugin {
         } else if (BackgroundGeolocation.ACTION_DESTROY_LOG.equalsIgnoreCase(action)) {
             result = true;
             destroyLog(callbackContext);
+        } else if (BackgroundGeolocation.ACTION_GET_SENSORS.equalsIgnoreCase(action)) {
+            result = true;
+            getSensors(callbackContext);
         }
         return result;
     }
@@ -629,8 +633,8 @@ public class CDVBackgroundGeolocation extends CordovaPlugin {
     private void addActivityChangeListener(final CallbackContext callbackContext) {
         getAdapter().on(BackgroundGeolocation.EVENT_ACTIVITYCHANGE, (new TSCallback() {
             @Override
-            public void success(Object activityName) {
-                PluginResult result = new PluginResult(PluginResult.Status.OK, (String) activityName);
+            public void success(Object activity) {
+                PluginResult result = new PluginResult(PluginResult.Status.OK, (JSONObject) activity);
                 result.setKeepCallback(true);
                 callbackContext.sendPluginResult(result);
             }
@@ -904,6 +908,22 @@ public class CDVBackgroundGeolocation extends CordovaPlugin {
 
     private JSONObject getState() {
         return Settings.getState();
+    }
+
+    private void getSensors(CallbackContext callbackContext) {
+        JSONObject result = new JSONObject();
+        Sensors sensors = Sensors.getInstance(cordova.getActivity().getApplicationContext());
+        try {
+            result.put("platform", "android");
+            result.put("accelerometer", sensors.hasAccelerometer());
+            result.put("magnetometer", sensors.hasMagnetometer());
+            result.put("gyroscope", sensors.hasGyroscope());
+            result.put("significant_motion", sensors.hasSignificantMotion());
+            callbackContext.success(result);
+        } catch (JSONException e) {
+            callbackContext.error(e.getMessage());
+            e.printStackTrace();
+        }
     }
 
     private void onError(String error) {
