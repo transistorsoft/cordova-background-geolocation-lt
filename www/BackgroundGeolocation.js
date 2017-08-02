@@ -29,6 +29,12 @@ module.exports = {
     AUTHORIZATION_STATUS_ALWAYS: 3,
     AUTHORIZATION_STATUS_WHEN_IN_USE: 4,
 
+    NOTIFICATION_PRIORITY_DEFAULT: 0,
+    NOTIFICATION_PRIORITY_HIGH: 1,
+    NOTIFICATION_PRIORITY_LOW: -1,
+    NOTIFICATION_PRIORITY_MAX: 2,
+    NOTIFICATION_PRIORITY_MIN: -2,
+
     /**
     * @property {Object} stationaryLocation
     */
@@ -606,7 +612,18 @@ module.exports = {
             'emailLog',
             [email]);
     },
-
+    /**
+    * Fetch list of available sensors: accelerometer, gyroscope, magnetometer
+    */
+    getSensors: function(success, failure) {
+        var success = success || function() {};
+        var failure = failure || function() {};
+        exec(success,
+            failure,
+            MODULE_NAME,
+            'getSensors',
+            []);  
+    },
     /**
     * Play a system sound.  This is totally experimental.
     * iOS http://iphonedevwiki.net/index.php/AudioServices
