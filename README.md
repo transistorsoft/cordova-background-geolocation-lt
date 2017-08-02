@@ -83,7 +83,12 @@ The plugin requires configuration within your App's `config.xml`:
 
 -----------------------------------------------------------------------------
 
-:exclamation: To apply changes to these `<variable />`, you **must** remove/re-add the plugin.
+:warning: To apply changes to these `<variable />`, you **must** remove/re-add the plugin (**append `--nosave` when removing the plugin**)
+
+```
+$ cordova plugin remove cordova-background-geolocation-lt --nosave
+$ cordova plugin add cordova-background-geolocation-lt
+```
 
 -----------------------------------------------------------------------------
 
