@@ -1,4 +1,3 @@
-
 /**
 * cordova-background-geolocation
 * Copyright (c) 2015, Transistor Software (9224-2932 Quebec Inc)
@@ -43,28 +42,7 @@ module.exports = {
     * @property {Object} config
     */
     config: {},
-    on: function(event, success, fail) {
-        switch (event) {
-            case 'location':
-                return this.onLocation(success, fail);
-            case 'http':
-                return this.onHttp(success, fail);
-            case 'geofence':
-                return this.onGeofence(success, fail);
-            case 'motionchange':
-                return this.onMotionChange(success, fail);
-            case 'heartbeat':
-                return this.onHeartbeat(success, fail);
-            case 'schedule':
-                return this.onSchedule(success, fail);
-            case 'activitychange':
-                return this.onActivityChange(success, fail);
-            case 'providerchange':
-                return this.onProviderChange(success, fail);
-            case 'geofenceschange':
-                return this.onGeofencesChange(success, fail);
-        }
-    },
+    cordovaCallbacks: [],
 
     /**
     * @private {Error} error
@@ -88,6 +66,75 @@ module.exports = {
              [config]
         );
     },
+    /**
+    * add event listener
+    */
+    addListener: function(event, success, fail) {
+        switch (event) {
+            case 'location':
+                return this.onLocation(success, fail);
+            case 'http':
+                return this.onHttp(success, fail);
+            case 'geofence':
+                return this.onGeofence(success, fail);
+            case 'motionchange':
+                return this.onMotionChange(success, fail);
+            case 'heartbeat':
+                return this.onHeartbeat(success, fail);
+            case 'schedule':
+                return this.onSchedule(success, fail);
+            case 'activitychange':
+                return this.onActivityChange(success, fail);
+            case 'providerchange':
+                return this.onProviderChange(success, fail);
+            case 'geofenceschange':
+                return this.onGeofencesChange(success, fail);
+        }
+    },
+    /**
+    * @alias #addListener
+    */
+    on: function() {
+        this.addListener.apply(this, arguments);    
+    },
+    /**
+    * remove event-listener
+    */
+    removeListener: function(event, callback, success, failure) {
+        // Compose remove-listener method name, eg:  "removeLocationListener"
+        var cordovaCallback;
+        for (var n=0,len=this.cordovaCallbacks.length;n<len;n++) {
+            cordovaCallback = this.cordovaCallbacks[n];
+            if (cordovaCallback.success === callback) {
+                var callbackId = cordovaCallback.callbackId;
+                if (typeof(window.cordova.callbacks[callbackId]) === 'object') {
+                    // Destroy Cordova callback.
+                    delete window.cordova.callbacks[callbackId];
+                    // Destroy internal reference
+                    this.cordovaCallbacks.splice(n, 1);
+
+                    exec(success || function() {},
+                         failure || function() {},
+                         MODULE_NAME,
+                         'removeListener',
+                         [event, callbackId]
+                    );
+                } else {
+                    console.warn('#un ' + event + ' failed to locate cordova callback');
+                }
+                break;
+            }
+        }
+    },
+    /**
+    * @alias #removeListener
+    */
+    un: function() {
+        this.removeListener.apply(this, arguments);
+    },
+    /**
+    * Remove all event-listeners
+    */
     removeListeners: function(success, failure) {
         success = success || function(){};
         failure = failure || function(){};
@@ -217,25 +264,21 @@ module.exports = {
         if (typeof(success) !== 'function') {
             throw "A callback must be provided";
         }
-
-        var me = this;
-        var mySuccess = function(params) {
-            var location    = params.location || params;
-            var taskId      = params.taskId || 0;
+        var mySuccess = function(location) {
             // Transform timestamp to Date instance.
             if (location.timestamp) {
                 location.timestamp = new Date(location.timestamp);
-            }
-            me._runBackgroundTask(taskId, function() {
-                success.call(this, location, taskId);
-            });
+            }            
+            success(location);
         }
+
         exec(mySuccess,
              failure || function() {},
              MODULE_NAME,
              'addLocationListener',
              []
         );
+        this._registerCallback(success, mySuccess);
     },
     /**
     * Add a movement-state-change listener.  Whenever the devices enters "stationary" or "moving" mode, your #success callback will be executed with #location param containing #radius of region
@@ -244,13 +287,10 @@ module.exports = {
     */
     onMotionChange: function(success, failure) {
         var me = this;
-        success = success || function(isMoving, location, taskId) {
-            me.finish(taskId);
-        };
+        success = success || function() {};
         var callback = function(params) {
             var isMoving    = params.isMoving;
             var location    = params.location;
-            var taskId      = params.taskId || 0;
 
             if (!isMoving) {
                 me.stationaryLocation = location;
@@ -260,51 +300,59 @@ module.exports = {
             if (location.timestamp) {
                 location.timestamp = new Date(location.timestamp);
             }
-
-            me._runBackgroundTask(taskId, function() {
-                success.call(me, isMoving, location, taskId);
-            }, failure);
+            success(isMoving, location);
         };
         exec(callback,
             failure || function() {},
             MODULE_NAME,
             'addMotionChangeListener',
             []);
+        this._registerCallback(success, callback);
     },
     onActivityChange: function(success) {
-        exec(success || function() {},
+        success = success || function() {}
+        exec(success,
             function() {},
             MODULE_NAME,
             'addActivityChangeListener',
             []);
+        this._registerCallback(success, success);
     },
     onProviderChange: function(success) {
-        exec(success || function() {},
+        success = success || function() {};
+        exec(success,
             function() {},
             MODULE_NAME,
             'addProviderChangeListener',
             []);
+        this._registerCallback(success, success);
     },
     onGeofencesChange: function(success) {
-        exec(success || function() {},
+        success = success || function() {}
+        exec(success,
             function() {},
             MODULE_NAME,
-            'addListener',
-            ['geofenceschange']);
+            'addGeofencesChangeListener',
+            []);
+        this._registerCallback(success, success);
     },
     onHeartbeat: function(success, failure) {
-        exec(success || function() {},
+        success = success || function() {}
+        exec(success,
             failure || function() {},
             MODULE_NAME,
             'addHeartbeatListener',
             []);
+        this._registerCallback(success, success);
     },
     onSchedule: function(success, failure) {
-        exec(success || function() {},
+        success || function() {}
+        exec(success,
             failure || function() {},
             MODULE_NAME,
             'addScheduleListener',
             []);
+        this._registerCallback(success, success);
     },
     getLocations: function(success, failure) {
         if (typeof(success) !== 'function') {
@@ -312,11 +360,8 @@ module.exports = {
         }
         var me = this;
         var mySuccess = function(params) {
-            var taskId      = params.taskId;
             var locations   = me._setTimestamp(params.locations);
-            me._runBackgroundTask(taskId, function() {
-                success.call(me, locations, taskId);
-            });
+            success(locations);
         }
         exec(mySuccess,
             failure || function() {},
@@ -364,11 +409,7 @@ module.exports = {
         var me = this;
         var mySuccess = function(params) {
             var locations   = me._setTimestamp(params.locations);
-            var taskId      = params.taskId;
-
-            me._runBackgroundTask(taskId, function() {
-                success.call(me, locations, taskId);
-            });
+            success(locations);
         }
         exec(mySuccess,
             failure || function() {},
@@ -377,11 +418,13 @@ module.exports = {
             []);
     },
     onHttp: function(success, failure) {
-        exec(success || function() {},
+        success = success || function() {};
+        exec(success,
             failure || function() {},
             MODULE_NAME,
             'addHttpListener',
             []);
+        this._registerCallback(success, success);
     },
     onLog: function(success, failure) {
         exec(success || function() {},
@@ -489,17 +532,12 @@ module.exports = {
         if (!typeof(success) === 'function') {
             throw "#onGeofence requires a success callback";
         }
-        var me = this;
-        var mySuccess = function(params) {
-            var taskId = 0;  // <-- taskId removed from geofence event in 2.5.1
-            delete(params.taskId);
-            success.call(me, params, taskId);
-        };
-        exec(mySuccess,
+        exec(success,
             failure || function() {},
             MODULE_NAME,
-            'onGeofence',
+            'addGeofenceListener',
             []);
+        this._registerCallback(success, success);
     },
     /**
     * Fetch a list of all monitored geofences
@@ -515,21 +553,14 @@ module.exports = {
     * Fetch the current position
     */
     getCurrentPosition: function(success, failure, options) {
-        var me = this;
         options = options || {};
-        success = success || function(location, taskId) {
-            me.finish(taskId);
-        };
-        var mySuccess = function(params) {
-            var location    = params.location || params;
-            var taskId      = params.taskId || 0;
+        success = success || function() {};
+        var mySuccess = function(location) {
             // Transform timestamp to Date instance.
             if (location.timestamp) {
                 location.timestamp = new Date(location.timestamp);
             }
-            me._runBackgroundTask(taskId, function() {
-                success.call(this, location, taskId);
-            });
+            success(location);
         }
         exec(mySuccess || function() {},
             failure || function() {},
@@ -622,7 +653,7 @@ module.exports = {
             failure,
             MODULE_NAME,
             'getSensors',
-            []);  
+            []);
     },
     /**
     * Play a system sound.  This is totally experimental.
@@ -673,6 +704,21 @@ module.exports = {
             }
         }
         return destination;
+    },
+    _registerCallback: function(userSuccess, mySuccess) {
+        var callbacks = window.cordova.callbacks;
+        var re = new RegExp(MODULE_NAME);
+        for (var callbackId in callbacks) {
+            if (callbackId.match(re)) {
+                var callback = callbacks[callbackId];
+                if (callback.success === mySuccess) {
+                    this.cordovaCallbacks.push({
+                        callbackId: callbackId,
+                        success: userSuccess
+                    });
+                    break;
+                }
+            }
+        }
     }
 };
-
