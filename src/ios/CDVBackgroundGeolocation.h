@@ -54,6 +54,7 @@
 - (void) setLogLevel:(CDVInvokedUrlCommand *) command;
 - (void) emailLog:(CDVInvokedUrlCommand*) command;
 - (void) playSound:(CDVInvokedUrlCommand *)command;
+- (void) log:(CDVInvokedUrlCommand*)command;
 @end
 
 

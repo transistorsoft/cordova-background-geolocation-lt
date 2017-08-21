@@ -599,6 +599,16 @@
     }];
 }
 
+- (void) log:(CDVInvokedUrlCommand*)command
+{
+    NSString *level = [command.arguments objectAtIndex:0];
+    NSString *msg = [command.arguments objectAtIndex:1];
+    
+    [bgGeo log:level message:msg];
+    [self.commandDelegate sendPluginResult:[CDVPluginResult resultWithStatus:CDVCommandStatus_OK] callbackId:command.callbackId];
+}
+
+
 -(void) getSensors:(CDVInvokedUrlCommand*)command
 {
     NSDictionary *sensors = @{

@@ -1,6 +1,11 @@
 
 # Change Log
 
+## [2.8.2] - 2017-08-21
+- [Changed] Reference latest `cordova-plugin-background-fetch` version `5.0.0`
+- [Added] Javascript API to plugin's logging system.
+- [Fixed] Minor issue with iOS flush where multiple threads might create multiple background-tasks, leaving some unfinished.
+
 ## [2.8.0] - 2017-08-15
 - [Changed] Refactor iOS/Android core library event-subscription API.
 - [Changed] Removed `taskId` supplied to all event-callbacks.  You no longer have to call `bgGeo.finish(taskId)` in your event-callbacks (though the method will still operate as a `noop` for backwards compatibility).  You will now be responsible for creating your own iOS background-tasks using the method `#startBackgroundTask` when performing long-running tasks in your event-callbacks.
