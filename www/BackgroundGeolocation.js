@@ -9,6 +9,25 @@
 var exec = require("cordova/exec");
 var MODULE_NAME = "BackgroundGeolocation";
 
+/**
+* Client log method
+*/
+function log(level, msg) {
+    var method = 'anonymous';
+    /** Doesn't work in strict mode
+    var caller = arguments.callee.caller.caller;
+    if (caller) {
+        method = caller.name;
+    }
+    */
+    exec(function() {},
+        function() {},
+        MODULE_NAME,
+        'log',
+        [level, msg]
+    );
+}
+
 module.exports = {
     LOG_LEVEL_OFF: 0,
     LOG_LEVEL_ERROR: 1,
@@ -643,6 +662,38 @@ module.exports = {
             'emailLog',
             [email]);
     },
+
+    logger: {
+        error: function(msg) {
+            log('error', msg);
+        },
+        warn: function(msg) {
+            log('warn', msg);
+        },
+        debug: function(msg) {
+            log('debug', msg);
+        },
+        info: function(msg) {
+            log('info', msg);
+        },        
+        notice: function(msg) {
+            log('notice', msg);
+        },        
+        header: function(msg) {
+            log('header', msg);
+        },
+        on: function(msg) {
+            log('on', msg);
+        },
+        off: function(msg) {
+            log('off', msg);
+        },
+        ok: function(msg) {
+            log('ok', msg);
+        }
+    },
+
+
     /**
     * Fetch list of available sensors: accelerometer, gyroscope, magnetometer
     */
