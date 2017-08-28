@@ -1,6 +1,12 @@
 
 # Change Log
 
+## [2.8.3] - 2017-08-28
+- [Fixed] Android `stopOnTerminate` was not setting the `enabled` value to `false` when terminated.  This caused the plugin to automatically `#start` the first time the app was booted (it would work correctly every boot thereafter).
+- [Changed] iOS `motionchange` position will be fetch by `CLLocationManager#startUpdatingLocation` rather than `#requestLocation`, since `#requestLocation` cannot keep the app alive in the background.  This could cause the app to be suspended when `motionchange` position was requested due to a background-fetch event.
+- [Changed] Change Android HTTP layer to use more modern library `OkHttp3` instead of `Volley`.  Some users reported weird issues with some devices on some servers.  `OkHttp` seems to have solved it for them.  `OkHttp` is a much simpler library to use than `Volley`
+- [Changed] `play-services-location` dependency pinned to `:11.+` instead of `:+` in order to prevent build-issues with plugin's using Google's `fcm`.  I've created a new plugin to solve Google API conflicts (eg: `play-services`): [`cordova-google-api-version`](https://github.com/transistorsoft/cordova-google-api-version)
+
 ## [2.8.2] - 2017-08-21
 - [Changed] Reference latest `cordova-plugin-background-fetch` version `5.0.0`
 - [Added] Javascript API to plugin's logging system.
