@@ -351,6 +351,17 @@
     [bgGeo onSchedule:callback];
 }
 
+- (void) addPowerSaveChangeListener:(CDVInvokedUrlCommand*)command
+{
+    __typeof(self.commandDelegate) __weak commandDelegate = self.commandDelegate;
+    void(^callback)(TSPowerSaveChangeEvent*) = ^void(TSPowerSaveChangeEvent* event) {
+        CDVPluginResult *result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsBool:event.isPowerSaveMode];
+        [result setKeepCallbackAsBool:YES];
+        [commandDelegate sendPluginResult:result callbackId:command.callbackId];
+    };
+    [self registerCallback:command.callbackId callback:callback];
+    [bgGeo onPowerSaveChange:callback];   
+}
 - (void) addGeofence:(CDVInvokedUrlCommand*)command
 {
     NSDictionary *params  = [command.arguments objectAtIndex:0];
@@ -620,6 +631,13 @@
                               };
     CDVPluginResult *result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:sensors];
     [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
+}
+
+- (void) isPowerSaveMode:(CDVInvokedUrlCommand *) command
+{
+    BOOL isPowerSaveMode = [bgGeo isPowerSaveMode];
+    CDVPluginResult *result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsBool:isPowerSaveMode];
+    [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];   
 }
 
 -(void) registerCallback:(NSString*)callbackId callback:(void(^)(id))callback
