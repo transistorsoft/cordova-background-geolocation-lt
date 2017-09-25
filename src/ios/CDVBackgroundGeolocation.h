@@ -33,6 +33,7 @@
 - (void) addGeofencesChangeListener:(CDVInvokedUrlCommand*)command;
 - (void) addGeofenceListener:(CDVInvokedUrlCommand *)command;
 - (void) addHeartbeatListener:(CDVInvokedUrlCommand*)command;
+- (void) addPowerSaveChangeListener:(CDVInvokedUrlCommand*)command;
 - (void) getStationaryLocation:(CDVInvokedUrlCommand *)command;
 - (void) getLocations:(CDVInvokedUrlCommand *)command;
 - (void) sync:(CDVInvokedUrlCommand *)command;
@@ -52,6 +53,8 @@
 - (void) getLog:(CDVInvokedUrlCommand *) command;
 - (void) destroyLog:(CDVInvokedUrlCommand *) command;
 - (void) setLogLevel:(CDVInvokedUrlCommand *) command;
+- (void) getSensors:(CDVInvokedUrlCommand*)command;
+- (void) isPowerSaveMode:(CDVInvokedUrlCommand *) command;
 - (void) emailLog:(CDVInvokedUrlCommand*) command;
 - (void) playSound:(CDVInvokedUrlCommand *)command;
 - (void) log:(CDVInvokedUrlCommand*)command;

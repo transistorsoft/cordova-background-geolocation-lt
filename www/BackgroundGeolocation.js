@@ -108,6 +108,8 @@ module.exports = {
                 return this.onProviderChange(success, fail);
             case 'geofenceschange':
                 return this.onGeofencesChange(success, fail);
+            case 'powersavechange':
+                return this.onPowerSaveChange(success, fail);                
         }
     },
     /**
@@ -269,6 +271,13 @@ module.exports = {
             'setConfig',
             [config]);
     },
+    isPowerSaveMode: function(success, failure) {
+        exec(success||function(){},
+            failure || function() {},
+            MODULE_NAME,
+            'isPowerSaveMode',
+            []);
+    },
     /**
     * Returns current stationaryLocation if available.  null if not
     */
@@ -352,6 +361,15 @@ module.exports = {
             function() {},
             MODULE_NAME,
             'addGeofencesChangeListener',
+            []);
+        this._registerCallback(success, success);
+    },
+    onPowerSaveChange: function(success) {
+        success = success || function() {};
+        exec(success,
+            function() {},
+            MODULE_NAME,
+            'addPowerSaveChangeListener',
             []);
         this._registerCallback(success, success);
     },

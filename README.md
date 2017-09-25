@@ -106,13 +106,20 @@ For those using `useSignificantChangesOnly: true`, possibly because Apple *denie
 </plugin>
 ```
 
+##### `@variable LICENSE [""]` Android
+**[Android]** Your Android license key generated from [Product Dashboard](http://www.transistorsoft.com/shop/customers)
+
+##### `@variable LOCATION_ALWAYS_AND_WHEN_IN_USE_USAGE_DESCRIPTION ["Background location-tracking is required"]` iOS
+
+**[iOS 11+]** Customize the message displayed to the user when `AlwaysAndWhenInUse` location authorization is requested.  This variable is added to your iOS `.plist` in the `NSLocationAlwaysAndWhenInUseUsageDescription` key.
+
 ##### `@variable LOCATION_ALWAYS_USAGE_DESCRIPTION ["Background location-tracking is required"]` iOS
 
-**[iOS]** Customize the message displayed to the user when `Always` location authorization is requested.  This variable is added to your iOS `.plist` in the `NSLocationAlwaysUsageDescription` key.
+**[iOS (deprecated in 11.0)]** Customize the message displayed to the user when `Always` location authorization is requested.  This variable is added to your iOS `.plist` in the `NSLocationAlwaysUsageDescription` key.
 
 ##### `@variable LOCATION_WHEN_IN_USE_USAGE_DESCRIPTION ["Background location-tracking is required"` iOS
 
-**[iOS]** Customize the message displayed to the user when `WhenInUse` location authorization is requested.  This variable is added to your iOS `.plist` in the `NSLocationWhenInUseUsageDescription` key.
+**[iOS (deprecated in 11.0)]** Customize the message displayed to the user when `WhenInUse` location authorization is requested.  This variable is added to your iOS `.plist` in the `NSLocationWhenInUseUsageDescription` key.
 
 ##### `@variable MOTION_USAGE_DESCRIPTION ["Using the accelerometer increases battery-efficiency by..."` iOS
 
