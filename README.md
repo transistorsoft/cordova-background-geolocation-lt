@@ -11,8 +11,8 @@ Also available for [React Native](https://github.com/transistorsoft/react-native
 
 -----------------------------------------------------------------------------
 
-![Home](https://dl.dropboxusercontent.com/u/2319755/cordova-background-geolocaiton/home-framed-350.png)
-![Settings](https://dl.dropboxusercontent.com/u/2319755/cordova-background-geolocaiton/settings-framed-350.png)
+![Home](https://dl.dropboxusercontent.com/s/wa43w1n3xhkjn0i/home-framed-350.png?dl=1)
+![Settings](https://dl.dropboxusercontent.com/s/8oad228siog49kt/settings-framed-350.png?dl=1)
 
 ## [:books: API Documentation](./docs/README.md)
 - :wrench: [Configuration Options](./docs/README.md#wrench-configuration-options)
@@ -60,7 +60,7 @@ This plugin has tagged stable versions.  To install a particular version, append
 $ cordova plugin add <git.url>#2.7.0
 ```
 
-![](https://dl.dropboxusercontent.com/u/2319755/cordova-background-geolocaiton/screenshot-github-tagged-branches.png)
+![](https://dl.dropboxusercontent.com/s/5y59djjvxlnvkou/cordova-background-geolocaiton/screenshot-github-tagged-branches.png?dl=1)
 
 ## :large_blue_diamond: Configuring the plugin
 
@@ -280,15 +280,15 @@ A fully-featured [SampleApp](https://github.com/christocracy/cordova-background-
 
 If you're using XCode, boot the SampleApp in the iOS Simulator and enable ```Debug->Location->Freeway Drive```.
 
-![](https://dl.dropboxusercontent.com/u/2319755/cordova-background-geolocaiton/simulate-location.png)
+![](https://dl.dropboxusercontent.com/s/grvak7dbfmbe89l/simulate-location.png?dl=1)
 
 ## :large_blue_diamond: Simple Testing Server
 
 A simple Node-based [web-application](https://github.com/transistorsoft/background-geolocation-console) with SQLite database is available for field-testing and performance analysis.  If you're familiar with Node, you can have this server up-and-running in about **one minute**.
 
-![](https://dl.dropboxusercontent.com/u/2319755/cordova-background-geolocaiton/background-geolocation-console-map.png)
+![](https://dl.dropboxusercontent.com/s/px5rzz7wybkv8fs/background-geolocation-console-map.png?dl=1)
 
-![](https://dl.dropboxusercontent.com/u/2319755/cordova-background-geolocaiton/background-geolocation-console-grid.png)
+![](https://dl.dropboxusercontent.com/s/tiy5b2oivt0np2y/background-geolocation-console-grid.png?dl=1)
 
 
 # Licence
