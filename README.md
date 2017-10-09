@@ -197,14 +197,11 @@ function onDeviceReady() {
     var bgGeo = window.BackgroundGeolocation;
 
     //This callback will be executed every time a geolocation is recorded in the background.
-    var callbackFn = function(location, taskId) {
+    var callbackFn = function(location) {
         var coords = location.coords;
         var lat    = coords.latitude;
         var lng    = coords.longitude;
-        console.log('- Location: ', JSON.stringify(location));
-
-        // Must signal completion of your callbackFn.
-        bgGeo.finish(taskId);
+        console.log('- Location: ', JSON.stringify(location));        
     };
 
     // This callback will be executed if a location-error occurs.  Eg: this will be called if user disables location-services.
