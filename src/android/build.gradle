@@ -10,7 +10,6 @@ repositories{
 }
 
 dependencies {
-  compile 'com.google.android.gms:play-services-location:11.+'
   compile 'com.squareup.okhttp3:okhttp:3.8.1'
   compile 'org.greenrobot:eventbus:3.0.0'
   compile(name:'tslocationmanager', ext:'aar')

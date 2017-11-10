@@ -11,7 +11,9 @@
     <keywords>cordova, phonegap, background geolocation, background, geolocation, location, tracking, geofencing, geofence</keywords>
 
     <engines>
-        <engine name="cordova" version=">=5.0.0" />
+        <engine name="cordova" version=">=7.1.0"/>
+        <engine name="cordova-android" version=">=6.3.0"/>
+        <engine name="cordova-ios" version=">=4.4.0"/>
     </engines>
 
     <dependency id="cordova-plugin-background-fetch" version="~5.1.1" />
@@ -73,6 +75,12 @@
         <config-file target="AndroidManifest.xml" parent="/manifest/application">
             <meta-data android:name="com.transistorsoft.locationmanager.license" android:value="$LICENSE" />
         </config-file>
+
+        <preference name="GOOGLE_API_VERSION" default="11.6.0" />
+        <framework src="com.google.android.gms:play-services-location:$GOOGLE_API_VERSION"/>
+        
+        <preference name="APPCOMPAT_VERSION" default="26.1.0" />
+        <framework src="com.android.support:appcompat-v7:$APPCOMPAT_VERSION"/>
 
         <framework src="src/android/build.gradle" custom="true" type="gradleReference" />
         <resource-file src="src/android/libs/tslocationmanager.aar" target="src/android/libs/tslocationmanager.aar" />

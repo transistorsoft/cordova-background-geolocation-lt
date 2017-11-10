@@ -1,6 +1,24 @@
 
 # Change Log
 
+## [2.9.0] - 2017-11-10
+- [Fixed] Android NPE on `Settings.getForegroundService()` when using `foregroundService: false`
+- [Fixed] Android 8 error with `emailLog`.  Crash due to `SecurityException` when writing the log-file.  Fixed by implementing `FileProvider` (storage permissions no longer necessary).
+- [Fixed] iOS bug when providing non-string `#header` values.  Ensure casted to String.
+- [Changed] Android minimum required play-services version is `11.2.0` (required for new `play-services` APis.  Anything less and plugin will crash.
+- [Changed] Update Android to use new [`FusedLocationProviderClient`](https://developers.google.com/android/reference/com/google/android/gms/location/FusedLocationProviderClient) instead of now-deprectated `FusedLocationProviderAPI`.  It's the same underlying play-services location API -- just with a much simpler, less error-prone interface to implement.
+- [Fixed] On Android, when `changePace(true)` is executed while device is currently `still` (and remains `still`), `stopTimeout` timer would never initiate until device movement is detected.
+- [Fixed] iOS manual `#sync` was not executing *any* callback if database was empty.
+- [Added] Expose Android variable `APPCOMPAT_VERSION` allowing customization of the plugin's required dependency `com.android.support:appcompat-v7` (default `27.0.0`).  This dependency is required for Android 8 API support.
+- [Added] Implement new Android 8 `NotificationChannel` which is now required for displaying the `foregroundService` notification.
+- [Added] New Android `<variable name="GOOGLE_API_VERSION" />` in `config.xml`.  This new `<variable />` is only possible to use in Cordova version `>= 7.1.0`.  This new variable helps to solve the old problem when multiple plugins require `play-services` of a different version, causing build failures.  The `GOOGLE_API_VERSION` allows you to configure the `play-services-location` version to align with the version used by other plugins (eg: `cordova-plugin-googlemaps`, `phonegap-plugin-push`, etc).
+- [Added] Android foreground-service notification now uses `id: 9942585`.  If you wish to interact with the foreground-service notification in native code, this is the `id`.
+- [Fixed] iOS not always firing location `failure` callback.
+- [Fixed] iOS was not forcing an HTTP flush on `motionchange` event when `autoSyncThreshold` was used.
+- [Fixed] iOS Add sanity-check for Settings `boolean` type.  It was possible to corrupt the Settings when a `boolean`-type setting was provided with a non-boolean value (eg: `{}`, `[]`).
+- [Fixed] Android `getState` could cause an NPE if executed before `#configure`.
+- [Fixed] Work around iOS 11 bug with `CLLocationManager#stopMonitoringSignificantLocationChanges` (SLC):  When this method is called upon *any* single `CLLocationManager` instance, it would cause *all* instances to `#stopMonitoringSignificantLocationChanges`.  This caused problems with Scheduler evaluation, since SLC is required to periodically evaluate the schedule.
+
 ## [2.8.5] - 2017-09-25
 - [Added] Build for iOS 11, XCode 9.
 - [Added] Implement new `powersavechange` event in addition to `isPowerSaveMode` method for determining if OS "Power saving" mode is enabled.
