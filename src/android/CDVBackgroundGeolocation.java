@@ -162,7 +162,7 @@ public class CDVBackgroundGeolocation extends CordovaPlugin {
             setConfig( data.getJSONObject(0), callbackContext);
         } else if (ACTION_GET_STATE.equalsIgnoreCase(action)) {
             result = true;
-            callbackContext.success(Settings.getState());
+            callbackContext.success(getAdapter().getState());
         } else if (ACTION_ADD_MOTION_CHANGE_LISTENER.equalsIgnoreCase(action)) {
             result = true;
             this.addMotionChangeListener(callbackContext);
@@ -655,6 +655,7 @@ public class CDVBackgroundGeolocation extends CordovaPlugin {
         TSActivityChangeCallback callback = new TSActivityChangeCallback() {
             @Override
             public void onActivityChange(ActivityChangeEvent event) {
+                
                 PluginResult result = new PluginResult(PluginResult.Status.OK, event.toJson());
                 result.setKeepCallback(true);
                 callbackContext.sendPluginResult(result);
@@ -886,7 +887,7 @@ public class CDVBackgroundGeolocation extends CordovaPlugin {
     }
 
     private JSONObject getState() {
-        return Settings.getState();
+        return getAdapter().getState();
     }
 
     private void getSensors(CallbackContext callbackContext) {
