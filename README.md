@@ -1,4 +1,4 @@
-Cordova Background Geolocation
+Cordova Background Geolocation &middot; [![npm](https://img.shields.io/npm/dm/cordova-background-geolocation-lt.svg)]() [![npm](https://img.shields.io/npm/v/cordova-background-geolocation-lt.svg)]()
 ===========================================================================
 
 The *most* sophisticated background **location-tracking & geofencing** module with battery-conscious motion-detection intelligence for **iOS** and **Android**.
