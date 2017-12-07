@@ -206,7 +206,7 @@ After adding the plugin, your `config.xml` will contain the following block, con
 
 ```xml
 <widget id="com.your.company.app.id">
-  <plugin name="cordova-background-geolocation">
+  <plugin name="cordova-background-geolocation-lt">
     <variable name="LICENSE" value="YOUR_LICENSE_KEY" />
     <variable name="GOOGLE_API_VERSION" value="11.6.0" />
     <variable name="APPCOMPAT_VERSION" value="26.1.0" />
