@@ -43,9 +43,7 @@ import android.util.Log;
 
 public class CDVBackgroundGeolocation extends CordovaPlugin {
     private static final String TAG = "TSLocationManager";
-    public static final String ACCESS_COARSE_LOCATION = Manifest.permission.ACCESS_COARSE_LOCATION;
-    public static final String ACCESS_FINE_LOCATION = Manifest.permission.ACCESS_FINE_LOCATION;
-    private static final String[] LOCATION_PERMISSIONS = {ACCESS_COARSE_LOCATION, ACCESS_FINE_LOCATION};
+    private static final String HEADLESS_JOB_SERVICE_CLASS = "HeadlessJobService";
 
     public static final int REQUEST_ACTION_START = 1;
     public static final int REQUEST_ACTION_GET_CURRENT_POSITION = 2;
@@ -265,8 +263,8 @@ public class CDVBackgroundGeolocation extends CordovaPlugin {
         return result;
     }
 
-    private void configure(final JSONObject config, final CallbackContext callbackContext) {
-        final TSCallback callback = new TSCallback() {
+    private void configure(final JSONObject config, final CallbackContext callbackContext) throws JSONException {
+        TSCallback callback = new TSCallback() {
             public void onSuccess() {
                 callbackContext.success(getAdapter().getState());
             }
@@ -274,23 +272,14 @@ public class CDVBackgroundGeolocation extends CordovaPlugin {
                 callbackContext.error(error);
             }
         };
-        if (hasPermission(ACCESS_COARSE_LOCATION) && hasPermission(ACCESS_FINE_LOCATION)) {
-            getAdapter().configure(config, callback);
-        } else {
-            requestPermissions(REQUEST_ACTION_CONFIGURE, new TSCallback() {
-                @Override
-                public void onSuccess() {
-                    getAdapter().configure(config, callback);
-                }
-
-                @Override
-                public void onFailure(String error) { getAdapter().configure(config, callback);}
-            });
+        if (config.has("enableHeadless") && config.getBoolean("enableHeadless")) {
+            config.put("headlessJobService", getClass().getPackage().getName() + "." + HEADLESS_JOB_SERVICE_CLASS);
         }
+        getAdapter().configure(config, callback);
     }
 
     private void start(final CallbackContext callbackContext) {
-        final TSCallback callback = new TSCallback() {
+        TSCallback callback = new TSCallback() {
             public void onSuccess() {
                 callbackContext.success(getAdapter().getState());
             }
@@ -299,20 +288,7 @@ public class CDVBackgroundGeolocation extends CordovaPlugin {
             }
         };
 
-        if (hasPermission(ACCESS_COARSE_LOCATION) && hasPermission(ACCESS_FINE_LOCATION)) {
-            getAdapter().start(callback);
-        } else {
-            requestPermissions(REQUEST_ACTION_START, new TSCallback() {
-                @Override
-                public void onSuccess() {
-                    getAdapter().start(callback);
-                }
-                @Override
-                public void onFailure(String error) {
-                    callbackContext.error("Start failed");
-                }
-            });
-        }
+        getAdapter().start(callback);
     }
 
     private void startSchedule(CallbackContext callbackContext) {
@@ -344,20 +320,7 @@ public class CDVBackgroundGeolocation extends CordovaPlugin {
     }
 
     private void startGeofences(final CallbackContext callback) {
-        if (hasPermission(ACCESS_COARSE_LOCATION) && hasPermission(ACCESS_FINE_LOCATION)) {
-            getAdapter().startGeofences(new StartGeofencesCallback(callback));
-        } else {
-            requestPermissions(REQUEST_ACTION_START_GEOFENCES, new TSCallback() {
-                @Override
-                public void onSuccess() {
-                    getAdapter().startGeofences(new StartGeofencesCallback(callback));
-                }
-                @Override
-                public void onFailure(String error) {
-                    callback.error(error);
-                }
-            });
-        }
+        getAdapter().startGeofences(new StartGeofencesCallback(callback));
     }
 
     private void stop(CallbackContext callbackContext) {
@@ -447,7 +410,7 @@ public class CDVBackgroundGeolocation extends CordovaPlugin {
     }
 
     private void getCurrentPosition(final CallbackContext callbackContext, final JSONObject options) {
-        final TSLocationCallback callback = new TSLocationCallback() {
+        TSLocationCallback callback = new TSLocationCallback() {
             public void onLocation(TSLocation location) {
                 callbackContext.success(location.toJson());
             }
@@ -455,26 +418,12 @@ public class CDVBackgroundGeolocation extends CordovaPlugin {
                 callbackContext.error(error);
             }
         };
-
-        if (hasPermission(ACCESS_COARSE_LOCATION) && hasPermission(ACCESS_FINE_LOCATION)) {
-            getAdapter().getCurrentPosition(options, callback);
-        } else {
-            requestPermissions(REQUEST_ACTION_GET_CURRENT_POSITION, new TSCallback() {
-                @Override
-                public void onSuccess() {
-                    getAdapter().getCurrentPosition(options, callback);
-                }
-                @Override
-                public void onFailure(String error) {
-                    callbackContext.error(error);
-                }
-            });
-        }
+        getAdapter().getCurrentPosition(options, callback);
     }
 
     private void watchPosition(final CallbackContext callbackContext, final JSONObject options) {
 
-        final TSLocationCallback callback = new TSLocationCallback() {
+        TSLocationCallback callback = new TSLocationCallback() {
             public void onLocation(TSLocation location) {
                 PluginResult result = new PluginResult(PluginResult.Status.OK, location.toJson());
                 result.setKeepCallback(true);
@@ -484,23 +433,8 @@ public class CDVBackgroundGeolocation extends CordovaPlugin {
                 callbackContext.error(error);
             }
         };
-
-        if (hasPermission(ACCESS_COARSE_LOCATION) && hasPermission(ACCESS_FINE_LOCATION)) {
-            watchPositionCallbacks.add(callbackContext);
-            getAdapter().watchPosition(options, callback);
-        } else {
-            requestPermissions(REQUEST_ACTION_WATCH_POSITION, new TSCallback() {
-                @Override
-                public void onSuccess() {
-                    watchPositionCallbacks.add(callbackContext);
-                    getAdapter().watchPosition(options, callback);
-                }
-                @Override
-                public void onFailure(String error) {
-                    callbackContext.error(error);
-                }
-            });
-        }
+        watchPositionCallbacks.add(callbackContext);
+        getAdapter().watchPosition(options, callback);
     }
 
     private void stopWatchPosition(final CallbackContext callbackContext) {
@@ -636,7 +570,7 @@ public class CDVBackgroundGeolocation extends CordovaPlugin {
             }
         };
         registerCallback(callbackContext, callback);
-        getAdapter().onPowerSaveChange(callback);    
+        getAdapter().onPowerSaveChange(callback);
     }
     private void addHeartbeatListener(final CallbackContext callbackContext) {
         TSHeartbeatCallback callback = new TSHeartbeatCallback() {
@@ -655,7 +589,7 @@ public class CDVBackgroundGeolocation extends CordovaPlugin {
         TSActivityChangeCallback callback = new TSActivityChangeCallback() {
             @Override
             public void onActivityChange(ActivityChangeEvent event) {
-                
+
                 PluginResult result = new PluginResult(PluginResult.Status.OK, event.toJson());
                 result.setKeepCallback(true);
                 callbackContext.sendPluginResult(result);
@@ -808,7 +742,10 @@ public class CDVBackgroundGeolocation extends CordovaPlugin {
         });
     }
 
-    private void setConfig(final JSONObject config, final CallbackContext callbackContext) {
+    private void setConfig(final JSONObject config, final CallbackContext callbackContext) throws JSONException {
+        if (config.has("enableHeadless") && config.getBoolean("enableHeadless")) {
+            config.put("headlessJobService", getClass().getPackage().getName() + "." + HEADLESS_JOB_SERVICE_CLASS);
+        }
         TSCallback callback = new TSCallback() {
             @Override
             public void onSuccess() {
@@ -917,7 +854,7 @@ public class CDVBackgroundGeolocation extends CordovaPlugin {
 
         // Show alert popup with js error
         if (Settings.getDebug()) {
-            getAdapter().startTone(BackgroundGeolocation.TONE_ERROR);
+            getAdapter().startTone(android.media.ToneGenerator.TONE_CDMA_HIGH_S_X4);
             AlertDialog.Builder builder = new AlertDialog.Builder(this.cordova.getActivity());
             builder.setMessage(message)
                     .setCancelable(false)
@@ -929,60 +866,6 @@ public class CDVBackgroundGeolocation extends CordovaPlugin {
             AlertDialog alert = builder.create();
             alert.show();
         }
-    }
-
-    private boolean hasPermission(String action) {
-        try {
-            Method methodToFind = cordova.getClass().getMethod("hasPermission", String.class);
-            if (methodToFind != null) {
-                try {
-                    return (Boolean) methodToFind.invoke(cordova, action);
-                } catch (IllegalAccessException e) {
-                    e.printStackTrace();
-                } catch (InvocationTargetException e) {
-                    e.printStackTrace();
-                }
-            }
-        } catch(NoSuchMethodException e) {
-            // Probably SDK < 23 (MARSHMALLOW implmements fine-grained, user-controlled permissions).
-            return true;
-        }
-        return true;
-    }
-
-    private void requestPermissions(int requestCode, TSCallback callback) {
-        try {
-            Method methodToFind = cordova.getClass().getMethod("requestPermissions", CordovaPlugin.class, int.class, String[].class);
-            if (methodToFind != null) {
-                try {
-                    methodToFind.invoke(cordova, this, requestCode, LOCATION_PERMISSIONS);
-                    locationAuthorizationCallbacks.add(callback);
-                } catch (IllegalAccessException e) {
-                    e.printStackTrace();
-                } catch (InvocationTargetException e) {
-                    e.printStackTrace();
-                }
-            }
-        } catch(NoSuchMethodException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public void onRequestPermissionResult(int requestCode, String[] permissions, int[] grantResults) throws JSONException {
-        if (grantResults.length == 0) {
-            Log.w(TAG, "Waiting for location permission result");
-            return;
-        }
-
-        int result = grantResults[0];
-        for (TSCallback callback : locationAuthorizationCallbacks) {
-            if(result == PackageManager.PERMISSION_DENIED) {
-                callback.onFailure("denied");
-            } else {
-                callback.onSuccess();
-            }
-        }
-        locationAuthorizationCallbacks.clear();
     }
 
     private void handlePlayServicesConnectError(Integer errorCode) {

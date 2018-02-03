@@ -743,7 +743,9 @@ module.exports = {
         // Transform timestamp to Date instance.
         if (typeof(rs) === 'object') {
             for (var n=0,len=rs.length;n<len;n++) {
-                rs[n].timestamp = new Date(rs[n].timestamp);
+                if (rs[n].timestamp) { 
+                    rs[n].timestamp = new Date(rs[n].timestamp);
+                }
             }
         }
         return rs;
