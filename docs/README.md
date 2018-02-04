@@ -130,7 +130,7 @@ BackgroundGeolocation.setConfig({
 | [`maxBatchSize`](#config-integer-maxbatchsize-undefined) | `Integer` | `-1` | If you've enabled HTTP feature by configuring an [`#url`](config-string-url-undefined) and [`batchSync: true`](#config-string-batchsync-false), this parameter will limit the number of records attached to each batch.|
 | [`maxDaysToPersist`](#config-integer-maxdaystopersist-1) | `Integer` |  `1` |  Maximum number of days to store a geolocation in plugin's SQLite database.|
 | [`maxRecordsToPersist`](#config-integer-maxrecordstopersist--1) | `Integer` |  `-1` |  Maximum number of records to persist in plugin's SQLite database.  Defaults to `-1` (no limit).  To disable persisting locations, set this to `0`|
-| [`locationsOrderDirection`](#config-string-locationsorderdirection-asc) | `String` |  `ASC` |  Controls the order that locations are selected from the database (and synced to your server).  Defaults to ascending (`ASC`), where oldest locations are synced first. Descending (`DESC`) syncs newst locations first.|
+| [`locationsOrderDirection`](#config-string-locationsorderdirection-asc) | `String` |  `ASC` |  Controls the order that locations are selected from the database (and synced to your server).  Defaults to ascending (`ASC`), where oldest locations are synced first. Descending (`DESC`) syncs latest locations first.|
 
 
 ## :wrench: Application Options
