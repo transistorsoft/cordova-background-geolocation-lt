@@ -16,6 +16,10 @@ import com.transistorsoft.locationmanager.logger.TSLog;
 
 import org.json.JSONObject;
 
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+
 import static android.content.Context.NOTIFICATION_SERVICE;
 
 /**
@@ -24,8 +28,60 @@ import static android.content.Context.NOTIFICATION_SERVICE;
 
 public class HeadlessTask {
     private Callback mCompletionHandler;
+    private static String BACKGROUND_GEOLOCATION_HEADLESS_TASK = HeadlessTask.class.getPackage().getName() + ".BackgroundGeolocationHeadlessTask";
+    private static String METHOD_SET_COMPLETION_HANDLER = "setCompletionHandler";
+    private static String METHOD_ON_RECEIVE             = "onReceive";
 
-    void setCompletionHandler(Callback completionHandler) {
+    public static boolean invoke(Context context, String event, JSONObject params, HeadlessTask.Callback completionHandler) {
+        try {
+            // Get class BackgroundGeolocationTask
+            Class<?> CustomHeadlessClass = Class.forName(BACKGROUND_GEOLOCATION_HEADLESS_TASK);
+            Constructor<?> cons = CustomHeadlessClass.getConstructor();
+            Object headlessTask = cons.newInstance();
+            // Get method #setCompletionHandler
+            Method setCompletionHandler = headlessTask.getClass().getMethod(METHOD_SET_COMPLETION_HANDLER, completionHandler.getClass());
+            setCompletionHandler.invoke(headlessTask, completionHandler);
+            // Get method #onReceive
+            Class<?>[] paramTypes = {Context.class, String.class, JSONObject.class};
+            Method onReceive = headlessTask.getClass().getMethod(METHOD_ON_RECEIVE, paramTypes);
+            onReceive.invoke(headlessTask, context, event, params);
+            return true;
+        } catch (ClassNotFoundException e) {
+            TSLog.logger.error("HeadlessTask failed to find BackgroundGeolocationHeadlessTask.java.  If you've configured enableHeadless: true, you must provide a custom BackgroundGeolocationHeadlessTask.java.  See Wiki: https://github.com/transistorsoft/cordova-background-geolocation-lt/wiki/Android-Headless-Mode");
+            handleReflectionError(context, e);
+            return false;
+        } catch (NoSuchMethodException e) {
+            handleReflectionError(context, e);
+            return false;
+        } catch (IllegalAccessException e) {
+            handleReflectionError(context, e);
+            return false;
+        } catch (InstantiationException e) {
+            handleReflectionError(context, e);
+            return false;
+        } catch (InvocationTargetException e) {
+            handleReflectionError(context, e);
+            return false;
+        }
+    }
+
+    private static void handleReflectionError(Context context, Exception e) {
+        com.transistorsoft.locationmanager.settings.Settings.load(context);
+        com.transistorsoft.locationmanager.settings.Settings.enableHeadless = false;
+        TSLog.logger.error(TSLog.error("BackgroundGeolocationHeadlessTask exception: " + e.getMessage()));
+        TSLog.logger.error(TSLog.error("enableHeadless has been automatically disabled."));
+        e.printStackTrace();
+    }
+
+    public void setCompletionHandler(HeadlessJobService.CompletionHandler completionHandler) {
+        applyCompletionHandler(completionHandler);
+    }
+
+    public void setCompletionHandler(HeadlessBroadcastReceiver.CompletionHandler completionHandler) {
+        applyCompletionHandler(completionHandler);
+    }
+
+    private void applyCompletionHandler(Callback completionHandler) {
         if (mCompletionHandler != null) { return; }
         mCompletionHandler = completionHandler;
     }
