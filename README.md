@@ -125,9 +125,9 @@ $ cordova platform add ios
 #### Or each variable separately
 
 ```bash
-$ cordova plugin add https://github.com/transistorsoft/cordova-background-geolocation.git --variable MOTION_USAGE_DESCRIPTION="My Motion Usage Description"
+$ cordova plugin add cordova-background-geolocation-lt --variable MOTION_USAGE_DESCRIPTION="My Motion Usage Description"
 
-$ cordova plugin add https://github.com/transistorsoft/cordova-background-geolocation.git --variable LOCATION_ALWAYS_AND_WHEN_IN_USE_USAGE_DESCRIPTION="My Usage Description"
+$ cordova plugin add cordova-background-geolocation-lt --variable LOCATION_ALWAYS_AND_WHEN_IN_USE_USAGE_DESCRIPTION="My Usage Description"
 
 $ cordova platform remove ios
 $ cordova platform add ios
