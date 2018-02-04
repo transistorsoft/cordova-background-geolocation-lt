@@ -30,22 +30,15 @@ public class HeadlessJobService extends JobService {
 
             JSONObject event = new JSONObject(extras.getString("params"));
 
-            BackgroundGeolocationHeadlessTask headlessTask = new BackgroundGeolocationHeadlessTask();
-            headlessTask.setCompletionHandler(new HeadlessTask.Callback() {
-                @Override
-                public void finish() {
-                    jobFinished(params, false);
-                }
-            });
-
-            headlessTask.onReceive(getApplicationContext(), eventName, event);
-
+            if (!HeadlessTask.invoke(getApplicationContext(), eventName, event, new CompletionHandler(params))) {
+                jobFinished(params, false);
+                return false;
+            }
         } catch (JSONException e) {
             TSLog.logger.error(TSLog.error(e.getMessage()));
             jobFinished(params, false);
             e.printStackTrace();
         }
-
         return true;
     }
     @Override
@@ -53,5 +46,15 @@ public class HeadlessJobService extends JobService {
         TSLog.logger.debug("HeadlessJobService onStopJob");
         jobFinished(params, false);
         return true;
+    }
+
+    class CompletionHandler implements HeadlessTask.Callback {
+        private JobParameters mParams;
+        public CompletionHandler(JobParameters params) {
+            mParams = params;
+        }
+        public void finish() {
+            jobFinished(mParams, false);
+        }
     }
 }

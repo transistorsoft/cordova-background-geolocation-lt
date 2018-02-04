@@ -3,7 +3,7 @@
 <plugin xmlns="http://www.phonegap.com/ns/plugins/1.0"
     xmlns:android="http://schemas.android.com/apk/res/android"
     id="cordova-background-geolocation-lt"
-    version="2.10.0">
+    version="2.10.1">
 
     <name>BackgroundGeolocation</name>
     <description>The most sophisticated, battery-efficient background-geolocation and geofencing plugin for Cordova</description>
@@ -104,7 +104,7 @@
         <source-file src="src/android/CDVBackgroundGeolocation.java" target-dir="src/com/transistorsoft/cordova/bggeo" />
         <source-file src="src/android/HeadlessBroadcastReceiver.java" target-dir="src/com/transistorsoft/cordova/bggeo" />
         <source-file src="src/android/HeadlessJobService.java" target-dir="src/com/transistorsoft/cordova/bggeo" />
-        <source-file src="src/android/BackgroundGeolocationHeadlessTask.java" target-dir="src/com/transistorsoft/cordova/bggeo" />
+         />
         <source-file src="src/android/HeadlessTask.java" target-dir="src/com/transistorsoft/cordova/bggeo" />
 
         <config-file target="res/xml/config.xml" parent="/*">

@@ -24,18 +24,16 @@ public class HeadlessBroadcastReceiver extends BroadcastReceiver {
 
             JSONObject event = new JSONObject(extras.getString("params"));
 
-            BackgroundGeolocationHeadlessTask headlessTask = new BackgroundGeolocationHeadlessTask();
-            headlessTask.setCompletionHandler(new HeadlessTask.Callback() {
-                @Override
-                public void finish() {
-                    // Do nothing with BroadcastReceiver.  This is only for JobService
-                }
-            });
-
-            headlessTask.onReceive(context, eventName, event);
+            HeadlessTask.invoke(context.getApplicationContext(), eventName, event, new CompletionHandler());
         } catch (JSONException e) {
             TSLog.logger.error(TSLog.error(e.getMessage()));
             e.printStackTrace();
+        }
+    }
+
+    class CompletionHandler implements HeadlessTask.Callback {
+        public void finish() {
+            // Do nothing with BroadcastReceiver.
         }
     }
 }
