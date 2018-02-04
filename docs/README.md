@@ -1,5 +1,5 @@
 # :books: API Documentation
-### :wrench: [Configuration Options](#wrench-configuration-options)
+### :wrench: [Configuration Options](#wrench-configuration-options-1)
   + [Geolocation Options](#wrench-geolocation-options)
     * [Common](#geolocation-common-options)
     * [iOS](#geolocation-ios-options)
@@ -13,7 +13,7 @@
     * [Common](#application-common-options)
     * [iOS](#application-ios-options)
     * [Android](#application-android-options)
-### :zap: [Events](#zap-events)
+### :zap: [Events](#zap-events-1)
 ### :small_blue_diamond: [Methods](#large_blue_diamond-methods)
   + [Core API Methods](#small_blue_diamond-core-api-methods)
   + [HTTP & Persistence Methods](#small_blue_diamond-http--persistence-methods)
@@ -26,6 +26,7 @@
   + [Android Headless Mode](../../..//wiki/Android-Headless-Mode)
   + [Location Data Schema](../../../wiki/Location-Data-Schema)
   + [Debugging](../../../wiki/Debugging)
+
 
 # :wrench: Configuration Options
 
@@ -1197,7 +1198,7 @@ If you set this option to **`true`**, the plugin will run its Android service in
 
 #### `@config {Boolean} enableHeadless [false]`
 
-Set to `true` to enable "Headless" mode when the user terminates the application where you've configured **`stopOnTerminate: false`**.  In this mode, you can respond to all the plugin's [events](#events) in the native Android environment.  For more information, see the wiki for [Headless Mode](../../../wiki/Android-Headless-Mode).
+Set to `true` to enable "Headless" mode when the user terminates the application where you've configured **`stopOnTerminate: false`**.  In this mode, you can respond to all the plugin's [events](#events) in the native Android environment.  For more information, see the wiki for [Android Headless Mode](../../../wiki/Android-Headless-Mode).
 
 :information_source: "Headless" mode is an alternartive to using the **`forceReloadOnXXX`** configuration options below.
 
