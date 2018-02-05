@@ -1,10 +1,10 @@
 
 # Change Log
 
-## [2.10.1] - 2017-02-04
+## [2.10.1] - 2018-02-04
 - [Fixed] Android `enableHeadless: true`:  The plugin cannot include a default `BackgroundGeolocationHeadlessTask.java` with a `<source-file />` element, since adding plugin and platform on initial install places the `<resource-file />`  from application's `plugin.xml` first, causing the `cordova plugin add` to complain about an existing file `BackgroundGeolocationHeadlessTask.java`.  Have to not place the default source-file and use refelction instead.  This is unfortunate since removing the plugin won't remove the user's custom BackgroundGeolocationHeadlessTask.java from the src tree, causing compilation errors.  Simply removing / re-adding the android platform will solve this issue.
 
-## [2.10.0] - 2017-02-03
+## [2.10.0] - 2018-02-03
 - [Fixed] Guard usage of `powersavechange` event for iOS < 9
 - [Added] Android permissions are now handled completely within `tslocationmanager` library rather than within Cordova Activity.
 - [Fixed] iOS `emailLog` issues:  sanity check existence of email client, ensure we have reference to topMost `UIViewController`.
