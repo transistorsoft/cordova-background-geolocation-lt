@@ -1,7 +1,7 @@
-repositories{    
+repositories{
   jcenter()
   flatDir{
-    dirs 'src/android/libs'
+    dirs 'src/main/libs'
   }
   // Google dependencies are now hosted at Maven
   maven {

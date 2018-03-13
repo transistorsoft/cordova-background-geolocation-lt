@@ -36,7 +36,7 @@
                 $BACKGROUND_MODE_LOCATION
             </array>
         </config-file>
-        
+
         <config-file target="*-Info.plist" parent="NSLocationAlwaysAndWhenInUseUsageDescription">
             <string>$LOCATION_ALWAYS_AND_WHEN_IN_USE_USAGE_DESCRIPTION</string>
         </config-file>
@@ -99,13 +99,13 @@
         <preference name="APPCOMPAT_VERSION" default="27.0.0" />
         <framework src="com.android.support:appcompat-v7:$APPCOMPAT_VERSION"/>
         <framework src="src/android/build.gradle" custom="true" type="gradleReference" />
-        <resource-file src="src/android/libs/tslocationmanager.aar" target="src/android/libs/tslocationmanager.aar" />
+        <resource-file src="src/android/libs/tslocationmanager.aar" target="libs/tslocationmanager.aar" />
 
-        <source-file src="src/android/CDVBackgroundGeolocation.java" target-dir="src/com/transistorsoft/cordova/bggeo" />
-        <source-file src="src/android/HeadlessBroadcastReceiver.java" target-dir="src/com/transistorsoft/cordova/bggeo" />
-        <source-file src="src/android/HeadlessJobService.java" target-dir="src/com/transistorsoft/cordova/bggeo" />
+        <source-file src="src/android/CDVBackgroundGeolocation.java" target-dir="app/src/main/com/transistorsoft/cordova/bggeo" />
+        <source-file src="src/android/HeadlessBroadcastReceiver.java" target-dir="app/src/main/com/transistorsoft/cordova/bggeo" />
+        <source-file src="src/android/HeadlessJobService.java" target-dir="app/src/main/com/transistorsoft/cordova/bggeo" />
          />
-        <source-file src="src/android/HeadlessTask.java" target-dir="src/com/transistorsoft/cordova/bggeo" />
+        <source-file src="src/android/HeadlessTask.java" target-dir="app/src/main/com/transistorsoft/cordova/bggeo" />
 
         <config-file target="res/xml/config.xml" parent="/*">
             <feature name="BackgroundGeolocation">
