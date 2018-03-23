@@ -32,7 +32,7 @@ public class HeadlessTask {
     private static String METHOD_SET_COMPLETION_HANDLER = "setCompletionHandler";
     private static String METHOD_ON_RECEIVE             = "onReceive";
 
-    public static boolean invoke(Context context, String event, JSONObject params, HeadlessTask.Callback completionHandler) {
+    static boolean invoke(Context context, String event, JSONObject params, HeadlessTask.Callback completionHandler) {
         try {
             // Get class BackgroundGeolocationTask
             Class<?> CustomHeadlessClass = Class.forName(BACKGROUND_GEOLOCATION_HEADLESS_TASK);
@@ -47,29 +47,25 @@ public class HeadlessTask {
             onReceive.invoke(headlessTask, context, event, params);
             return true;
         } catch (ClassNotFoundException e) {
-            TSLog.logger.error("HeadlessTask failed to find BackgroundGeolocationHeadlessTask.java.  If you've configured enableHeadless: true, you must provide a custom BackgroundGeolocationHeadlessTask.java.  See Wiki: https://github.com/transistorsoft/cordova-background-geolocation-lt/wiki/Android-Headless-Mode");
+            TSLog.logger.error("HeadlessTask failed to find " + BACKGROUND_GEOLOCATION_HEADLESS_TASK + ".java.  If you've configured enableHeadless: true, you must provide a custom BackgroundGeolocationHeadlessTask.java.  See Wiki: https://github.com/transistorsoft/cordova-background-geolocation-lt/wiki/Android-Headless-Mode");
             handleReflectionError(context, e);
-            return false;
         } catch (NoSuchMethodException e) {
             handleReflectionError(context, e);
-            return false;
         } catch (IllegalAccessException e) {
             handleReflectionError(context, e);
-            return false;
         } catch (InstantiationException e) {
             handleReflectionError(context, e);
-            return false;
         } catch (InvocationTargetException e) {
             handleReflectionError(context, e);
-            return false;
         }
+        return false;
     }
 
     private static void handleReflectionError(Context context, Exception e) {
         com.transistorsoft.locationmanager.settings.Settings.load(context);
         com.transistorsoft.locationmanager.settings.Settings.enableHeadless = false;
         TSLog.logger.error(TSLog.error("BackgroundGeolocationHeadlessTask exception: " + e.getMessage()));
-        TSLog.logger.error(TSLog.error("enableHeadless has been automatically disabled."));
+        TSLog.logger.error(TSLog.error("enableHeadless has been automatically disabled to prevent further exceptions."));
         e.printStackTrace();
     }
 
