@@ -3,7 +3,7 @@
 <plugin xmlns="http://www.phonegap.com/ns/plugins/1.0"
     xmlns:android="http://schemas.android.com/apk/res/android"
     id="cordova-background-geolocation-lt"
-    version="2.10.1">
+    version="2.11.0-beta.1">
 
     <name>BackgroundGeolocation</name>
     <description>The most sophisticated, battery-efficient background-geolocation and geofencing plugin for Cordova</description>
@@ -16,12 +16,13 @@
         <engine name="cordova-ios" version=">=4.4.0"/>
     </engines>
 
-    <dependency id="cordova-plugin-background-fetch" version="~5.2.1" />
+    <dependency id="cordova-plugin-background-fetch" version="~5.3.0" />
 
     <js-module src="www/BackgroundGeolocation.js" name="BackgroundGeolocation">
         <clobbers target="window.BackgroundGeolocation" />
     </js-module>
-
+    <js-module src="www/API.js" name="API"></js-module>    
+    
      <platform name="ios">
         <preference name="BACKGROUND_MODE_LOCATION" default="&lt;string&gt;location&lt;/string&gt;" />
         <preference name="LOCATION_ALWAYS_AND_WHEN_IN_USE_USAGE_DESCRIPTION" default="Always use is required for constant background location-tracking" />
@@ -99,7 +100,7 @@
         <preference name="APPCOMPAT_VERSION" default="27.0.0" />
         <framework src="com.android.support:appcompat-v7:$APPCOMPAT_VERSION"/>
         <framework src="src/android/build.gradle" custom="true" type="gradleReference" />
-        <resource-file src="src/android/libs/tslocationmanager.aar" target="src/android/libs/tslocationmanager.aar" />
+        <source-file src="src/android/libs/com/transistorsoft/tslocationmanager" target-dir="src/android/libs/com/transistorsoft" />
 
         <source-file src="src/android/CDVBackgroundGeolocation.java" target-dir="src/com/transistorsoft/cordova/bggeo" />
         <source-file src="src/android/HeadlessBroadcastReceiver.java" target-dir="src/com/transistorsoft/cordova/bggeo" />

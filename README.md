@@ -236,11 +236,11 @@ platform.ready().then(() => {
 
 ```
 
-### `#configure` the Plugin
+### Initialize the Plugin
 There are **three** simple steps to using `BackgroundGeolocation`:
 
 1. Listen to events
-2. `#configure` the plugin
+2. Execute [`#ready`](docs/README.md#readydefaultconfig-successfn-failurefn) 
 3. `#start` the plugin
 
 ```javascript
@@ -249,8 +249,8 @@ bgGeo.on('location', onLocation, onLocationFailure);
 bgGeo.on('motionchange', onMotionChange);
 bgGeo.on('providerchange', onProviderChange);
 
-// 2. Configure the plugin.  
-bgGeo.configure({
+// 2. Execute #ready method:  
+bgGeo.ready({  
   desiredAccuracy: 0,   // <-- Config params
   distanceFilter: 50
 }, function(state) {    // <-- Current state provided to #configure callback
@@ -266,10 +266,34 @@ bgGeo.configure({
 // method above executes!
 // For example, do not do this here:
 // bgGeo.getCurrentPosition()   // <-- NO!
-// bgGeo.getState();            // <-- NO!
+// bgGeo.start();               // <-- NO!
 ```
 
-:warning: Do not execute *any* API method (aside from `#getState` or adding event-listeners with `#on`) *before* the `callbackFn` to the `#configure` method fires, as noted above.
+:information_source: **NOTE:** The configuration **`{}`** provided to the `#ready` method is applied **only** when your app is **first booted** &mdash; for every launch thereafter, the plugin will automatically load the last known configuration from persistant storage.  If you wish to **force** the `#ready` method to *always* apply the supplied config `{}`, you can specify **`reset: true`**
+
+```javascript
+bgGeo.ready({
+  reset: true,  // <-- true to always apply the supplied config
+  distanceFilter: 10
+}, function(state) {
+  console.log('- BackgroundGeolocation is ready: ', state);
+});
+```
+
+:warning: Do not execute *any* API method which will require accessing location-services until the callback to **`#ready*` executes (eg: `#getCurrentPosition`, `#watchPosition`, `#start`).
+
+### Promise API
+
+The `BackgroundGeolocation` Javascript API supports [Promises](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise) for *nearly* every method (the exceptions are **`#watchPosition`** and adding event-listeners via **`#on`** method.  For more information, see the [API Documentation](docs/README.md#large_blue_diamond-methods)
+
+```javascript
+// Traditional API still works:
+bgGeo.ready({desiredAccuracy: 0, distanceFilter: 50}).then(state => {
+  console.log('- BackgroundGeolocation is ready: ', state);
+}).catch(error => {
+  console.log('- BackgroundGeolocation error: ', error);
+});
+```
 
 ## :large_blue_diamond: Example
 
@@ -315,7 +339,7 @@ function onDeviceReady() {
     });
 
     // BackgroundGeoLocation is highly configurable.
-    bgGeo.configure({
+    bgGeo.ready({
         // Geolocation config
         desiredAccuracy: 0,
         distanceFilter: 10,

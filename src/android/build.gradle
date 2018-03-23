@@ -1,24 +1,18 @@
 repositories{    
-  jcenter()
-  flatDir{
-    dirs 'src/android/libs'
-  }
-  // Google dependencies are now hosted at Maven
+  jcenter()  
   maven {
     url 'https://maven.google.com'
   }
+  maven {
+    url 'src/android/libs'
+  }
 }
 
-dependencies {
-  compile 'com.squareup.okhttp3:okhttp:3.8.1'
+dependencies {  
+  compile(group: 'com.transistorsoft', name:'tslocationmanager', version: '+')
   compile 'org.greenrobot:eventbus:3.0.0'
-  compile(name:'tslocationmanager', ext:'aar')
-  // logback-android
+  compile 'com.squareup.okhttp3:okhttp:3.10.0'
   compile 'org.slf4j:slf4j-api:1.7.21'
-  compile 'com.github.tony19:logback-android-core:1.1.1-6'
-  compile('com.github.tony19:logback-android-classic:1.1.1-6') {
-    exclude group: 'com.google.android', module: 'android'
-  }
-  // android-permissions
-  compile 'com.intentfilter:android-permissions:0.1.5'
+  compile 'com.github.tony19:logback-android:1.1.1-9'
+  compile 'com.intentfilter:android-permissions:0.1.6'  
 }
