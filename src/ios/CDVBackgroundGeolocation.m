@@ -273,6 +273,7 @@
     __typeof(self.commandDelegate) __weak commandDelegate = self.commandDelegate;
     void(^callback)(TSHttpEvent*) = ^void(TSHttpEvent* response) {
         NSDictionary *params = @{
+            @"success": @(response.isSuccess),
             @"status": @(response.statusCode),
             @"responseText":response.responseText
         };

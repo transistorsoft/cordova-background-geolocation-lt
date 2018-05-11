@@ -94,6 +94,10 @@ public class CDVBackgroundGeolocation extends CordovaPlugin {
     private void initializeLocationManager() {
         Activity activity   = cordova.getActivity();
         Intent launchIntent = activity.getIntent();
+
+        TSConfig config = TSConfig.getInstance(activity.getApplicationContext());
+        config.useCLLocationAccuracy(true);
+
         if (launchIntent.hasExtra("forceReload")) {
             activity.moveTaskToBack(true);
         }
@@ -289,7 +293,6 @@ public class CDVBackgroundGeolocation extends CordovaPlugin {
         final TSConfig config = TSConfig.getInstance(cordova.getActivity().getApplicationContext());
 
         if (config.isFirstBoot()) {
-            config.useCLLocationAccuracy(true);
             config.updateWithJSONObject(setHeadlessJobService(params));
         } else if (params.has("reset") && params.getBoolean("reset")) {
             config.reset();
@@ -307,7 +310,6 @@ public class CDVBackgroundGeolocation extends CordovaPlugin {
     private void configure(final JSONObject params, final CallbackContext callbackContext) throws JSONException {
         final TSConfig config = TSConfig.getInstance(cordova.getActivity().getApplicationContext());
         config.reset();
-        config.useCLLocationAccuracy(true);
         config.updateWithJSONObject(setHeadlessJobService(params));
 
         getAdapter().ready(new TSCallback() {
@@ -778,6 +780,7 @@ public class CDVBackgroundGeolocation extends CordovaPlugin {
             @Override public void onHttpResponse(HttpResponse response) {
                 JSONObject params = new JSONObject();
                 try {
+                    params.put("success", response.isSuccess());
                     params.put("status", response.status);
                     params.put("responseText", response.responseText);
                     PluginResult result = new PluginResult((response.isSuccess()) ? PluginResult.Status.OK : PluginResult.Status.ERROR, params);
