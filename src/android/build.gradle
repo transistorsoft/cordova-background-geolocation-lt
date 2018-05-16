@@ -4,7 +4,7 @@ repositories{
     url 'https://maven.google.com'
   }
   maven {
-    url 'src/android/libs'
+    url '../app/libs'
   }
 }
 
