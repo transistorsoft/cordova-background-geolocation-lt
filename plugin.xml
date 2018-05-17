@@ -3,7 +3,7 @@
 <plugin xmlns="http://www.phonegap.com/ns/plugins/1.0"
     xmlns:android="http://schemas.android.com/apk/res/android"
     id="cordova-background-geolocation-lt"
-    version="2.11.0">
+    version="2.12.0">
 
     <name>BackgroundGeolocation</name>
     <description>The most sophisticated, battery-efficient background-geolocation and geofencing plugin for Cordova</description>
@@ -11,12 +11,12 @@
     <keywords>cordova, phonegap, background geolocation, background, location, tracking, geofence, geofencing</keywords>
 
     <engines>
-        <engine name="cordova" version=">=7.1.0"/>
-        <engine name="cordova-android" version=">=6.3.0"/>
+        <engine name="cordova" version=">=8.0.0"/>
+        <engine name="cordova-android" version=">=7.0.0"/>
         <engine name="cordova-ios" version=">=4.4.0"/>
     </engines>
 
-    <dependency id="cordova-plugin-background-fetch" version="~5.3.0" />
+    <dependency id="cordova-plugin-background-fetch" version="~5.4.0" />
 
     <js-module src="www/BackgroundGeolocation.js" name="BackgroundGeolocation">
         <clobbers target="window.BackgroundGeolocation" />
@@ -100,12 +100,12 @@
         <preference name="APPCOMPAT_VERSION" default="27.0.0" />
         <framework src="com.android.support:appcompat-v7:$APPCOMPAT_VERSION"/>
         <framework src="src/android/build.gradle" custom="true" type="gradleReference" />
-        <source-file src="src/android/libs/com/transistorsoft/tslocationmanager" target-dir="src/android/libs/com/transistorsoft" />
+        
+        <resource-file src="src/android/libs/com/transistorsoft/tslocationmanager" target="../../libs/com/transistorsoft/tslocationmanager" />
 
         <source-file src="src/android/CDVBackgroundGeolocation.java" target-dir="src/com/transistorsoft/cordova/bggeo" />
         <source-file src="src/android/HeadlessBroadcastReceiver.java" target-dir="src/com/transistorsoft/cordova/bggeo" />
         <source-file src="src/android/HeadlessJobService.java" target-dir="src/com/transistorsoft/cordova/bggeo" />
-         />
         <source-file src="src/android/HeadlessTask.java" target-dir="src/com/transistorsoft/cordova/bggeo" />
 
         <config-file target="res/xml/config.xml" parent="/*">

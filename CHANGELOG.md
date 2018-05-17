@@ -1,6 +1,9 @@
 
 # Change Log
 
+## [2.12.0] - 2018-05-16
+- [Added] `cordova-android@7.0.0` support.  Cordova 8 is now required.  This is the same library versions for both iOS and Android as used in `2.11.0`.
+
 ## [2.11.0] - 2018-05-11
 - [Fixed] Android bug where plugin could fail to translate iOS desiredAccuracy value to Android value, resulting in incorrect `desiredAccuracy` value for Android, probably defaulting to `DESIRED_ACCURACY_LOWEST`.
 - [Fixed] iOS was not persiting odometer.
