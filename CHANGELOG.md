@@ -1,6 +1,9 @@
 
 # Change Log
 
+## [2.12.1] - 2018-05-17
+- [Fixed] iOS geofence exit was being ignored in a specific case where (1) geofence was configured with `notifyOnDwell: true` AND (2) the app was booted in the background *due to* a geofence exit event.
+
 ## [2.12.0] - 2018-05-16
 - [Added] `cordova-android@7.0.0` support.  Cordova 8 is now required.  This is the same library versions for both iOS and Android as used in `2.11.0`.
 
