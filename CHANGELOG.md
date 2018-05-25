@@ -1,6 +1,11 @@
 
 # Change Log
 
+## [2.12.2] - 2018-05-25
+- [Changed] Reduce required `cordova` version from `8.0.0` to `7.1.0`.
+- [Fixed] iOS issue when plugin is booted in background in geofences-only mode, could engage location-tracking mode.
+- [Fixed] Android `getCurrentPosition` was not respecting `persist: true` when executed in geofences-only mode.
+
 ## [2.12.1] - 2018-05-17
 - [Fixed] iOS geofence exit was being ignored in a specific case where (1) geofence was configured with `notifyOnDwell: true` AND (2) the app was booted in the background *due to* a geofence exit event.
 
