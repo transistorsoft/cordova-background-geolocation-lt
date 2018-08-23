@@ -67,7 +67,7 @@ BackgroundGeolocation.setConfig({
 |-------------|-----------|-----------|-----------------------------------|
 | [`desiredAccuracy`](#config-integer-desiredaccuracy-0-10-100-1000-in-meters) | `Integer` | `0` | Specify the desired-accuracy of the geolocation system with 1 of 4 values, `0`, `10`, `100`, `1000` where `0` means **HIGHEST POWER, HIGHEST ACCURACY** and `1000` means **LOWEST POWER, LOWEST ACCURACY** |
 | [`distanceFilter`](#config-integer-distancefilter) | `Integer` | `10` | The minimum distance (measured in meters) a device must move horizontally before an update event is generated. |
-| [`disableElasticity`](#config-boolean-disableelasticity-false) | `Boolean` | `false` | Set true to disable automatic speed-based #distanceFilter elasticity. eg: When device is moving at highway speeds, locations are returned at ~ 1 / km. |
+| [`disableElasticity`](#config-boolean-disableelasticity-false) | `Boolean` | `false` | Set true to disable automatic speed-based [`#distanceFilter`](#config-integer-distancefilter) elasticity. eg: When device is moving at highway speeds, locations are returned at ~ 1 / km. |
 | [`elasticityMultiplier`](#config-float-elasticitymultiplier-1) | `Float` | `1` | Controls the scale of automatic speed-based `distanceFilter` elasticity.  Increasing `elasticityMultiplier` will result in few location samples as speed increases. |
 | [`stopAfterElapsedMinutes`](#config-integer-stopafterelapsedminutes) | `Integer`  | `0`  | The plugin can optionally automatically stop tracking after some number of minutes elapses after the [`#start`](#startsuccessfn-failurefn) method was called. |
 | [`stopOnStationary`](#config-boolean-stoponstationary) | `Boolean`  | `false`  | The plugin can optionally automatically stop tracking when the `stopTimeout` timer elapses. |
@@ -89,7 +89,7 @@ BackgroundGeolocation.setConfig({
 
 | Option      | Type      | Default   | Note                              |
 |-------------|-----------|-----------|-----------------------------------|
-| [`locationUpdateInterval`](#config-integer-millis-locationupdateinterval) | `Integer` | `1000` | With [`distanceFilter: 0`](config-integer-distancefilter), Sets the desired interval for location updates, in milliseconds.  :warning: This setting will be ignored when **`distanceFilter > 0`** |
+| [`locationUpdateInterval`](#config-integer-millis-locationupdateinterval) | `Integer` | `1000` | With [`distanceFilter: 0`](#config-integer-distancefilter), Sets the desired interval for location updates, in milliseconds.  :warning: This setting will be ignored when **`distanceFilter > 0`** |
 | [`fastestLocationUpdateInterval`](#config-integer-millis-fastestlocationupdateinterval) | `Integer` | `10000` | Explicitly set the fastest interval for location updates, in milliseconds. |
 | [`deferTime`](#config-integer-defertime) | `Integer` | `0` | Sets the maximum wait time in milliseconds for location updates to be delivered to your callback, when they will all be delivered in a batch.|
 | [`allowIdenticalLocations`](#config-boolean-allowidenticallocations) | `Boolean` | `false` | The Android plugin will ignore a received location when it is identical to the last location.  Set `true` to override this behaviour and record every location, regardless if it is identical to the last location.|
@@ -104,7 +104,7 @@ BackgroundGeolocation.setConfig({
 | [`activityRecognitionInterval`](#config-integer-millis-10000-activityrecognitioninterval) | `Integer` | `10000` | The desired time between activity detections. Larger values will result in fewer activity detections while improving battery life. A value of `0` will result in activity detections at the fastest possible rate. |
 | [`stopTimeout`](#config-integer-minutes-stoptimeout) | `Integer` | `5`  | The number of **minutes** to wait before turning off location-services after the ActivityRecognition System (ARS) detects the device is `STILL` |
 | [`minimumActivityRecognitionConfidence`](#config-integer-millis-minimumactivityrecognitionconfidence) | `Integer` | `75` | Each activity-recognition-result returned by the API is tagged with a "confidence" level expressed as a `%`.  You can set your desired confidence to trigger a state-change.|
-| [`stopDetectionDelay`](#config-integer-minutes-stopdetectiondelay-0) | `Integer` | `0` | Number of **minute** to delay the stop-detection system from being activated.| 
+| [`stopDetectionDelay`](#config-integer-minutes-stopdetectiondelay-0) | `Integer` | `0` | Number of **minutes** to delay the stop-detection system from being activated.| 
 | [`disableStopDetection`](#config-boolean-disablestopdetection-false) | `Boolean` | `false` | Disable accelerometer-based **Stop-detection System**. :warning: Not recommended|
 
 ### [Activity Recognition] iOS Options
@@ -168,12 +168,13 @@ BackgroundGeolocation.setConfig({
 | [`notificationColor`](#config-string-notificationcolor-null) | `String` | `null` | When running the service with [`foregroundService: true`](#config-boolean-foregroundservice-false), controls the color of the persistent notification in the Notification Bar. |
 | [`notificationSmallIcon`](#config-string-notificationsmallicon-app-icon) | `String` |  Your App Icon | When running the service with [`foregroundService: true`](#config-boolean-foregroundservice-false), controls your customize notification *small* icon.  Defaults to your application icon.|
 | [`notificationLargeIcon`](#config-string-notificationlargeicon-undefined) | `String` |  `undefined` | When running the service with [`foregroundService: true`](#config-boolean-foregroundservice-false), controls your customize notification *large* icon.  Defaults to `undefined`.|
+| [`notificationChannelName`](#config-string-notificationchannelname-appname) | `String` |  `app name` | On Android O+, the plugin's foreground-service needs to create a "Notification Channel".  The name of this channel can be seen in Settings->App & Notifications->Your App.  Defaults to `Your App`.|
 | [`forceReloadOnMotionChange`](#config-boolean-forcereloadonmotionchange-false) | `Boolean` | `false` |  Launch your app whenever the [`#motionchange`](#motionchange) event fires. |
 | [`forceReloadOnLocationChange`](#config-boolean-forcereloadonlocationchange-false) | `Boolean` | `false` |  Launch your app whenever the [`#location`](#location) event fires. |
 | [`forceReloadOnGeofence`](#config-boolean-forcereloadongeofence-false) | `Boolean` | `false` |  Launch your app whenever the [`#geofence`](#geofence) event fires. |
 | [`forceReloadOnHeartbeat`](#config-boolean-forcereloadonheartbeat-false) | `Boolean` | `false` |  Launch your app whenever the [`#heartbeat`](#heartbeat) event fires. |
 | [`forceReloadOnSchedule`](#config-boolean-forcereloadonschedule-false) | `Boolean` | `false` |  Launch your app whenever a [`schedule`](#schedule) event fires. |
-| [`forceReloadOnBoot`](#config-boolean-forcereloadonboot-false) | `Boolean` | `false` |  If the user reboots the device with the plugin configured for [`startOnBoot: true`](#config-boolean-startonboot-false), your will app will launch when the device is rebooted. |
+| [`forceReloadOnBoot`](#config-boolean-forcereloadonboot-false) | `Boolean` | `false` |  If the user reboots the device with the plugin configured for [`startOnBoot: true`](#config-boolean-startonboot-false), your app will launch when the device is rebooted. |
 
 
 
@@ -271,7 +272,7 @@ By marking one of your application methods as **`async`** you can use the **`awa
 ```javascript
 async onClickGetPosition() {
   let location = await bgGeo.getCurrentPosition({samples:1, persist: false});
-  conosle.log('- current position: ', location);
+  console.log('- current position: ', location);
 
   let count = await bgGeo.getCount();
   console.log('- There are ', count, ' records in the database');
@@ -368,7 +369,7 @@ You may also use the following constants upon `BackgroundGeolocation`:
 | `DESIRED_ACCURACY_VERY_LOW`   | `1000`| Cellular only | Lowest power; lowest accuracy |
 | `DESIRED_ACCURACY_THREE_KILOMETER` | `3000` | (**iOS only**) Lowest power; lowest accuracy |
 ```javascript
-BackgroundGeoloction.configure({
+BackgroundGeoloction.ready({
   desiredAccuracy: BackgroundGeolocation.DESIRED_ACCURACY_HIGH
 });
 ```
@@ -443,7 +444,7 @@ Controls the scale of automatic speed-based [`#distanceFilter`](#config-integer-
 The plugin can optionally automatically stop tracking after some number of minutes elapses after the `#start` method was called.
 
 ```javascript
-BackgroundGeolocation.configure({
+BackgroundGeolocation.ready({
   stopAfterElapsedMinutes: 30
 }, function(state) {
   BackgroundGeolocation.start();  // <-- plugin will automatically #stop in 30 minutes
@@ -459,7 +460,7 @@ The plugin can optionally automatically stop tracking when the `stopTimeout` tim
 :warning: `stopOnStationary` will **only** occur due to `stopTimeout` timer elapse.  It will **not** occur by manually executing `changePace(false)`.
 
 ```javascript
-BackgroundGeolocation.configure({
+BackgroundGeolocation.ready({
   stopOnStationary: true
 }, function(state) {
   BackgroundGeolocation.start();
@@ -534,7 +535,7 @@ When you configure the plugin location-authorization `Always` or `WhenInUse` and
 ![](s/wyoaf16buwsw7ed/docs-locationAuthorizationAlert.jpg?dl=1)
 
 ```javascript
-BackgroundGeolocation.configure({
+BackgroundGeolocation.ready({
   locationAuthorizationAlert: {
     titleWhenNotEnabled: "Yo, location-services not enabled",
     titleWhenOff: "Yo, location-services OFF",
@@ -588,7 +589,7 @@ Applications with only the coarse location permission may have their interval si
 :blue_book: [Android docs](https://developers.google.com/android/reference/com/google/android/gms/location/LocationRequest.html#setInterval(long))
 
 ```javascript
-BackgroundGeolocation.configure({
+BackgroundGeolocation.ready({
   distanceFilter: 0,            // Must be 0 or locationUpdateInterval is ignored!
   locationUpdateInterval: 5000  // Get a location every 5 seconds
 });
@@ -651,12 +652,12 @@ If you wish, you can configure the plugin to only engage the **moving** state fo
 
 ```javascript
 // Only trigger tracking for vehicles
-BackgroundGeolocation.configure({
+BackgroundGeolocation.ready({
   triggerActivities: 'in_vehicle'
 });
 
 // Only trigger tracking for on_foot, walking and running
-BackgroundGeolocation.configure({
+BackgroundGeolocation.ready({
   triggerActivities: 'on_foot, walking, running'
 });
 ```
@@ -772,7 +773,7 @@ Defaults to `true`.  Set `false` to disable triggering a geofence immediately if
 Your server **`url`** where you wish to HTTP POST location data to.
 
 ```javascript
-BackgroundGeolocation.configure({
+BackgroundGeolocation.ready({
   url: 'http://my-server.com/locations'
 });
 ```
@@ -794,7 +795,7 @@ BackgroundGeolocation.on('http', function(request) {
   console.log('HTTP FAILURE', response);
 });
 
-BackgroundGeolocation.configure({
+BackgroundGeolocation.ready({
   url: 'http://my-server.com/locations',
   httpTimeout: 3000
 });
@@ -807,7 +808,7 @@ BackgroundGeolocation.configure({
 The HTTP method to use when creating an HTTP request to your configured [`#url`](#config-string-url-undefined).  Defaults to `POST`.  Valid values are `POST`, `PUT` and `OPTIONS`.
 
 ```javascript
-BackgroundGeolocation.configure({
+BackgroundGeolocation.ready({
   url: 'http://my-server.com/locations',
   method: 'PUT'
 });
@@ -820,7 +821,7 @@ BackgroundGeolocation.configure({
 Optional HTTP **`params`** sent along in each HTTP request.
 
 ```javascript
-BackgroundGeolocation.configure({
+BackgroundGeolocation.ready({
   url: 'http://my-server.com/locations',
   params: {
     user_id: 1234,
@@ -896,12 +897,12 @@ Optional custom template for rendering `location` JSON request data in HTTP requ
 :blue_book: See [HTTP Guide](http.md) for more information.
 
 ```javascript
-BackgroundGeolocation.configure({
+BackgroundGeolocation.ready({
   locationTemplate: '{"lat":<%= latitude %>,"lng":<%= longitude %>,"event":"<%= event %>",isMoving:<%= isMoving %>}'
 });
 
 // Or use a compact [Array] template!
-BackgroundGeolocation.configure({
+BackgroundGeolocation.ready({
   locationTemplate: '[<%=latitude%>, <%=longitude%>, "<%=event%>", <%=is_moving%>]'
 })
 ```
@@ -909,7 +910,7 @@ BackgroundGeolocation.configure({
 :warning: If you've configured [`#extras`](#config-object-extras), these key-value pairs will be merged *directly* onto your location data.  Eg:
 
 ```javascript
-BackgroundGeolocation.configure({
+BackgroundGeolocation.ready({
   httpRootProperty: 'data',
   locationTemplate: '{"lat":<%= latitude %>,"lng":<%= longitude %>}',
   extras: {
@@ -964,12 +965,12 @@ Evaulate variables in your **`geofenceTemplate`** using Ruby `erb`-style tags:
 :blue_book: See [HTTP Guide](http.md) for more information.
 
 ```javascript
-BackgroundGeolocation.configure({
+BackgroundGeolocation.ready({
   geofenceTemplate: '{ "lat":<%= latitude %>, "lng":<%= longitude %>, "geofence":"<%= geofence.identifier %>:<%= geofence.action %>" }'
 });
 
 // Or use a compact [Array] template!
-BackgroundGeolocation.configure({
+BackgroundGeolocation.ready({
   geofenceTemplate: '[<%= latitude %>, <%= longitude %>, "<%= geofence.identifier %>", "<%= geofence.action %>"]'
 })
 
@@ -1033,7 +1034,7 @@ Eg: Every recorded location will have the following **`extras`** appended:
 :blue_book: See [HTTP Guide](http.md) for more information.
 
 ```javascript
-BackgroundGeolocation.configure({
+BackgroundGeolocation.ready({
   url: 'http://my-server.com/locations',
   extras: {
     route_id: 1234
@@ -1160,7 +1161,7 @@ The `START_TIME`, `END_TIME` are in **24h format**.  The `DAY` param corresponds
 
 
 ```javascript
-BackgroundGeolocation.configure({
+BackgroundGeolocation.ready({
   .
   .
   .
@@ -1217,7 +1218,7 @@ The schedule can also be configured with a literal start date of the form:
 eg:
 
 ```javascript
-BackgroundGeolocation.configure({
+BackgroundGeolocation.ready({
   schedule: [
     "2018-01-01 09:00-17:00"
   ]
@@ -1347,7 +1348,7 @@ The following `notificationPriority` values defined as **constants** on the `Bac
 | `NOTIFICATION_PRIORITY_MIN`     | Notification **strongly** weighted to bottom of list; notification-bar icon **hidden**                          |
 
 ```javascript
-BackgroundGeolocation.configure({
+BackgroundGeolocation.ready({
   foregroundService: true,
   notificationPriority: BackgroundGeolocation.NOTIFICATION_PRIORITY_MIN
 });
@@ -1388,12 +1389,12 @@ eg:
 
 ```javascript
 // 1. drawable
-BackgroundGeolocation.configure({
+BackgroundGeolocation.ready({
   notificationSmallIcon: "drawable/my_custom_notification_small_icon"
 });
 
 // 2. mipmap
-BackgroundGeolocation.configure({
+BackgroundGeolocation.ready({
   notificationSmallIcon: "mipmap/my_custom_notification_small_icon"
 });
 ```
@@ -1412,14 +1413,36 @@ eg:
 
 ```javascript
 // 1. drawable
-BackgroundGeolocation.configure({
+BackgroundGeolocation.ready({
   notificationLargeIcon: "drawable/my_custom_notification_large_icon"
 });
 
 // 2. mipmap
-BackgroundGeolocation.configure({
+BackgroundGeolocation.ready({
   notificationLargeIcon: "mipmap/my_custom_notification_large_icon"
 });
+```
+
+------------------------------------------------------------------------------
+
+#### `@config {String} notificationChannelName [appname]`
+
+On Android O+, the plugin's foreground-service needs to create a "Notification Channel".  The name of this channel can be seen in Settings->App & Notifications->Your App.  Defaults to `Your App`.
+
+![](https://dl.dropboxusercontent.com/s/zgcxau7lyjfuaw9/android-notificationChannelName.png?dl=1)
+
+eg:
+
+```javascript
+
+BackgroundGeolocation.ready({
+  notificationChannelName: "Location Tracker"
+});
+
+// or with #setConfig
+BackgroundGeolocation.setConfig({
+  notificationChannelName: "Location Tracker"
+})
 ```
 
 ------------------------------------------------------------------------------
@@ -1458,7 +1481,7 @@ The following log-levels are defined as **constants** on the `BackgroundGeolocat
 
 Eg:
 ```javascript
-BackgroundGeolocation.configure({
+BackgroundGeolocation.ready({
   logLevel: BackgroundGeolocation.LOG_LEVEL_WARNING
 });
 ```
@@ -1962,7 +1985,7 @@ BackgroundGeolocation.configure({
 BackgroundGeolocation.on('location', onLocation);
 BackgroundGeolocation.on('motionchange', onMotionChange);
 
-BackgroundGeolocation.configure(options, function(state) {
+BackgroundGeolocation.ready(options, function(state) {
   // YES
   BackgroundGeolocation.getCurrentPosition(succes, fail);
 });
@@ -2594,7 +2617,7 @@ Engages the geofences-only `trackingMode`.  In this mode, no active location-tra
 
 ```javascript
 
-BackgroundGeolocation.configure(config, function(state) {
+BackgroundGeolocation.ready(config, function(state) {
   // Add some geofences.
   BackgroundGeolocation.addGeofences([
     notifyOnExit: true,

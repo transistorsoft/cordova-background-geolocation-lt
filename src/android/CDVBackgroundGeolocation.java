@@ -97,6 +97,10 @@ public class CDVBackgroundGeolocation extends CordovaPlugin {
 
         TSConfig config = TSConfig.getInstance(activity.getApplicationContext());
         config.useCLLocationAccuracy(true);
+        // Ensure HeadlessJobService is set.
+        config.updateWithBuilder()
+            .setHeadlessJobService(getClass().getPackage().getName() + "." + HEADLESS_JOB_SERVICE_CLASS)
+            .commit();
 
         if (launchIntent.hasExtra("forceReload")) {
             activity.moveTaskToBack(true);
