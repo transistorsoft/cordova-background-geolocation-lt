@@ -80,8 +80,8 @@ After adding the plugin, your `config.xml` will contain the following block, con
 <widget id="com.your.company.app.id">
   <plugin name="cordova-background-geolocation-lt">
     <variable name="LICENSE" value="YOUR_LICENSE_KEY" />
-    <variable name="GOOGLE_API_VERSION" value="11.6.0" />
-    <variable name="APPCOMPAT_VERSION" value="26.1.0" />
+    <variable name="GOOGLE_API_VERSION" value="15.0.1" />
+    <variable name="APPCOMPAT_VERSION" value="27.1.1" />
     <variable name="LOCATION_ALWAYS_AND_WHEN_IN_USE_USAGE_DESCRIPTION" value="Always use is required for background location tracking" />
     <variable name="LOCATION_ALWAYS_USAGE_DESCRIPTION" value="Background location-tracking is required" />
     <variable name="LOCATION_WHEN_IN_USE_USAGE_DESCRIPTION" value="Background location-tracking is required" />
@@ -111,8 +111,8 @@ Use the `\` character followed by [`ENTER`] in console to configure multiple var
 ```bash
 $ cordova plugin add cordova-background-geolocation-lt \
   --variable LICENSE=your_key_here \
-  --variable GOOGLE_API_VERSION=11.6.0 \
-  --variable APPCOMPAT_VERSION=27.0.0 \
+  --variable GOOGLE_API_VERSION=15.0.1 \
+  --variable APPCOMPAT_VERSION=27.1.1 \
   --variable MOTION_USAGE_DESCRIPTION="My motion usage description"
 
 $ cordova platform remove android
@@ -163,7 +163,7 @@ Many other plugins require Google Play Services and/or Firebase libraries.  This
 :warning: The plugin requires a minimum version of **`11.2.0`**.
 
 ```bash
-$ cordova plugin add cordova-background-geolocation-lt --variable GOOGLE_API_VERSION=11.2.0
+$ cordova plugin add cordova-background-geolocation-lt --variable GOOGLE_API_VERSION=15.0.1
 $ cordova platform remove android
 $ cordova platform add android
 ```
@@ -187,10 +187,10 @@ $ cordova platform add ios
 ##### `@variable LICENSE [""]`
 Your Android license key generated from [Product Dashboard](http://www.transistorsoft.com/shop/customers)
 
-##### `@variable GOOGLE_API_VERSION ["11.6.0"]`
+##### `@variable GOOGLE_API_VERSION ["15.0.1"]`
 Sets the desired version of `play-services-location` dependency.  Many other plugins require `play-services` dependencies, (eg: `cordova-plugin-googlemaps`, `phonegap-plugin-push`):  If the version of `play-services` and/or `firebase` is not aligned to the **same** version for **ALL** plugins, your build **will fail**.
 
-##### `@variable APPCOMPAT_VERSION ["27.0.0"]`
+##### `@variable APPCOMPAT_VERSION ["27.1.1"]`
 Sets the desired version of `com.google.android.appcompat-v7` dependency.  Many other plugins can require a different version of `appcompat-v7` dependeny:  If the version of `appcompat-v7` is not aligned to the **same** version for **ALL** plugins, your build **will fail**.  `BackgroundGeolocation` requires a minimum version of `26.1.0` due to its support for Android 8.
 
 ### iOS
