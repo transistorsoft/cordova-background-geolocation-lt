@@ -42,7 +42,7 @@ import android.util.Log;
 
 public class CDVBackgroundGeolocation extends CordovaPlugin {
     private static final String TAG = "TSLocationManager";
-    private static final String HEADLESS_JOB_SERVICE_CLASS = "HeadlessJobService";
+    private static final String HEADLESS_JOB_SERVICE_CLASS = "BackgroundGeolocationHeadlessTask";
 
     public static final int REQUEST_ACTION_START = 1;
     public static final int REQUEST_ACTION_GET_CURRENT_POSITION = 2;
@@ -298,7 +298,7 @@ public class CDVBackgroundGeolocation extends CordovaPlugin {
 
         if (config.isFirstBoot()) {
             config.updateWithJSONObject(setHeadlessJobService(params));
-        } else if (params.has("reset") && params.getBoolean("reset")) {
+        } else if (params.has("reset") && (params.getBoolean("reset") == true)) {
             config.reset();
             config.updateWithJSONObject(setHeadlessJobService(params));
         }

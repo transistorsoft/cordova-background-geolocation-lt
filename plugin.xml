@@ -3,7 +3,7 @@
 <plugin xmlns="http://www.phonegap.com/ns/plugins/1.0"
     xmlns:android="http://schemas.android.com/apk/res/android"
     id="cordova-background-geolocation-lt"
-    version="2.13.1">
+    version="2.13.2">
 
     <name>BackgroundGeolocation</name>
     <description>The most sophisticated, battery-efficient background-geolocation and geofencing plugin for Cordova</description>
@@ -75,24 +75,6 @@
         <preference name="LICENSE" default="YOUR_LICENSE_KEY" />
         <config-file target="AndroidManifest.xml" parent="/manifest/application">
             <meta-data android:name="com.transistorsoft.locationmanager.license" android:value="$LICENSE" />
-
-            <service android:name="com.transistorsoft.cordova.bggeo.HeadlessJobService" android:permission="android.permission.BIND_JOB_SERVICE" android:exported="true" />
-
-            <receiver android:name="com.transistorsoft.cordova.bggeo.HeadlessBroadcastReceiver">
-                <intent-filter>
-                    <action android:name="${applicationId}.tslocationmanager.event.LOCATION" />
-                    <action android:name="${applicationId}.tslocationmanager.event.MOTIONCHANGE" />
-                    <action android:name="${applicationId}.tslocationmanager.event.ACTIVITYCHANGE" />
-                    <action android:name="${applicationId}.tslocationmanager.event.PROVIDERCHANGE" />
-                    <action android:name="${applicationId}.tslocationmanager.event.POWERSAVECHANGE" />
-                    <action android:name="${applicationId}.tslocationmanager.event.HEARTBEAT" />
-                    <action android:name="${applicationId}.tslocationmanager.event.GEOFENCE" />
-                    <action android:name="${applicationId}.tslocationmanager.event.HTTP" />
-                    <action android:name="${applicationId}.tslocationmanager.event.SCHEDULE" />
-                    <action android:name="${applicationId}.tslocationmanager.event.BOOT" />
-                    <action android:name="${applicationId}.tslocationmanager.event.TERMINATE" />
-                </intent-filter>
-            </receiver>
         </config-file>
 
         <preference name="GOOGLE_API_VERSION" default="15.0.1" />
@@ -103,10 +85,7 @@
         
         <resource-file src="src/android/libs/com/transistorsoft/tslocationmanager" target="../../libs/com/transistorsoft/tslocationmanager" />
 
-        <source-file src="src/android/CDVBackgroundGeolocation.java" target-dir="src/com/transistorsoft/cordova/bggeo" />
-        <source-file src="src/android/HeadlessBroadcastReceiver.java" target-dir="src/com/transistorsoft/cordova/bggeo" />
-        <source-file src="src/android/HeadlessJobService.java" target-dir="src/com/transistorsoft/cordova/bggeo" />
-        <source-file src="src/android/HeadlessTask.java" target-dir="src/com/transistorsoft/cordova/bggeo" />
+        <source-file src="src/android/CDVBackgroundGeolocation.java" target-dir="src/com/transistorsoft/cordova/bggeo" />        
 
         <config-file target="res/xml/config.xml" parent="/*">
             <feature name="BackgroundGeolocation">
