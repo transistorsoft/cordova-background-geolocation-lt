@@ -1,6 +1,10 @@
 
 # Change Log
 
+## [2.13.2] - 2018-10-01
+- [Fixed] iOS was missing Firebase adapter hook for persisting geofences.
+- [Changed] Android headless events are now posted with using `EventBus` instead of `JobScheduler`.  Events posted via Android `JobScheduler` are subject to time-slicing by the OS so events could arrive late.
+
 ## [2.13.1] - 2018-08-29
 - [Fixed] iOS scheduler not being initialized in `#ready` after reboot.
 
