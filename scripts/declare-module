@@ -1,0 +1,1 @@
+find ./src/ionic/declarations -type f -name "*.d.ts" -print0 | xargs -0 sed -i '' -e 's/declare module.*/declare module "cordova-background-geolocation" \{/g'
