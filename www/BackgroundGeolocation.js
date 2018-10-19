@@ -46,7 +46,7 @@ module.exports = {
     ACTIVITY_TYPE_AUTOMOTIVE_NAVIGATION: 2,
     ACTIVITY_TYPE_FITNESS: 3,
     ACTIVITY_TYPE_OTHER_NAVIGATION: 4,
-    
+
     ready: function(defaultConfig, success, failure) {
         if (arguments.length <= 1) {
             return API.ready(defaultConfig||{});
@@ -60,7 +60,7 @@ module.exports = {
             return API.configure(config);
         } else {
             API.configure(config).then(success).catch(failure);
-        }        
+        }
     },
     reset: function(config, success, failure) {
         if ((typeof(config) === 'function') ||  (typeof(success) === 'function')) {
@@ -71,21 +71,69 @@ module.exports = {
             API.reset(config).then(success).catch(failure);
         } else {
             return API.reset(config);
-        }        
+        }
     },
+    onLocation: function(success, failure) {
+        this.on('location', success, failure);
+    },
+
+    onMotionChange: function(callback) {
+        this.on('motionchange', callback);
+    },
+
+    onHttp: function(success, failure) {
+        this.on('http', success, failure);
+    },
+
+    onHeartbeat: function(callback) {
+        this.on('heartbeat', callback);
+    },
+
+    onProviderChange: function(callback) {
+        this.on('providerchange', callback);
+    },
+
+    onActivityChange: function(callback) {
+        this.on('activitychange', callback);
+    },
+
+    onGeofence: function(callback) {
+        this.on('geofence', callback);
+    },
+
+    onGeofencesChange: function(callback) {
+        this.on('geofenceschange', callback);
+    },
+
+    onSchedule: function(callback) {
+        this.on('schedule', callback);
+    },
+
+    onEnabledChange: function(callback) {
+        this.on('enabledchange', callback);
+    },
+
+    onConnectivityChange: function(callback) {
+        this.on('connectivitychange', callback);
+    },
+
+    onPowerSaveChange: function(callback) {
+        this.on('powersavechange', callback);
+    },
+
     on: function(event, success, failure) {
         if (typeof(success) !== 'function') {
             throw "BackgroundGeolocation event '" + event + "' was not provided with a success callback.  If you're attempting to use Promise API to add an event-listener, that won't work, since a Promise can only evaluate once.";
         }
         failure = failure || emptyFn;
-        API.on(event, success, failure);
+        API.addListener(event, success, failure);
     },
     /**
     * @alias #removeListener
     */
     un: function() {
         return this.removeListener.apply(this, arguments);
-    },    
+    },
     removeListener: function(event, handler, success, failure) {
         if (arguments.length == 2) {
             return API.removeListener(event, handler);
@@ -112,7 +160,7 @@ module.exports = {
             return API.start();
         } else {
             API.start().then(success).catch(failure);
-        }        
+        }
     },
     stop: function(success, failure) {
         if (!arguments.length) {
@@ -137,7 +185,7 @@ module.exports = {
     },
     startGeofences: function(success, failure) {
         if (!arguments.length) {
-            return API.startGeofences(); 
+            return API.startGeofences();
         } else {
             API.startGeofences().then(success).catch(failure);
         }
@@ -255,19 +303,19 @@ module.exports = {
     * 1. removeGeofences() <-- Promise
     * 2. removeGeofences(['foo'])  <-- Promise
     *
-    * 3. removeGeofences(success, [failure])    
+    * 3. removeGeofences(success, [failure])
     * 4. removeGeofences(['foo'], success, [failure])
     */
-    removeGeofences: function(identifiers, success, failure) {        
+    removeGeofences: function(identifiers, success, failure) {
         if ( (arguments.length <= 1) && (typeof(identifiers) !== 'function') )  {
             return API.removeGeofences(identifiers);
-        } else {            
+        } else {
             if (typeof(identifiers) === 'function') {
                 // 3. -> removeGeofences(success, failure?)
                 failure = success || emptyFn;
                 success = identifiers;
                 identifiers = [];
-            }            
+            }
             API.removeGeofences(identifiers).then(success).catch(failure);
         }
     },
@@ -289,7 +337,7 @@ module.exports = {
             API.getCurrentPosition(options).then(success).catch(failure);
         } else {
             return API.getCurrentPosition.apply(API, arguments);
-        }        
+        }
     },
     watchPosition: function(success, failure, options) {
         if (typeof(success) === 'function') {
@@ -299,7 +347,7 @@ module.exports = {
                 failure = emptyFn;
             }
             API.watchPosition.apply(API, arguments);
-        } else {            
+        } else {
             throw "BackgroundGeolocation#watchPosition does not support Promise API, since Promises cannot resolve multiple times.  The #watchPosition callback *will* be run multiple times.  Use the #watchPosition(success, failure, options) API.";
         }
     },
@@ -309,6 +357,9 @@ module.exports = {
         } else {
             API.stopWatchPosition().then(success).catch(failure);
         }
+    },
+    registerHeadlessTask: function(callback) {
+        console.warn('[BackgroundGeolocation registerHeadlessTask] -- Cordova has no Javascript mechanism for registering Headless-tasks.  See Wiki https://github.com/transistorsoft/cordova-background-geolocation-lt/wiki/Android-Headless-Mode');
     },
     setLogLevel: function(logLevel, success, failure) {
         if (arguments.length == 1) {
@@ -344,7 +395,7 @@ module.exports = {
         } else {
             API.isPowerSaveMode().then(success).catch(failure);
         }
-    },    
+    },
     getSensors: function(success, failure) {
         if (!arguments.length) {
             return API.getSensors();
@@ -372,10 +423,10 @@ module.exports = {
         },
         info: function(msg) {
             return API.log('info', msg);
-        },        
+        },
         notice: function(msg) {
             return API.log('notice', msg);
-        },        
+        },
         header: function(msg) {
             return API.log('header', msg);
         },
@@ -389,6 +440,25 @@ module.exports = {
             return API.log('ok', msg);
         }
     },
+    /**
+    * Returns a #params object suitable for recognition by tracker.transistorsoft.com
+    * @param {Device} cordova-plugin-device instance
+    * @return {Object}
+    */
+    transistorTrackerParams: function(device) {
+        if (typeof(device) === undefined) { throw "An instance of cordova-plugin-device must be provided"; }
+        if (typeof(device.model) === undefined) { throw "Invalid instance of cordova-plugin-device"; }
+        return {
+            device: {
+                model: device.model,
+                platform: device.platform,
+                uuid: (device.model + '-' + device.version).replace(/[\s\.,]/g, '-'),
+                version: device.version,
+                manufacturer: device.manufacturer,
+                framework: 'Cordova'
+            }
+        };
+    },
     test: function(delay) {
         test(this, delay);
     }
@@ -396,7 +466,7 @@ module.exports = {
 
 var test = function(bgGeo, delay) {
     delay = delay || 250;
-    
+
     var methods = [
         ['reset', {debug: true, logLevel: 5}],
         ['setConfig', {distanceFilter: 50}],
@@ -404,7 +474,7 @@ var test = function(bgGeo, delay) {
         ['getLog', null],
         ['emailLog', 'foo@bar.com'],
         ['on', 'location'],
-        ['ready', {}],  
+        ['ready', {}],
         ['configure', {debug: true, logLevel: 5, schedule: ['1-7 00:00-23:59']}],
         ['getState', null],
         ['startSchedule', null],
@@ -414,24 +484,24 @@ var test = function(bgGeo, delay) {
         ['start', null],
         ['startBackgroundTask', null],
         ['finish', 0],
-        ['changePace', true],        
-        ['getLocations', null],        
+        ['changePace', true],
+        ['getLocations', null],
         ['insertLocation', {}],
         ['sync', null],
         ['getOdometer', null],
         ['setOdometer', 0],
         ['resetOdometer'],
-        ['addGeofence', {identifier: 'test-geofence-1', radius: 100, latitude: 0, longitude:0, notifyOnEntry:true}],        
+        ['addGeofence', {identifier: 'test-geofence-1', radius: 100, latitude: 0, longitude:0, notifyOnEntry:true}],
         ['addGeofences', [{identifier: 'test-geofence-2', radius: 100, latitude: 0, longitude:0, notifyOnEntry:true}, {identifier: 'test-geofence-3', radius: 100, latitude: 0, longitude:0, notifyOnEntry:true}]],
         ['getGeofences', null],
         ['removeGeofence', 'test-geofence-1'],
         ['removeGeofences', null],
         ['getCurrentPosition', {}],
         ['watchPosition', {}],
-        ['stopWatchPosition', null],      
+        ['stopWatchPosition', null],
         ['isPowerSaveMode', null],
         ['getSensors', null],
-        ['playSound', 1509],        
+        ['playSound', 1509],
         ['destroyLocations', null],
         ['clearDatabase', null],
         ['destroyLog', null],
@@ -440,12 +510,12 @@ var test = function(bgGeo, delay) {
 
     var createCallback = function(type, method, params) {
         return function(result) {
-            console.log('- ' + method + '(' + params + ') - ' + type + ': ', result); 
+            console.log('- ' + method + '(' + params + ') - ' + type + ': ', result);
         }
-    }            
+    }
     var executeMethod = function(record) {
         console.log('* Execute method: ', record)
-        var method = '' + record[0];      
+        var method = '' + record[0];
         var params = record[1];
 
         var success = createCallback('success', method, params);
@@ -466,7 +536,7 @@ var test = function(bgGeo, delay) {
                     default:
                         bgGeo[method](params, success, failure);
                         break;
-                }                
+                }
             }
         } catch (e) {
             console.warn(e);
@@ -484,15 +554,15 @@ var test = function(bgGeo, delay) {
                 console.warn(e);
             }
         }, 10);
-    }        
+    }
     // Begin fetching methods.
     var intervalId = setInterval(function() {
-        var record = methods.shift();        
+        var record = methods.shift();
         if (!record || !methods.length) {
             clearInterval(intervalId);
             console.log('*** TEST COMPLETE ***');
             return;
-        }        
+        }
         executeMethod(record);
     }, delay);
 }

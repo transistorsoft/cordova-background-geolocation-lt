@@ -669,16 +669,10 @@ public class CDVBackgroundGeolocation extends CordovaPlugin {
 
     private void addEnabledChangeListener(final CallbackContext callbackContext) {
         TSEnabledChangeCallback callback = new TSEnabledChangeCallback() {
-            @Override public void onEnabledChange(boolean b) {
-                JSONObject params = new JSONObject();
-                try {
-                    params.put("enabled", TSConfig.getInstance(cordova.getActivity().getApplicationContext()).getEnabled());
-                    PluginResult result = new PluginResult(PluginResult.Status.OK, params);
-                    result.setKeepCallback(true);
-                    callbackContext.sendPluginResult(result);
-                } catch (JSONException e) {
-                    callbackContext.error(e.getMessage());
-                }
+            @Override public void onEnabledChange(boolean enabled) {
+                PluginResult result = new PluginResult(PluginResult.Status.OK, enabled);
+                result.setKeepCallback(true);
+                callbackContext.sendPluginResult(result);
             }
         };
         registerCallback(callbackContext, callback);
@@ -782,17 +776,9 @@ public class CDVBackgroundGeolocation extends CordovaPlugin {
     private void addHttpListener(final CallbackContext callbackContext) {
         TSHttpResponseCallback callback = new TSHttpResponseCallback() {
             @Override public void onHttpResponse(HttpResponse response) {
-                JSONObject params = new JSONObject();
-                try {
-                    params.put("success", response.isSuccess());
-                    params.put("status", response.status);
-                    params.put("responseText", response.responseText);
-                    PluginResult result = new PluginResult((response.isSuccess()) ? PluginResult.Status.OK : PluginResult.Status.ERROR, params);
-                    result.setKeepCallback(true);
-                    callbackContext.sendPluginResult(result);
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
+                PluginResult result = new PluginResult(PluginResult.Status.OK, response.toJson());
+                result.setKeepCallback(true);
+                callbackContext.sendPluginResult(result);
             }
         };
         registerCallback(callbackContext, callback);

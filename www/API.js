@@ -36,7 +36,7 @@ function registerCordovaCallback(userSuccess, mySuccess) {
 /**
 * Remove a single plugin CordovaCallback
 */
-function removeCordovaCallback(callback) {    
+function removeCordovaCallback(callback) {
     for (var n=0,len=cordovaCallbacks.length;n<len;n++) {
         var cordovaCallback = cordovaCallbacks[n];
         if (cordovaCallback.success === callback) {
@@ -77,7 +77,7 @@ function setTimestamp(rs) {
     // Transform timestamp to Date instance.
     if (typeof(rs) === 'object') {
         for (var n=0,len=rs.length;n<len;n++) {
-            if (rs[n].timestamp) { 
+            if (rs[n].timestamp) {
                 rs[n].timestamp = new Date(rs[n].timestamp);
             }
         }
@@ -166,7 +166,7 @@ module.exports = {
                 return this.onEnabledChange(success, fail);
         }
     },
-    
+
     /**
     * remove event-listener
     */
@@ -183,7 +183,7 @@ module.exports = {
                 console.warn(error);
                 reject(error);
             }
-        });        
+        });
     },
     /**
     * Remove all event-listeners
@@ -194,9 +194,9 @@ module.exports = {
                 removeCordovaCallbacks();
                 resolve();
             }
-            var failure = function(error)   { reject(error) };            
+            var failure = function(error)   { reject(error) };
             exec(success, failure, MODULE_NAME, 'removeListeners', []);
-        });        
+        });
     },
     /**
     * Event handlers
@@ -206,21 +206,19 @@ module.exports = {
             // Transform timestamp to Date instance.
             if (location.timestamp) {
                 location.timestamp = new Date(location.timestamp);
-            }            
+            }
             success(location);
         }
         exec(mySuccess, failure, MODULE_NAME, 'addLocationListener', []);
         registerCordovaCallback(success, mySuccess);
-    },    
-    onMotionChange: function(success, failure) {        
+    },
+    onMotionChange: function(success, failure) {
         var mySuccess = function(params) {
-            var isMoving    = params.isMoving;
-            var location    = params.location;
             // Transform timestamp to Date instance.
-            if (location.timestamp) {
-                location.timestamp = new Date(location.timestamp);
+            if (params.location.timestamp) {
+                params.location.timestamp = new Date(params.location.timestamp);
             }
-            success(isMoving, location);
+            success(params);
         };
         exec(mySuccess, failure, MODULE_NAME, 'addMotionChangeListener', []);
         registerCordovaCallback(success, mySuccess);
@@ -233,7 +231,7 @@ module.exports = {
         exec(success, emptyFn, MODULE_NAME, 'addProviderChangeListener', []);
         registerCordovaCallback(success, success);
     },
-    onGeofence: function(success, failure) {    
+    onGeofence: function(success, failure) {
         exec(success, failure || emptyFn, MODULE_NAME, 'addGeofenceListener', []);
         registerCordovaCallback(success, success);
     },
@@ -271,14 +269,14 @@ module.exports = {
             var success = function(state) { resolve(state) }
             var failure = function(error) { reject(error) }
             exec(success, failure, MODULE_NAME, 'getState', []);
-        });        
+        });
     },
     start: function() {
         return new Promise(function(resolve, reject) {
             var success = function(state) { resolve(state) }
             var failure = function(error) { reject(error) }
             exec(success, failure, MODULE_NAME, 'start', [])
-        });        
+        });
     },
     stop: function() {
         return new Promise(function(resolve, reject) {
@@ -308,7 +306,7 @@ module.exports = {
             exec(success, failure, MODULE_NAME, 'startGeofences', []);
         });
     },
-    startBackgroundTask: function() {        
+    startBackgroundTask: function() {
         return new Promise(function(resolve, reject) {
             var success = function(taskId) { resolve(taskId) }
             var failure = function(error) { reject(error) }
@@ -323,8 +321,8 @@ module.exports = {
                 return success('Invalid taskId:  Ignored');
             }
             exec(success, failure, MODULE_NAME, 'finish', [taskId]);
-        });        
-    },    
+        });
+    },
     changePace: function(isMoving) {
         return new Promise(function(resolve, reject) {
             var success = function(isMoving) { resolve(isMoving) }
@@ -338,7 +336,7 @@ module.exports = {
             var failure = function(error) { reject(error) }
             exec(success, failure, MODULE_NAME, 'setConfig', [config]);
         });
-    },    
+    },
     getLocations: function() {
         return new Promise(function(resolve, reject) {
             var success = function(params) {
@@ -376,7 +374,7 @@ module.exports = {
             var success = function(location) { resolve(location) }
             var failure = function(error) { reject(error) }
             exec(success, failure, MODULE_NAME, 'insertLocation', [location]);
-        });        
+        });
     },
     /**
     * Signal native plugin to sync locations queue to HTTP
@@ -388,8 +386,8 @@ module.exports = {
             }
             var failure = function(error) { reject(error) }
             exec(success, failure, MODULE_NAME, 'sync', []);
-        });        
-    },    
+        });
+    },
     /**
     * Fetch current odometer value
     */
@@ -442,7 +440,7 @@ module.exports = {
             var success = function() { resolve() }
             var failure = function(error) { reject(error) }
             exec(success, failure, MODULE_NAME, 'removeGeofences', [identifiers]);
-        });        
+        });
     },
     /**
     * remove a geofence
@@ -456,9 +454,9 @@ module.exports = {
             var success = function() { resolve() }
             var failure = function(error) { reject(error) }
             exec(success, failure, MODULE_NAME, 'removeGeofence', [identifier]);
-        });        
+        });
     },
-    
+
     /**
     * Fetch a list of all monitored geofences
     */
@@ -467,7 +465,7 @@ module.exports = {
             var success = function(rs) { resolve(rs) }
             var failure = function(error) { reject(error) }
             exec(success, failure, MODULE_NAME, 'getGeofences', []);
-        });        
+        });
     },
     /**
     * Fetch the current position
@@ -484,9 +482,9 @@ module.exports = {
             var failure = function(error) { reject(error) }
             options = options || {};
             exec(success, failure, MODULE_NAME, 'getCurrentPosition', [options]);
-        });        
+        });
     },
-    
+
     watchPosition: function(success, failure, options) {
         var mySuccess = function(location) {
             // Transform timestamp to Date instance.
@@ -510,7 +508,7 @@ module.exports = {
                         console.warn(MODULE_NAME + '#stopWatchPosition failed to locate callbackId: ', callbackId);
                     }
                 }
-                resolve();            
+                resolve();
             };
             var failure = function(error) { reject(error) }
             exec(success, failure, MODULE_NAME, 'stopWatchPosition', []);
@@ -528,15 +526,15 @@ module.exports = {
         return new Promise(function(resolve, reject) {
             var success = function(log) { resolve(log) }
             var failure = function(error) { reject(error) }
-            exec(success, failure, MODULE_NAME, 'getLog', []);    
-        });        
+            exec(success, failure, MODULE_NAME, 'getLog', []);
+        });
     },
     destroyLog: function() {
         return new Promise(function(resolve, reject) {
             var success = function() { resolve() }
             var failure = function(error) { reject(error) };
             exec(success, failure, MODULE_NAME, 'destroyLog', []);
-        });        
+        });
     },
     emailLog: function(email) {
         return new Promise(function(resolve, reject) {
@@ -557,14 +555,14 @@ module.exports = {
             var success = function() { resolve() };
             var failure = function(error) { reject(error) };
             exec(success, failure, MODULE_NAME, 'playSound', [soundId]);
-        });        
+        });
     },
     log: function(level, msg) {
         return new Promise(function(resolve, reject) {
             var success = function() { resolve() };
             var failure = function(error) { reject(error) }
             exec(emptyFn, emptyFn, MODULE_NAME, 'log', [level, msg]);
-        });        
+        });
     },
     /**
     * Fetch list of available sensors: accelerometer, gyroscope, magnetometer
@@ -574,7 +572,7 @@ module.exports = {
             var success = function(sensors) { resolve(sensors) };
             var failure = function(error) { reject(error) };
             exec(success, failure, MODULE_NAME, 'getSensors', []);
-        });        
-    }    
+        });
+    }
 };
 

@@ -3,7 +3,7 @@
 <plugin xmlns="http://www.phonegap.com/ns/plugins/1.0"
     xmlns:android="http://schemas.android.com/apk/res/android"
     id="cordova-background-geolocation-lt"
-    version="2.13.2">
+    version="2.14.0-beta.1">
 
     <name>BackgroundGeolocation</name>
     <description>The most sophisticated, battery-efficient background-geolocation and geofencing plugin for Cordova</description>
@@ -21,8 +21,8 @@
     <js-module src="www/BackgroundGeolocation.js" name="BackgroundGeolocation">
         <clobbers target="window.BackgroundGeolocation" />
     </js-module>
-    <js-module src="www/API.js" name="API"></js-module>    
-    
+    <js-module src="www/API.js" name="API"></js-module>
+
      <platform name="ios">
         <preference name="BACKGROUND_MODE_LOCATION" default="&lt;string&gt;location&lt;/string&gt;" />
         <preference name="LOCATION_ALWAYS_AND_WHEN_IN_USE_USAGE_DESCRIPTION" default="Always use is required for constant background location-tracking" />
@@ -37,7 +37,7 @@
                 $BACKGROUND_MODE_LOCATION
             </array>
         </config-file>
-        
+
         <config-file target="*-Info.plist" parent="NSLocationAlwaysAndWhenInUseUsageDescription">
             <string>$LOCATION_ALWAYS_AND_WHEN_IN_USE_USAGE_DESCRIPTION</string>
         </config-file>
@@ -77,15 +77,15 @@
             <meta-data android:name="com.transistorsoft.locationmanager.license" android:value="$LICENSE" />
         </config-file>
 
-        <preference name="GOOGLE_API_VERSION" default="15.0.1" />
+        <preference name="GOOGLE_API_VERSION" default="16.0.0" />
         <framework src="com.google.android.gms:play-services-location:$GOOGLE_API_VERSION"/>
         <preference name="APPCOMPAT_VERSION" default="27.1.1" />
         <framework src="com.android.support:appcompat-v7:$APPCOMPAT_VERSION"/>
         <framework src="src/android/build.gradle" custom="true" type="gradleReference" />
-        
+
         <resource-file src="src/android/libs/com/transistorsoft/tslocationmanager" target="../../libs/com/transistorsoft/tslocationmanager" />
 
-        <source-file src="src/android/CDVBackgroundGeolocation.java" target-dir="src/com/transistorsoft/cordova/bggeo" />        
+        <source-file src="src/android/CDVBackgroundGeolocation.java" target-dir="src/com/transistorsoft/cordova/bggeo" />
 
         <config-file target="res/xml/config.xml" parent="/*">
             <feature name="BackgroundGeolocation">
