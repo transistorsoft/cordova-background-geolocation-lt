@@ -326,13 +326,11 @@ module.exports = {
             API.getGeofences().then(success).catch(failure);
         }
     },
-    getCurrentPosition: function(success, failure, options) {
+    getCurrentPosition: function(options, success, failure) {
+        if (typeof (options) === 'function') {
+            throw "#getCurrentPosition requires options {} as first argument";
+        }
         if (typeof(success) === 'function') {
-            if (typeof(failure) === 'object') {
-                // Allow -> #getCurrentPosition(success, options)
-                options = failure;
-                failure = emptyFn;
-            }
             options = options || {};
             API.getCurrentPosition(options).then(success).catch(failure);
         } else {
@@ -452,7 +450,7 @@ module.exports = {
             device: {
                 model: device.model,
                 platform: device.platform,
-                uuid: (device.model + '-' + device.version).replace(/[\s\.,]/g, '-'),
+                uuid: device.model.replace(/[\s\.,]/g, '-'),
                 version: device.version,
                 manufacturer: device.manufacturer,
                 framework: 'Cordova'
