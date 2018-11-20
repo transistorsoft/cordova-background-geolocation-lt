@@ -159,7 +159,7 @@ function onDeviceReady() {
     console.log('[motionchange] -', event.isMoving, event.location);
   });
 
-  bgGeo.onHttp(response => {
+  bgGeo.onHttp(function(response) {
     console.log(['http] - ', response.success, response.status, response.responseText);
   });
 
