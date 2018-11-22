@@ -117,7 +117,7 @@ declare module "cordova-background-geolocation-lt" {
   * - Removing a single geofence by [[identifier]] with [[removeGeofence]]:
   * @example
   * ```typescript
-  * BackgroundGeolocaion.removeGeofence('HOME').then(success => {
+  * BackgroundGeolocation.removeGeofence('HOME').then(success => {
   *   console.log('[removeGeofence] success');
   * })
   * ```
