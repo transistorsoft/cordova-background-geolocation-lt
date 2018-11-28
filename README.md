@@ -114,7 +114,7 @@ class HomeView {
     });
 
     BackgroundGeolocation.onHttp(response => {
-      console.log(['http] - ', response.success, response.status, response.responseText);
+      console.log('[http] - ', response.success, response.status, response.responseText);
     });
 
     BackgroundGeolocation.onProviderChange(event => {
