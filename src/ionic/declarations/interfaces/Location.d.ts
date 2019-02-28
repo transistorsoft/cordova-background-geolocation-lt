@@ -132,7 +132,7 @@ declare module "cordova-background-geolocation-lt" {
     */
     timestamp: string;
     /**
-    * Distance-travelled in meters.
+    * Distance-traveled in meters.
     * ℹ️
     * - [[BackgroundGeolocation.resetOdometer]]
     * - [[BackgroundGeolocation.getOdometer]]

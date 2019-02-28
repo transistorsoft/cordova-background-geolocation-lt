@@ -94,4 +94,6 @@ declare module "cordova-background-geolocation-lt" {
 	* Desired HTTP method to use when uploading data to your configured [[url]].
 	*/
 	type HttpMethod = "POST" | "PUT" | "OPTIONS";
+
+	type PersistMode = -1 | 0 | 1 | 2;
 }

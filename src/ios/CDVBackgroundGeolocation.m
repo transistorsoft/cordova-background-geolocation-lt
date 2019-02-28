@@ -193,7 +193,7 @@
         CDVPluginResult *result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:params];
         [commandDelegate sendPluginResult:result callbackId:command.callbackId];
     } failure:^(NSString* error) {
-        CDVPluginResult *result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:error];
+        CDVPluginResult *result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:error];
         [commandDelegate sendPluginResult:result callbackId:command.callbackId];
     }];
 }
@@ -771,6 +771,40 @@
     BOOL isPowerSaveMode = [bgGeo isPowerSaveMode];
     CDVPluginResult *result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsBool:isPowerSaveMode];
     [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
+}
+
+- (void) isIgnoringBatteryOptimizations:(CDVInvokedUrlCommand *) command
+{
+    CDVPluginResult *result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsBool:NO];
+    [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
+}
+
+- (void) requestSettings:(CDVInvokedUrlCommand *) command
+{
+    CDVPluginResult* result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:@"No iOS Implementation"];
+    [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
+}
+
+- (void) showSettings:(CDVInvokedUrlCommand *) command
+{
+    CDVPluginResult* result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:@"No iOS Implementation"];
+    [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
+}
+
+- (void) getProviderState:(CDVInvokedUrlCommand *) command {
+    TSProviderChangeEvent *event = [bgGeo getProviderState];
+    CDVPluginResult *result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:[event toDictionary]];
+    [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
+}
+
+- (void) requestPermission:(CDVInvokedUrlCommand *) command {
+    [bgGeo requestPermission:^(NSNumber *status) {
+        CDVPluginResult* result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsInt: [status intValue]];
+        [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
+    } failure:^(NSNumber *status) {
+        CDVPluginResult* result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsInt: [status intValue]];
+        [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
+    }];
 }
 
 -(void) registerCallback:(NSString*)callbackId callback:(void(^)(id))callback

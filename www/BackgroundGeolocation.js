@@ -8,6 +8,7 @@
 */
 
 var API = require('./API');
+var DeviceSettings = require('./DeviceSettings');
 
 var emptyFn = function() {};
 
@@ -47,6 +48,14 @@ module.exports = {
     ACTIVITY_TYPE_FITNESS: 3,
     ACTIVITY_TYPE_OTHER_NAVIGATION: 4,
 
+    // For persistMode
+    PERSIST_MODE_ALL: 2,
+    PERSIST_MODE_LOCATION: 1,
+    PERSIST_MODE_GEOFENCE: -1,
+    PERSIST_MODE_NONE: 0,
+
+    deviceSettings: DeviceSettings,
+
     ready: function(defaultConfig, success, failure) {
         if (arguments.length <= 1) {
             return API.ready(defaultConfig||{});
@@ -73,6 +82,20 @@ module.exports = {
             return API.reset(config);
         }
     },
+    requestPermission: function(success, failure) {
+        if (!arguments.length) {
+            return API.requestPermission();
+        } else {
+            API.requestPermission().then(success).catch(failure);
+        }
+    },
+    getProviderState: function(success, failure) {
+        if (!arguments.length) {
+            return API.getProviderState();
+        } else {
+            API.getProviderState().then(success).catch(failure);
+        }
+    },
     onLocation: function(success, failure) {
         this.on('location', success, failure);
     },
@@ -81,8 +104,8 @@ module.exports = {
         this.on('motionchange', callback);
     },
 
-    onHttp: function(success, failure) {
-        this.on('http', success, failure);
+    onHttp: function(callback) {
+        this.on('http', callback);
     },
 
     onHeartbeat: function(callback) {
@@ -339,11 +362,6 @@ module.exports = {
     },
     watchPosition: function(success, failure, options) {
         if (typeof(success) === 'function') {
-            if (typeof(failure) === 'object') {
-                // Allow -> #watchPosition(success, options)
-                options = failure;
-                failure = emptyFn;
-            }
             API.watchPosition.apply(API, arguments);
         } else {
             throw "BackgroundGeolocation#watchPosition does not support Promise API, since Promises cannot resolve multiple times.  The #watchPosition callback *will* be run multiple times.  Use the #watchPosition(success, failure, options) API.";
