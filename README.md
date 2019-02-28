@@ -160,7 +160,7 @@ function onDeviceReady() {
   });
 
   bgGeo.onHttp(function(response) {
-    console.log(['http] - ', response.success, response.status, response.responseText);
+    console.log('[http] - ', response.success, response.status, response.responseText);
   });
 
   bgGeo.onProviderChange(function(event) {
