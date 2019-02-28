@@ -60,6 +60,9 @@
 - (void) emailLog:(CDVInvokedUrlCommand*) command;
 - (void) playSound:(CDVInvokedUrlCommand *)command;
 - (void) log:(CDVInvokedUrlCommand*)command;
+- (void) isIgnoringBatteryOptimizations:(CDVInvokedUrlCommand*)command;
+- (void) requestSettings:(CDVInvokedUrlCommand*)command;
+- (void) showSettings:(CDVInvokedUrlCommand*)command;
 @end
 
 

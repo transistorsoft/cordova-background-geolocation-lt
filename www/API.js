@@ -125,6 +125,21 @@ module.exports = {
             exec(success, failure, MODULE_NAME, 'reset', args);
         });
     },
+    requestPermission: function() {
+        return new Promise(function(resolve, reject) {
+            var success = function(status) { resolve(status) }
+            var failure = function(status) { reject(status) }
+            exec(success, failure, MODULE_NAME, 'requestPermission', []);
+        });
+    },
+    getProviderState: function(success, failure) {
+        return new Promise(function(resolve, reject) {
+            var success = function(state) { resolve(state) }
+            var failure = function(error) { reject(error) }
+            exec(success, failure, MODULE_NAME, 'getProviderState', []);
+        });
+    },
+
     /**
     * @alias #addListener
     */
@@ -494,6 +509,7 @@ module.exports = {
             success(location);
         }
         failure = failure || emptyFn;
+        options = options || {};
         exec(mySuccess, failure, MODULE_NAME, 'watchPosition', [options]);
     },
     stopWatchPosition: function() {
