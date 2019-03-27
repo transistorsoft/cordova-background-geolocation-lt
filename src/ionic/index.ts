@@ -150,9 +150,14 @@ export default class BackgroundGeolocation {
     let bgGeo = plugin();
     return bgGeo.startBackgroundTask.apply(bgGeo, arguments);
   }
-  static finish() {
+  // TODO rename native method -> #stopBackgroundTask
+  static stopBackgroundTask() {
     let bgGeo = plugin();
-    return bgGeo.finish.apply(bgGeo, arguments);
+    return bgGeo.stopBackgroundTask.apply(bgGeo, arguments);
+  }
+  // @deprecated.
+  static finish() {
+    return BackgroundGeolocation.stopBackgroundTask();
   }
   static changePace() {
     let bgGeo = plugin();

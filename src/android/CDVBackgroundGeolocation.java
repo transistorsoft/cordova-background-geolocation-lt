@@ -144,10 +144,10 @@ public class CDVBackgroundGeolocation extends CordovaPlugin {
             stop(callbackContext);
         } else if (ACTION_START_BACKGROUND_TASK.equalsIgnoreCase(action)) {
             result = true;
-            callbackContext.success(0);
+            startBackgroundTask(callbackContext);
         } else if (ACTION_FINISH.equalsIgnoreCase(action)) {
             result = true;
-            callbackContext.success();
+            stopBackgroundTask(data.getInt(0), callbackContext);
         } else if (ACTION_ERROR.equalsIgnoreCase(action)) {
             result = true;
             this.onError(data.getString(1));
@@ -243,7 +243,7 @@ public class CDVBackgroundGeolocation extends CordovaPlugin {
         } else if (BackgroundGeolocation.ACTION_STOP_WATCH_POSITION.equalsIgnoreCase(action)) {
             result = true;
             stopWatchPosition(callbackContext);
-        } else if (BackgroundGeolocation.ACTION_BEGIN_BACKGROUND_TASK.equalsIgnoreCase(action)) {
+        } else if (BackgroundGeolocation.ACTION_START_BACKGROUND_TASK.equalsIgnoreCase(action)) {
             // Android doesn't do background-tasks.  This is an iOS thing.  Just return a number.
             result = true;
             callbackContext.success(1);
@@ -605,6 +605,19 @@ public class CDVBackgroundGeolocation extends CordovaPlugin {
                 callbackContext.error(error);
             }
         });
+    }
+
+    private void startBackgroundTask(final CallbackContext callbackContext) {
+        getAdapter().startBackgroundTask(new TSBackgroundTaskCallback() {
+            @Override public void onStart(int taskId) {
+                callbackContext.success(taskId);
+            }
+        });
+    }
+
+    private void stopBackgroundTask(int taskId, CallbackContext callbackContext) {
+        getAdapter().stopBackgroundTask(taskId);
+        callbackContext.success(taskId);
     }
 
     private void removeListener(String event, String callbackId, CallbackContext callbackContext) {

@@ -220,12 +220,15 @@ module.exports = {
             API.startBackgroundTask().then(success).catch(failure);
         }
     },
-    finish: function(taskId, success, failure) {
+    stopBackgroundTask: function(taskId, success, failure) {
         if (arguments.length == 1) {
-            return API.finish(taskId);
+            return API.stopBackgroundTask(taskId);
         } else {
-            API.finish(taskId).then(success).catch(failure);
+            API.stopBackgroundTask(taskId).then(success).catch(failure);
         }
+    },
+    finish: function(taskId, success, failure) {
+        return this.stopBackgroundTask.apply(this, arguments);
     },
     changePace: function(isMoving, success, failure) {
         if (arguments.length == 1) {

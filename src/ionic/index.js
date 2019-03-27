@@ -268,9 +268,14 @@ var BackgroundGeolocation = /** @class */ (function () {
         var bgGeo = plugin();
         return bgGeo.startBackgroundTask.apply(bgGeo, arguments);
     };
-    BackgroundGeolocation.finish = function () {
+    // TODO rename native method -> #stopBackgroundTask
+    BackgroundGeolocation.stopBackgroundTask = function () {
         var bgGeo = plugin();
-        return bgGeo.finish.apply(bgGeo, arguments);
+        return bgGeo.stopBackgroundTask.apply(bgGeo, arguments);
+    };
+    // @deprecated.
+    BackgroundGeolocation.finish = function () {
+        return BackgroundGeolocation.stopBackgroundTask();
     };
     BackgroundGeolocation.changePace = function () {
         var bgGeo = plugin();

@@ -328,15 +328,19 @@ module.exports = {
             exec(success, failure, MODULE_NAME, 'startBackgroundTask', []);
         });
     },
-    finish: function(taskId) {
+    stopBackgroundTask: function(taskId) {
         return new Promise(function(resolve, reject) {
+            if ((typeof(taskId) !== 'number') || taskId === 0) {
+                return reject('INVALID_TASK_ID: ' + taskId);
+            }
             var success = function() { resolve() }
             var failure = function(error) { reject(error) }
-            if ((typeof(taskId) !== 'number') || taskId === 0) {
-                return success('Invalid taskId:  Ignored');
-            }
             exec(success, failure, MODULE_NAME, 'finish', [taskId]);
         });
+    },
+    // @deprecated
+    finish: function(taskId) {
+        return this.stopBackgroundTask(taskId);
     },
     changePace: function(isMoving) {
         return new Promise(function(resolve, reject) {
