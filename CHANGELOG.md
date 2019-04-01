@@ -1,6 +1,9 @@
 
 # Change Log
 
+## [3.0.0-rc.4] - 2019-03-31
+- [Fixed] Android: Another `NullPointerException` with `Bundle#getExtras`.
+
 ## [3.0.0-rc.3] - 2019-03-29
 
 - [Fixed] Android `NullPointerException` with `Bundle#getExtras`.
