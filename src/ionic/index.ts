@@ -267,4 +267,12 @@ export default class BackgroundGeolocation {
     let bgGeo = plugin();
     return bgGeo.transistorTrackerParams.apply(bgGeo, arguments);
   }
+  static getProviderState() {
+    let bgGeo = plugin();
+    return bgGeo.getProviderState.apply(bgGeo, arguments);
+  }
+  static requestPermission() {
+    let bgGeo = plugin();
+    return bgGeo.requestPermission.apply(bgGeo, arguments);
+  }
 }
