@@ -385,6 +385,14 @@ var BackgroundGeolocation = /** @class */ (function () {
         var bgGeo = plugin();
         return bgGeo.transistorTrackerParams.apply(bgGeo, arguments);
     };
+    BackgroundGeolocation.getProviderState = function () {
+        var bgGeo = plugin();
+        return bgGeo.getProviderState.apply(bgGeo, arguments);
+    };
+    BackgroundGeolocation.requestPermission = function () {
+        var bgGeo = plugin();
+        return bgGeo.requestPermission.apply(bgGeo, arguments);
+    };
     return BackgroundGeolocation;
 }());
 export default BackgroundGeolocation;

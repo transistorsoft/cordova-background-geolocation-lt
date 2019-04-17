@@ -1,6 +1,10 @@
 
 # Change Log
 
+## [3.0.1] - 2019-04-17
+- [Fixed] Typescript API missing methods `getProviderState`, `requestPermission`.
+- [Added] Expose plugin config `--variable` `OKHTTP_VERSION`.  People are reporting conflicts with `cordova-plugin-advanced-http`, which also imports `okhttp`.
+
 ## [3.0.0] - 2019-04-10
 
 ## [3.0.0-rc.4] - 2019-03-31
