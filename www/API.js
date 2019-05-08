@@ -14,6 +14,33 @@ var CALLBACK_REGEXP = new RegExp("^" + MODULE_NAME + ".*");
 
 var cordovaCallbacks = [];
 
+// Validate provided config for #ready, #setConfig
+var validateConfig = function(config) {
+  // Detect obsolete notification* fields and re-map to Notification instance.
+  if (
+    (config.notificationPriority) ||
+    (config.notificationText) ||
+    (config.notificationTitle) ||
+    (config.notificationChannelName) ||
+    (config.notificationColor) ||
+    (config.notificationSmallIcon) ||
+    (config.notificationLargeIcon)
+  ) {
+    console.warn('[BackgroundGeolocation] WARNING: Config.notification* fields (eg: notificationText) are all deprecated in favor of notification: {title: "My Title", text: "My Text"}  See docs for "Notification" class');
+
+    config.notification = {
+      text: config.notificationText,
+      title: config.notificationTitle,
+      color: config.notificationColor,
+      channelName: config.notificationChannelName,
+      smallIcon: config.notificationSmallIcon,
+      largeIcon: config.notificationLargeIcon,
+      priority: config.notificationPriority
+    };
+  }
+  return config;
+};
+
 /**
 * Register a single Cordova Callback
 */
@@ -100,7 +127,7 @@ module.exports = {
             defaultConfig = defaultConfig || {};
             var success = function(state) { resolve(state) }
             var failure = function(error) { reject(error) }
-            exec(success, failure, MODULE_NAME, 'ready', [defaultConfig]);
+            exec(success, failure, MODULE_NAME, 'ready', [validateConfig(defaultConfig)]);
         });
     },
     /**
@@ -111,7 +138,7 @@ module.exports = {
             config = config || {};
             var success = function(state) { resolve(state) }
             var failure = function(error) { reject(error) }
-            exec(success, failure, MODULE_NAME, 'configure', [config]);
+            exec(success, failure, MODULE_NAME, 'configure', [validateConfig(config)]);
         });
     },
     /**
@@ -121,7 +148,7 @@ module.exports = {
         return new Promise(function(resolve, reject) {
             var success = function(state) { resolve(state) }
             var failure = function(error) { reject(error) }
-            var args = (defaultConfig !== undefined) ? [defaultConfig] : [{}];
+            var args = (defaultConfig !== undefined) ? [validateConfig(defaultConfig)] : [{}];
             exec(success, failure, MODULE_NAME, 'reset', args);
         });
     },
@@ -179,6 +206,8 @@ module.exports = {
                 return this.onConnectivityChange(success, fail);
             case 'enabledchange':
                 return this.onEnabledChange(success, fail);
+            case 'notificationaction':
+                return this.onNotificationAction(success, fail);
         }
     },
 
@@ -278,7 +307,9 @@ module.exports = {
         exec(success, failure, MODULE_NAME, 'addScheduleListener', []);
         registerCordovaCallback(success, success);
     },
-
+    onNotificationAction: function(success, failure) {
+        exec(success, failure, MODULE_NAME, 'addNotificationActionListener', []);
+    },
     getState: function() {
         return new Promise(function(resolve, reject) {
             var success = function(state) { resolve(state) }
@@ -353,7 +384,7 @@ module.exports = {
         return new Promise(function(resolve, reject) {
             var success = function(state) { resolve(state) }
             var failure = function(error) { reject(error) }
-            exec(success, failure, MODULE_NAME, 'setConfig', [config]);
+            exec(success, failure, MODULE_NAME, 'setConfig', [validateConfig(config)]);
         });
     },
     getLocations: function() {

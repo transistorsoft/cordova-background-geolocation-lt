@@ -66,6 +66,8 @@ public class BackgroundGeolocationHeadlessTask  {
             ConnectivityChangeEvent connectivityChangeEvent = event.getConnectivityChangeEvent();
         } else if (name.equals(BackgroundGeolocation.EVENT_POWERSAVECHANGE)) {
             boolean powerSaveEnabled = event.getPowerSaveChangeEvent().isPowerSaveMode();
+        } else if (name.equals(BackgroundGeolocation.EVENT_NOTIFICATIONACTION)) {
+            String buttonId = event.getNotificationEvent();
         } else {
             TSLog.logger.warn(TSLog.warn("Unknown Headless Event: " + name));
         }

@@ -76,6 +76,7 @@ public class CDVBackgroundGeolocation extends CordovaPlugin {
     public static final String ACTION_ADD_CONNECTIVITYCHANGE_LISTENER = "addConnectivityChangeListener";
     public static final String ACTION_ADD_ENABLEDCHANGE_LISTENER = "addEnabledChangeListener";
     public static final String ACTION_ADD_POWERSAVECHANGE_LISTENER = "addPowerSaveChangeListener";
+    public static final String ACTION_ADD_NOTIFICATIONACTION_LISTENER = "addNotificationActionListener";
 
     public static final String ACTION_PLAY_SOUND        = "playSound";
     public static final String ACTION_GET_STATE         = "getState";
@@ -227,6 +228,9 @@ public class CDVBackgroundGeolocation extends CordovaPlugin {
         } else if (ACTION_ADD_ENABLEDCHANGE_LISTENER.equalsIgnoreCase(action)) {
             result = true;
             addEnabledChangeListener(callbackContext);
+        } else if (ACTION_ADD_NOTIFICATIONACTION_LISTENER.equalsIgnoreCase(action)) {
+            result = true;
+            addNotificationActionListener(callbackContext);
         } else if (BackgroundGeolocation.ACTION_GET_GEOFENCES.equalsIgnoreCase(action)) {
             result = true;
             getGeofences(callbackContext);
@@ -320,9 +324,15 @@ public class CDVBackgroundGeolocation extends CordovaPlugin {
 
         if (config.isFirstBoot()) {
             config.updateWithJSONObject(setHeadlessJobService(params));
-        } else if (params.has("reset") && (params.getBoolean("reset") == true)) {
-            config.reset();
-            config.updateWithJSONObject(setHeadlessJobService(params));
+        } else {
+            boolean reset = true;
+            if (params.has("reset")) {
+                reset = params.getBoolean("reset");
+            }
+            if (reset) {
+                config.reset();
+                config.updateWithJSONObject(setHeadlessJobService(params));
+            }
         }
         adapter.ready(new TSCallback() {
             @Override public void onSuccess() {
@@ -712,6 +722,18 @@ public class CDVBackgroundGeolocation extends CordovaPlugin {
         };
         registerCallback(callbackContext, callback);
         getAdapter().onEnabledChange(callback);
+    }
+
+    private void addNotificationActionListener(final CallbackContext callbackContext) {
+        TSNotificationActionCallback callback = new TSNotificationActionCallback() {
+            @Override public void onClick(String buttonId) {
+                PluginResult result = new PluginResult(PluginResult.Status.OK, buttonId);
+                result.setKeepCallback(true);
+                callbackContext.sendPluginResult(result);
+            }
+        };
+        registerCallback(callbackContext, callback);
+        getAdapter().onNotificationAction(callback);
     }
 
     private void addHeartbeatListener(final CallbackContext callbackContext) {
