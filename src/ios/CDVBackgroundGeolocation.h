@@ -36,6 +36,7 @@
 - (void) addPowerSaveChangeListener:(CDVInvokedUrlCommand*)command;
 - (void) addConnectivityChangeListener:(CDVInvokedUrlCommand*)command;
 - (void) addEnabledChangeListener:(CDVInvokedUrlCommand*)command;
+- (void) addNotificationActionListener:(CDVInvokedUrlCommand*)command;
 - (void) getStationaryLocation:(CDVInvokedUrlCommand *)command;
 - (void) getLocations:(CDVInvokedUrlCommand *)command;
 - (void) sync:(CDVInvokedUrlCommand *)command;

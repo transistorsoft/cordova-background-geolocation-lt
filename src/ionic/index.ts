@@ -105,6 +105,10 @@ export default class BackgroundGeolocation {
     let bgGeo = plugin();
     bgGeo.onPowerSaveChange.apply(bgGeo, arguments);
   }
+  static onNotificationAction(callback:Function) {
+    let bgGeo = plugin();
+    bgGeo.onNotificationAction.apply(bgGeo, arguments);
+  }
 
   static on() {
     let bgGeo = plugin();

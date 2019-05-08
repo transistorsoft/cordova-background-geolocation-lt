@@ -224,6 +224,10 @@ var BackgroundGeolocation = /** @class */ (function () {
         var bgGeo = plugin();
         bgGeo.onPowerSaveChange.apply(bgGeo, arguments);
     };
+    BackgroundGeolocation.onNotificationAction = function (callback) {
+        var bgGeo = plugin();
+        bgGeo.onNotificationAction.apply(bgGeo, arguments);
+    };
     BackgroundGeolocation.on = function () {
         var bgGeo = plugin();
         return bgGeo.on.apply(bgGeo, arguments);

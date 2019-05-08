@@ -44,10 +44,14 @@
     NSDictionary *params = [command.arguments objectAtIndex:0];
     if (config.isFirstBoot) {
         [config updateWithDictionary:params];
-    } else if (params[@"reset"] && [[params objectForKey:@"reset"] boolValue]) {
-        [config reset];
-        [config updateWithDictionary:params];
+    } else {
+        BOOL reset = (params[@"reset"]) ? [params[@"reset"] boolValue] : YES;
+        if (reset) {
+            [config reset];
+            [config updateWithDictionary:params];
+        }
     }
+
     [bgGeo ready];
     CDVPluginResult *result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:[config toDictionary]];
     [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
@@ -417,6 +421,11 @@
     [bgGeo onEnabledChange:callback];
 }
 
+- (void) addNotificationActionListener:(CDVInvokedUrlCommand*)command
+{
+    // No iOS implementation
+}
+
 - (void) addGeofence:(CDVInvokedUrlCommand*)command
 {
     __typeof(self.commandDelegate) __weak commandDelegate = self.commandDelegate;
@@ -635,7 +644,9 @@
 {
     UIBackgroundTaskIdentifier taskId = [[command.arguments objectAtIndex: 0] integerValue];
     [bgGeo stopBackgroundTask:taskId];
-    [self.commandDelegate sendPluginResult:[CDVPluginResult resultWithStatus:CDVCommandStatus_OK] callbackId:command.callbackId];
+
+    CDVPluginResult* result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsInt: (int)taskId];
+    [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
 }
 
 /**
@@ -658,13 +669,6 @@
     BOOL moving = [[command.arguments objectAtIndex: 0] boolValue];
     [bgGeo changePace:moving];
     CDVPluginResult* result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsBool: moving];
-    [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
-}
-
--(void) beginBackgroundTask:(CDVInvokedUrlCommand*)command
-{
-    UIBackgroundTaskIdentifier taskId = [bgGeo createBackgroundTask];
-    CDVPluginResult* result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsInt: (int)taskId];
     [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
 }
 

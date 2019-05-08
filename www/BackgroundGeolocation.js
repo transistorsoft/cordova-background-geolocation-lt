@@ -144,6 +144,10 @@ module.exports = {
         this.on('powersavechange', callback);
     },
 
+    onNotificationAction: function(callback) {
+        this.on('notificationaction', callback);
+    },
+
     on: function(event, success, failure) {
         if (typeof(success) !== 'function') {
             throw "BackgroundGeolocation event '" + event + "' was not provided with a success callback.  If you're attempting to use Promise API to add an event-listener, that won't work, since a Promise can only evaluate once.";
