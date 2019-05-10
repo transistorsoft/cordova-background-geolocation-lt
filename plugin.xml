@@ -3,7 +3,7 @@
 <plugin xmlns="http://www.phonegap.com/ns/plugins/1.0"
     xmlns:android="http://schemas.android.com/apk/res/android"
     id="cordova-background-geolocation-lt"
-    version="3.0.3">
+    version="3.0.4">
 
     <name>BackgroundGeolocation</name>
     <description>The most sophisticated, battery-efficient background-geolocation and geofencing plugin for Cordova</description>
@@ -86,8 +86,8 @@
         <framework src="com.squareup.okhttp3:okhttp:$OKHTTP_VERSION"/>
         <preference name="EVENTBUS_VERSION" default="3.0.0" />
         <framework src="org.greenrobot:eventbus:$EVENTBUS_VERSION"/>
-        <preference name="ANDROID_PERMISSIONS_VERSION" default="1.0.43" />
-        <framework src="com.intentfilter:android-permissions:$ANDROID_PERMISSIONS_VERSION"/>
+
+        <framework src="com.intentfilter:android-permissions:0.1.8"/>
         <framework src="org.slf4j:slf4j-api:1.7.25"/>
         <framework src="com.github.tony19:logback-android:1.3.0-2"/>
 
