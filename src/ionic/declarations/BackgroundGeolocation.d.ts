@@ -652,7 +652,8 @@ declare module "cordova-background-geolocation-lt" {
     * });
     * ```
     *
-    * ### ⚠️ Warning: You must call `#ready` **once** and **only** once, each time your app is launched.  Do not hide the call to `#ready` within a view which is loaded only by clicking a UI action.  This is particularly important
+    * ### ⚠️ Warning: You must call `#ready` **once** and **only** once, each time your app is launched.
+    * - Do not hide the call to `#ready` within a view which is loaded only by clicking a UI action.  This is particularly important
     * for iOS in the case where the OS relaunches your app in the background when the device is detected to be moving.  If you don't ensure that `#ready` is called in this case, tracking will not resume.
     *
     * ### The [[reset]] method.

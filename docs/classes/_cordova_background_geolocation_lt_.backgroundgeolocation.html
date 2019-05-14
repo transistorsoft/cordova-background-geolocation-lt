@@ -2556,8 +2556,11 @@ BackgroundGeolocation.changePace(<span class="hljs-literal">false</span>); <span
 }).then(<span class="hljs-function">(<span class="hljs-params">state</span>) =&gt;</span> {
  <span class="hljs-built_in">console</span>.log(<span class="hljs-string">'[ready] success'</span>, state);
 });</code></pre>
-										<h3 id="-warning-you-must-call-ready-once-and-only-once-each-time-your-app-is-launched-do-not-hide-the-call-to-ready-within-a-view-which-is-loaded-only-by-clicking-a-ui-action-this-is-particularly-important">⚠️ Warning: You must call <code>#ready</code> <strong>once</strong> and <strong>only</strong> once, each time your app is launched.  Do not hide the call to <code>#ready</code> within a view which is loaded only by clicking a UI action.  This is particularly important</h3>
-										<p>for iOS in the case where the OS relaunches your app in the background when the device is detected to be moving.  If you don&#39;t ensure that <code>#ready</code> is called in this case, tracking will not resume.</p>
+										<h3 id="-warning-you-must-call-ready-once-and-only-once-each-time-your-app-is-launched-">⚠️ Warning: You must call <code>#ready</code> <strong>once</strong> and <strong>only</strong> once, each time your app is launched.</h3>
+										<ul>
+											<li>Do not hide the call to <code>#ready</code> within a view which is loaded only by clicking a UI action.  This is particularly important
+											for iOS in the case where the OS relaunches your app in the background when the device is detected to be moving.  If you don&#39;t ensure that <code>#ready</code> is called in this case, tracking will not resume.</li>
+										</ul>
 										<h3 id="the-a-href-_cordova_background_geolocation_lt_-backgroundgeolocation-html-reset-reset-a-method-">The <a href="_cordova_background_geolocation_lt_.backgroundgeolocation.html#reset">reset</a> method.</h3>
 										<p>If you wish, you can use the <a href="_cordova_background_geolocation_lt_.backgroundgeolocation.html#reset">reset</a> method to reset all <a href="../interfaces/_cordova_background_geolocation_lt_.config.html">Config</a> options to documented default-values (with optional overrides):</p>
 									</dd>
