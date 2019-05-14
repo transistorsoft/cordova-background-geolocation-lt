@@ -3,7 +3,7 @@
 <plugin xmlns="http://www.phonegap.com/ns/plugins/1.0"
     xmlns:android="http://schemas.android.com/apk/res/android"
     id="cordova-background-geolocation-lt"
-    version="3.0.4">
+    version="3.0.5">
 
     <name>BackgroundGeolocation</name>
     <description>The most sophisticated, battery-efficient background-geolocation and geofencing plugin for Cordova</description>
@@ -26,10 +26,6 @@
 
      <platform name="ios">
         <preference name="BACKGROUND_MODE_LOCATION" default="&lt;string&gt;location&lt;/string&gt;" />
-        <preference name="LOCATION_ALWAYS_AND_WHEN_IN_USE_USAGE_DESCRIPTION" default="Always use is required for constant background location-tracking" />
-        <preference name="LOCATION_ALWAYS_USAGE_DESCRIPTION" default="Background location-tracking is required" />
-        <preference name="LOCATION_WHEN_IN_USE_USAGE_DESCRIPTION" default="Background location-tracking is required" />
-        <preference name="MOTION_USAGE_DESCRIPTION" default="Using the accelerometer increases battery-efficiency by intelligently toggling location-tracking only when the device is detected to be moving" />
 
         <dependency id="cordova-plugin-cocoalumberjack" version="~0.0.4" />
         <!-- required background modes:  App registers for location updates -->
@@ -37,22 +33,6 @@
             <array>
                 $BACKGROUND_MODE_LOCATION
             </array>
-        </config-file>
-
-        <config-file target="*-Info.plist" parent="NSLocationAlwaysAndWhenInUseUsageDescription">
-            <string>$LOCATION_ALWAYS_AND_WHEN_IN_USE_USAGE_DESCRIPTION</string>
-        </config-file>
-
-        <config-file target="*-Info.plist" parent="NSLocationAlwaysUsageDescription">
-            <string>$LOCATION_ALWAYS_USAGE_DESCRIPTION</string>
-        </config-file>
-
-        <config-file target="*-Info.plist" parent="NSLocationWhenInUseUsageDescription">
-            <string>$LOCATION_WHEN_IN_USE_USAGE_DESCRIPTION</string>
-        </config-file>
-
-        <config-file target="*-Info.plist" parent="NSMotionUsageDescription">
-            <string>$MOTION_USAGE_DESCRIPTION</string>
         </config-file>
 
         <config-file target="config.xml" parent="/*">
@@ -73,11 +53,6 @@
 
      <!-- android -->
     <platform name="android">
-        <preference name="LICENSE" default="YOUR_LICENSE_KEY" />
-        <config-file target="AndroidManifest.xml" parent="/manifest/application">
-            <meta-data android:name="com.transistorsoft.locationmanager.license" android:value="$LICENSE" />
-        </config-file>
-
         <preference name="GOOGLE_API_VERSION" default="16.+" />
         <framework src="com.google.android.gms:play-services-location:$GOOGLE_API_VERSION"/>
         <preference name="APPCOMPAT_VERSION" default="27.+" />
