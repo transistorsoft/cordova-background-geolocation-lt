@@ -30,15 +30,19 @@ The **[Android plugin](http://www.transistorsoft.com/shop/products/cordova-backg
 # Contents
 - ### :books: [API Documentation](https://transistorsoft.github.io/cordova-background-geolocation-lt)
 - ### [Installing the Plugin](#large_blue_diamond-installing-the-plugin)
+- ### [Configuring the Plugin](#large_blue_diamond-configuring-the-plugin)
+  - [Android](#android)
+  - [iOS](#ios)
 - ### [Using the plugin](#large_blue_diamond-using-the-plugin)
   - [Ionic 2+](#ionic-2-with-typescript)
   - [Cordova / Ionic 1](#cordova--ionic-1)
-- ### [Configuring the Plugin](#large_blue_diamond-configuring-the-plugin)
 - ### [Debugging](../../wiki/Debugging)
 - ### [Sample Application](#large_blue_diamond-advanced-sample-application)
 - ### [Testing Server](#large_blue_diamond-simple-testing-server)
 
 ## :large_blue_diamond: Installing the plugin ##
+
+:warning: After installing the plugin, you must [Configure the Plugin](#large_blue_diamond-configuring-the-plugin) for both [iOS](#ios) &amp; [Android](#android).
 
 #### From npm
 
@@ -66,13 +70,138 @@ $ ionic cordova plugin add cordova-background-geolocation-lt
 $ cordova plugin add https://github.com/transistorsoft/cordova-background-geolocation-lt.git
 ```
 
+## :large_blue_diamond: Configuring the plugin
+
+### Android
+
+- Open `config.xml`:  Add the following *namespace* attribute to the top-level `<widget>` element:
+
+```diff
+<widget
+  id="com.foo.bar"
+  version="1.0.0"
+  xmlns="http://www.w3.org/ns/widgets"
++ xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:cdv="http://cordova.apache.org/ns/1.0">
+```
+
+- Within the `<platform name="android">` container, add the `license_key` key using a `<config-file />` element:
+- :information_source: If you haven't yet [purchased a license](http://www.transistorsoft.com/shop/products/cordova-background-geolocation), you can skip this step &mdash; the plugin is **fully functional in *DEBUG* builds without a license** so you can *try before you buy*.  You will see a Toast message "*License Validation Failure*" when your app boots &mdash; **ignore it**.
+
+```xml
+<platform name="android">
+      <!-- background-geolocation -->
+      <config-file parent="/manifest/application" target="app/src/main/AndroidManifest.xml">
+          <meta-data
+            android:name="com.transistorsoft.locationmanager.license_key"
+            android:value="YOUR_LICENSE_KEY_HERE" />
+      </config-file>
+      <!-- /background-geolocation -->
+</platform>
+```
+
+------------------------------------------------------------------------------------------
+:warning: On older version of Cordova, If you **change your license key** after building android, you might receive an error:
+```diff
+BUILD FAILED in 1s
+
+-Element meta-data#com.transistorsoft.locationmanager.license at AndroidManifest.xml duplicated
+-with element declared at AndroidManifest.xml duplicated with element declared at AndroidManifest.xml
+```
+
+Simply remove and re-add the android platform:
+
+```
+$ cordova platform remove android
+$ cordova platform add android
+```
+------------------------------------------------------------------------------------------
+
+#### Android Gradle Dependency Configuration.
+
+Quite often, other 3rd-party plugins will require the same dependencies used by background-geolocation, including:
+- `play-services:location`
+- `com.android.support` libraries
+- `okhttp` (Android HTTP library)
+
+If your app requests different versions of these dependencies, it can cause a build-failure (See wiki [Solving Build Failures](./wiki/Solving-Build-Failures)).  Background Geolocation exposes the following **Android** CLI configuration `--variable` to help you align the required dependency versions with other plugins:
+
+Cordova CLI `--variable` are used as follows:
+
+:exclamation: To apply changes to these `--variable`, you **must** remove/re-add the cordova platform(s)
+
+```
+$ cordova plugin add cordova-background-geolocation-lt --variable FOO=value_foo --variable BAR=value_bar
+
+// After adding --variable, remove and re-add the platform
+$ cordova platform remove android
+$ cordova platform add android
+```
+
+##### `@variable GOOGLE_API_VERSION ["16.+"]`
+Sets the desired version of `play-services-location` dependency.  Many other plugins require `play-services` dependencies, (eg: `cordova-plugin-googlemaps`, `phonegap-plugin-push`):  If the version of `play-services` and/or `firebase` is not aligned to the **same** version for **ALL** plugins, your build **will fail**.
+
+```
+$ cordova plugin add cordova-background-geolocation-lt --variable GOOGLE_API_VERSION=16.0.0
+```
+
+##### `@variable APPCOMPAT_VERSION ["27.+"]`
+Sets the desired version of `com.google.android.appcompat-v7` dependency.  Many other plugins can require a different version of `appcompat-v7` dependeny:  If the version of `appcompat-v7` is not aligned to the **same** version for **ALL** plugins, your build **will fail**.  `BackgroundGeolocation` requires a minimum version of `26.1.0` due to its support for Android 8.
+
+```
+$ cordova plugin add cordova-background-geolocation-lt --variable APPCOMPAT_VERSION=27.+
+```
+
+##### `@variable OKHTTP_VERSION ["3.12.+"]`
+Sets the desired version of `okhttp` to import.  The Android plugin uses [okhttp](https://square.github.io/okhttp/) for its HTTP service.  Some other plugins can also import `okhttp` (eg: `cordova-plugin-advanced-http`).  If both plugins don't align themselves to the same version, your Android build will fail.
+
+```
+$ cordova plugin add cordova-background-geolocation-lt --variable OKHTTP_VERSION=3.12.+
+```
+
+### iOS
+
+iOS requires a number of "Usage Strings" for location and motion-usage authorization.  iOS will render these strings upon the dialog used to request permission from the user.  Take care to write relevent descriptions of *why* your app requires these authorizations as they can affect whether Apple accepts your app or not.
+
+Paste **all** the following elements into the `<platform name="ios">` container:
+
+```xml
+<platform name="ios">
+    <!-- background-geolocation -->
+    <config-file parent="NSLocationAlwaysAndWhenInUseUsageDescription" target="*-Info.plist">
+        <string>[CHANGEME] Background location tracking is required for our app so we can...</string>
+    </config-file>
+    <config-file parent="NSLocationAlwaysUsageDescription" target="*-Info.plist">
+        <string>[CHANGEME pre-iOS11.  No longer used with iOS 12] Background location tracking is required for our app so we can...</string>
+    </config-file>
+    <config-file parent="NSLocationWhenInUseUsageDescription" target="*-Info.plist">
+        <string>[CHANGEME] Background location tracking is required for our app so we can...</string>
+    </config-file>
+    <config-file parent="NSMotionUsageDescription" target="*-Info.plist">
+        <string>[CHANGEME] Device motion updates help determine when the device is stationary so the app can save power by turning off location-updates</string>
+    </config-file>
+    <!-- /background-geolocation -->
+</platform>
+```
+
+#### Configuring for `useSignificantChangesOnly`
+
+For those using `useSignificantChangesOnly: true`, possibly because Apple *denied* your use of the background `location` capability, you can disable background `location` by providing the `BACKGROUND_MODE_LOCATION` `--variable` with an empty-string:
+
+```bash
+$ cordova plugin add cordova-background-geolocation-lt --variable BACKGROUND_MODE_LOCATION=""
+
+$ cordova platform remove ios
+$ cordova platform add ios
+```
+
 ## :large_blue_diamond: Using the Plugin
 
 There are **three** simple steps to using `BackgroundGeolocation`:
 
-1. [Listen to events](https://transistorsoft.github.io/cordova-background-geolocation-lt/classes/_cordova_background_geolocation_.backgroundgeolocation.html).
-2. [`#ready`](https://transistorsoft.github.io/cordova-background-geolocation-lt/classes/_cordova_background_geolocation_.backgroundgeolocation.html#ready) the plugin.
-3. [`#start`](https://transistorsoft.github.io/cordova-background-geolocation-lt/classes/_cordova_background_geolocation_.backgroundgeolocation.html#start) the plugin.
+1. [Listen to events](https://transistorsoft.github.io/cordova-background-geolocation-lt/classes/_cordova_background_geolocation_lt_.backgroundgeolocation.html).
+2. [`#ready`](https://transistorsoft.github.io/cordova-background-geolocation-lt/classes/_cordova_background_geolocation_lt_.backgroundgeolocation.html#ready) the plugin.
+3. [`#start`](https://transistorsoft.github.io/cordova-background-geolocation-lt/classes/_cordova_background_geolocation_lt_.backgroundgeolocation.html#start) the plugin.
 
 ### Ionic 2+ with Typescript
 
@@ -224,157 +353,6 @@ BackgroundGeolocation.ready({desiredAccuracy: 0, distanceFilter: 50}).then(state
   console.log('- BackgroundGeolocation error: ', error);
 });
 ```
-
-## :large_blue_diamond: Configuring the plugin
-
-After adding the plugin, your `config.xml` will contain the following block, containing a number of `<variable />` for you to configure (eg: `LICENSE`):
-
-```xml
-<widget id="com.your.company.app.id">
-  <plugin name="cordova-background-geolocation-lt">
-    <variable name="LICENSE" value="YOUR_LICENSE_KEY" />
-    <variable name="GOOGLE_API_VERSION" value="15.0.1" />
-    <variable name="APPCOMPAT_VERSION" value="27.1.1" />
-    <variable name="LOCATION_ALWAYS_AND_WHEN_IN_USE_USAGE_DESCRIPTION" value="Always use is required for background location tracking" />
-    <variable name="LOCATION_ALWAYS_USAGE_DESCRIPTION" value="Background location-tracking is required" />
-    <variable name="LOCATION_WHEN_IN_USE_USAGE_DESCRIPTION" value="Background location-tracking is required" />
-    <variable name="MOTION_USAGE_DESCRIPTION" value="Using the accelerometer increases battery-efficiency by intelligently toggling location-tracking only when the device is detected to be moving" />
-  </plugin>
-  .
-  .
-  .
-</widget>
-```
-
-To configure these `<variable />`, you simply re-add the plugin, providing desired `--variable` to the `cordova plugin add` command.  You can combine multiple `--variable` together in *one* command or execute `cordova plugin add` *successivly*.
-
-```
-$ cordova plugin add cordova-background-geolocation-lt --variable VARIABLE_NAME=value
-
-$ cordova platform remove android
-$ cordova platform add android
-```
-
-:exclamation: To apply changes to these `<variable />`, you **must** remove/re-add the cordova platform(s)
-
-#### Configuring Multiple Variables at Once
-
-Use the `\` character followed by [`ENTER`] in console to configure multiple variables with one command:
-
-```bash
-$ cordova plugin add cordova-background-geolocation-lt \
-  --variable LICENSE=your_key_here \
-  --variable GOOGLE_API_VERSION=15.0.1 \
-  --variable APPCOMPAT_VERSION=27.1.1 \
-  --variable MOTION_USAGE_DESCRIPTION="My motion usage description"
-
-$ cordova platform remove android
-$ cordova platform add android
-
-$ cordova platform remove ios
-$ cordova platform add ios
-```
-
-#### Or each variable separately
-
-```bash
-$ cordova plugin add cordova-background-geolocation-lt --variable MOTION_USAGE_DESCRIPTION="My Motion Usage Description"
-
-$ cordova plugin add cordova-background-geolocation-lt --variable LOCATION_ALWAYS_AND_WHEN_IN_USE_USAGE_DESCRIPTION="My Usage Description"
-
-$ cordova platform remove ios
-$ cordova platform add ios
-```
-
-#### After editing variables, ALWAYS REMOVE / RE-ADD PLATFORM
-
-```bash
-$ cordova platform remove android
-$ cordova platform add android
-
-$ cordova platform remove ios
-$ cordova platform add ios
-
-```
-
-#### Configuring your LICENSE key
-
-After generating your Android license-key in the [Product Dashboard](http://www.transistorsoft.com/shop/customers), Configure the `LICENSE` variable:
-
-```bash
-$ cordova plugin add cordova-background-geolocation-lt --variable LICENSE=your_key_here
-
-// Remove / re-add the Android platform
-$ cordova platform remove android
-$ cordova platform add android
-```
-
-#### Configuring `play-services` Version
-
-Many other plugins require Google Play Services and/or Firebase libraries.  This is a common source of Android build-failures, since the `play-services` library version must be aligned to the same version for **all** plugins.  For example, when one plugin imports version `11.0.1` and another one imports `11.2.0`, a gradle build failure will occur.  Use the `GOOGLE_API_VERSION` to align the required `play-services` version with other plugins.
-
-:warning: The plugin requires a minimum version of **`11.2.0`**.
-
-```bash
-$ cordova plugin add cordova-background-geolocation-lt --variable GOOGLE_API_VERSION=15.0.1
-$ cordova platform remove android
-$ cordova platform add android
-```
-
-#### Configuring for `useSignificantChangesOnly`
-
-For those using `useSignificantChangesOnly: true`, possibly because Apple *denied* your use of the background `location` capability, you can disable background `location` by providing the `BACKGROUND_MODE_LOCATION` `<variable />` with an empty-string:
-
-```bash
-$ cordova plugin add cordova-background-geolocation-lt --variable BACKGROUND_MODE_LOCATION=""
-
-$ cordova platform remove ios
-$ cordova platform add ios
-```
-
-
-## Configuration Variables
-
-### Android
-
-##### `@variable LICENSE [""]`
-Your Android license key generated from [Product Dashboard](http://www.transistorsoft.com/shop/customers)
-
-##### `@variable GOOGLE_API_VERSION ["16.+"]`
-Sets the desired version of `play-services-location` dependency.  Many other plugins require `play-services` dependencies, (eg: `cordova-plugin-googlemaps`, `phonegap-plugin-push`):  If the version of `play-services` and/or `firebase` is not aligned to the **same** version for **ALL** plugins, your build **will fail**.
-
-##### `@variable APPCOMPAT_VERSION ["27.+"]`
-Sets the desired version of `com.google.android.appcompat-v7` dependency.  Many other plugins can require a different version of `appcompat-v7` dependeny:  If the version of `appcompat-v7` is not aligned to the **same** version for **ALL** plugins, your build **will fail**.  `BackgroundGeolocation` requires a minimum version of `26.1.0` due to its support for Android 8.
-
-##### `@variable OKHTTP_VERSION ["3.12.+"]`
-Sets the desired version of `okhttp` to import.  The Android plugin uses [okhttp](https://square.github.io/okhttp/) for its HTTP service.  Some other plugins can also import `okhttp` (eg: `cordova-plugin-advanced-http`).  If both plugins don't align themselves to the same version, your Android build will fail.
-
-### iOS
-
-##### `@variable LOCATION_ALWAYS_AND_WHEN_IN_USE_USAGE_DESCRIPTION ["Background location-tracking is required"]`
-
-Customize the message displayed to the user when `AlwaysAndWhenInUse` location authorization is requested.  This variable is added to your iOS `.plist` in the `NSLocationAlwaysAndWhenInUseUsageDescription` key.
-
-##### `@variable LOCATION_ALWAYS_USAGE_DESCRIPTION ["Background location-tracking is required"]`
-
-**(deprecated in iOS 11.0)** Customize the message displayed to the user when `Always` location authorization is requested.  This variable is added to your iOS `.plist` in the `NSLocationAlwaysUsageDescription` key.
-
-##### `@variable LOCATION_WHEN_IN_USE_USAGE_DESCRIPTION ["Background location-tracking is required"`
-
-Customize the message displayed to the user when `WhenInUse` location authorization is requested.  This variable is added to your iOS `.plist` in the `NSLocationWhenInUseUsageDescription` key.
-
-##### `@variable MOTION_USAGE_DESCRIPTION ["Using the accelerometer increases battery-efficiency by..."`
-
-Customize the message displayed to the user when "Motion & Fitness" permission is requested.  The plugin is **highly** optimized to use iOS `CMMotionActivityManager` API for intelligently toggling location-services only when the plugin is detected to be moving.
-
-##### `@variable BACKGROUND_MODE_LOCATION ["&lt;string&gt;location&lt;/string&gt;"]`
-Adds the iOS background-mode `location` to your iOS `.plist` file.  This is the default behaviour.  To disable this, (ie: for those using `useSignificantChangesOnly`), provide an empty-string:
-
-```xml
-  <variable name="BACKGROUND_MODE_LOCATION" value="" />
-```
-
-:warning: If you *do* want the default behaviour of background-location updates, simply **IGNORE** this variable -- Do **NOT** even provide it.  If you *do* provide it, you must provide the full escaped XML value of `&lt;string&gt;location&lt;/string&gt;` (the default value when not provided), not just `location`.
 
 
 ## :large_blue_diamond: [Advanced Sample Application](https://github.com/christocracy/cordova-background-geolocation-SampleApp)

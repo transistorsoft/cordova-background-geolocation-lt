@@ -1,6 +1,87 @@
 
 # Change Log
 
+## [3.0.5] &mdash; 2019-05-14
+--------------------------------------------------------------------
+### :warning: Breaking Changes
+
+### Android License Configuration
+
+The Android license configuration mechanism of the plugin using `--variable LICENSE` is one of the biggest recurring support requests received.  From now on, Android `license_key` will be configured using a `<config-file />` block in your `config.xml` file (See updated README [Configuring the plugin](./README.md#large_blue_diamond-configuring-the-plugin)):
+
+With this change, your license key will **never be deleted** when you remove the plugin and you'll never have to resort to the Wiki *License Validation Failure*.
+
+- Open `config.xml`:  Add the following *namespace* attribute to the top-level `<widget>` element:
+
+```diff
+<widget
+  id="com.foo.bar"
+  version="1.0.0"
+  xmlns="http://www.w3.org/ns/widgets"
++ xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:cdv="http://cordova.apache.org/ns/1.0">
+```
+
+- Within the `<platform name="android">` container, add the `license_key` key using a `<config-file />` element:
+
+```xml
+<platform name="android">
+      <!-- background-geolocation -->
+      <config-file parent="/manifest/application" target="app/src/main/AndroidManifest.xml">
+          <meta-data
+            android:name="com.transistorsoft.locationmanager.license_key"
+            android:value="YOUR_LICENSE_KEY_HERE" />
+      </config-file>
+      <!-- /background-geolocation -->
+</platform>
+```
+
+:warning: On older version of Cordova, If you **change your license key** after building android, you might receive an error:
+```diff
+BUILD FAILED in 1s
+
+-Element meta-data#com.transistorsoft.locationmanager.license at AndroidManifest.xml duplicated
+-with element declared at AndroidManifest.xml duplicated with element declared at AndroidManifest.xml
+```
+
+Simply remove and re-add the android platform:
+
+```
+$ cordova platform remove android
+$ cordova platform add android
+```
+
+### iOS Location Authorization Strings
+
+The iOS *Location Authorization Strings* have been migrated to the same `<config-file> />` mechanism.  The following plugin config `--variable` have been removed:
+- `LOCATION_ALWAYS_AND_WHEN_IN_USE_USAGE_DESCRIPTION`
+- `LOCATION_ALWAYS_USAGE_DESCRIPTION`
+- `LOCATION_WHEN_IN_USE_USAGE_DESCRIPTION`
+- `MOTION_USAGE_DESCRIPTION`
+
+You can now manage these strings in `config.xml` using the following `<config-file />` elements:
+
+```xml
+<platform name="ios">
+    <!-- background-geolocation -->
+    <config-file parent="NSLocationAlwaysAndWhenInUseUsageDescription" target="*-Info.plist">
+        <string>[CHANGEME] Background location tracking is required for our app so we can...</string>
+    </config-file>
+    <config-file parent="NSLocationAlwaysUsageDescription" target="*-Info.plist">
+        <string>[CHANGEME pre-iOS11.  No longer used with iOS 12] Background location tracking is required for our app so we can...</string>
+    </config-file>
+    <config-file parent="NSLocationWhenInUseUsageDescription" target="*-Info.plist">
+        <string>[CHANGEME].  Background location tracking is required for our app so we can...</string>
+    </config-file>
+    <config-file parent="NSMotionUsageDescription" target="*-Info.plist">
+        <string>[CHANGEME] Device motion updates help determine when the device is stationary so the app can save power by turning off location-updates</string>
+    </config-file>
+    <!-- /background-geolocation -->
+</platform>
+```
+
+--------------------------------------------------------------------
+
 ## [3.0.4] - 2019-05-10
 - [Changed] Rollback `android-permissions` version back to `0.1.8`.  It relies on `support-annotations@28`.  This isn't a problem if one simply upgrades their `targetSdkVersion` but the support calls aren't worth the hassle, since the latest version doesn't offer anything the plugin needs.
 
