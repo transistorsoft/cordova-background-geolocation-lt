@@ -41,5 +41,9 @@ INSERT_YOUR_CODE_HERE
 -->
 <details>
 	<summary>Logs</summary>
-	PASTE_YOUR_LOGS_HERE
+
+```
+PASTE_YOUR_LOGS_HERE
+```
+
 </details>
