@@ -42,7 +42,7 @@ INSERT_YOUR_CODE_HERE
 <details>
 	<summary>Logs</summary>
 
-```
+```<!-- Syntax highlighting:  DO NOT REMOVE -->
 PASTE_YOUR_LOGS_HERE
 ```
 
