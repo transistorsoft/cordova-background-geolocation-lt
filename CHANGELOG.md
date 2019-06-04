@@ -1,6 +1,12 @@
 
 # Change Log
 
+## [3.0.6] - 2019-06-04
+- [Fixed] Android `destroyLocations` callback was being executed in background-thread.
+- [Fixed] When Android geofence API receives a `GEOFENCE_NOT_AVAILABLE` error (can occur if Wifi is disabled), geofences must be re-registered.
+- [Fixed] Android `Config.disableStopDetection` was not implemented.
+- [Added] Add new Android Config options `scheduleUseAlarmManager` for forcing scheduler to use `AlarmManager` insead of `JobService` for more precise scheduling.
+
 ## [3.0.5] &mdash; 2019-05-14
 --------------------------------------------------------------------
 ### :warning: Breaking Changes
