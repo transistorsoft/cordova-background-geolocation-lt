@@ -6,8 +6,7 @@
 #import "CDVBackgroundGeolocation.h"
 
 @implementation CDVBackgroundGeolocation {
-    TSLocationManager *bgGeo;
-
+    BOOL ready;
     NSMutableDictionary *callbacks;
     NSMutableArray *watchPositionCallbacks;
 }
@@ -16,7 +15,8 @@
 
 - (void)pluginInitialize
 {
-    bgGeo = [TSLocationManager sharedInstance];
+    ready = NO;
+    TSLocationManager *bgGeo = [TSLocationManager sharedInstance];
     bgGeo.viewController = self.viewController;
     callbacks = [NSMutableDictionary new];
 }
@@ -32,6 +32,7 @@
 {
     NSDictionary *params = [command.arguments objectAtIndex:0];
     TSConfig *config = [TSConfig sharedInstance];
+    TSLocationManager *bgGeo = [TSLocationManager sharedInstance];
     [bgGeo configure:params];
 
     CDVPluginResult *result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:[config toDictionary]];
@@ -40,6 +41,14 @@
 
 - (void) ready:(CDVInvokedUrlCommand*) command
 {
+    if (ready) {
+        TSLocationManager *bgGeo = [TSLocationManager sharedInstance];
+        [bgGeo log:@"warn" message:@"#ready already called.  Redirecting to #setConfig"];
+        [self setConfig:command];
+        return;
+    }
+
+    ready = YES;
     TSConfig *config = [TSConfig sharedInstance];
     NSDictionary *params = [command.arguments objectAtIndex:0];
     if (config.isFirstBoot) {
@@ -51,7 +60,7 @@
             [config updateWithDictionary:params];
         }
     }
-
+    TSLocationManager *bgGeo = [TSLocationManager sharedInstance];
     [bgGeo ready];
     CDVPluginResult *result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:[config toDictionary]];
     [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
@@ -73,6 +82,7 @@
 - (void) removeListeners:(CDVInvokedUrlCommand*) command
 {
     [self.commandDelegate runInBackground:^{
+        TSLocationManager *bgGeo = [TSLocationManager sharedInstance];
         [bgGeo removeListeners];
     }];
     CDVPluginResult* result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK];
@@ -108,6 +118,7 @@
 {
     __typeof(self.commandDelegate) __weak commandDelegate = self.commandDelegate;
     [self.commandDelegate runInBackground:^{
+        TSLocationManager *bgGeo = [TSLocationManager sharedInstance];
         [bgGeo start];
         TSConfig *config = [TSConfig sharedInstance];
         NSDictionary *state = [config toDictionary];
@@ -122,6 +133,7 @@
  */
 - (void) stop:(CDVInvokedUrlCommand*)command
 {
+    TSLocationManager *bgGeo = [TSLocationManager sharedInstance];
     [bgGeo stop];
     TSConfig *config = [TSConfig sharedInstance];
     CDVPluginResult* result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:[config toDictionary]];
@@ -130,6 +142,7 @@
 
 - (void) startSchedule:(CDVInvokedUrlCommand*)command
 {
+    TSLocationManager *bgGeo = [TSLocationManager sharedInstance];
     [bgGeo startSchedule];
     TSConfig *config = [TSConfig sharedInstance];
     CDVPluginResult* result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:[config toDictionary]];
@@ -138,6 +151,7 @@
 
 - (void) stopSchedule:(CDVInvokedUrlCommand*)command
 {
+    TSLocationManager *bgGeo = [TSLocationManager sharedInstance];
     [bgGeo stopSchedule];
     TSConfig *config = [TSConfig sharedInstance];
     CDVPluginResult* result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:[config toDictionary]];
@@ -146,6 +160,7 @@
 
 - (void) startGeofences:(CDVInvokedUrlCommand*)command
 {
+    TSLocationManager *bgGeo = [TSLocationManager sharedInstance];
     [bgGeo startGeofences];
     TSConfig *config = [TSConfig sharedInstance];
     CDVPluginResult* result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:[config toDictionary]];
@@ -171,7 +186,7 @@
         CDVPluginResult *result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsInt:(int)error.code];
         [commandDelegate sendPluginResult:result callbackId:command.callbackId];
     }];
-
+    TSLocationManager *bgGeo = [TSLocationManager sharedInstance];
     [bgGeo setOdometer:value request:request];
 }
 
@@ -180,6 +195,7 @@
  */
 - (void) getStationaryLocation:(CDVInvokedUrlCommand *)command
 {
+    TSLocationManager *bgGeo = [TSLocationManager sharedInstance];
     NSDictionary* location = [bgGeo getStationaryLocation];
 
     CDVPluginResult *result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:location];
@@ -192,6 +208,7 @@
 - (void) getLocations:(CDVInvokedUrlCommand *)command
 {
     __typeof(self.commandDelegate) __weak commandDelegate = self.commandDelegate;
+    TSLocationManager *bgGeo = [TSLocationManager sharedInstance];
     [bgGeo getLocations:^(NSArray* locations) {
         NSDictionary *params = @{@"locations": locations};
         CDVPluginResult *result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:params];
@@ -212,6 +229,7 @@
 - (void) destroyLocations:(CDVInvokedUrlCommand*)command
 {
     __typeof(self.commandDelegate) __weak commandDelegate = self.commandDelegate;
+    TSLocationManager *bgGeo = [TSLocationManager sharedInstance];
     [bgGeo destroyLocations:^{
         CDVPluginResult *result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK];
         [commandDelegate sendPluginResult:result callbackId:command.callbackId];
@@ -227,7 +245,7 @@
 - (void) sync:(CDVInvokedUrlCommand *)command
 {
     __typeof(self.commandDelegate) __weak commandDelegate = self.commandDelegate;
-
+    TSLocationManager *bgGeo = [TSLocationManager sharedInstance];
     [bgGeo sync:^(NSArray* records) {
         NSDictionary *params = @{@"locations": records};
         CDVPluginResult* result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:params];
@@ -245,7 +263,7 @@
 
     @synchronized(callbacks) {
         id callback = [callbacks objectForKey:callbackId];
-
+        TSLocationManager *bgGeo = [TSLocationManager sharedInstance];
         [bgGeo un:event callback:callback];
 
         CDVPluginResult* result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK];
@@ -269,6 +287,7 @@
         [commandDelegate sendPluginResult:result callbackId:command.callbackId];
     };
     [self registerCallback:command.callbackId callback:success];
+    TSLocationManager *bgGeo = [TSLocationManager sharedInstance];
     [bgGeo onLocation:success failure:failure];
 }
 
@@ -281,6 +300,7 @@
         [commandDelegate sendPluginResult:result callbackId:command.callbackId];
     };
     [self registerCallback:command.callbackId callback:callback];
+    TSLocationManager *bgGeo = [TSLocationManager sharedInstance];
     [bgGeo onHttp:callback];
 }
 
@@ -298,6 +318,7 @@
         [commandDelegate sendPluginResult:result callbackId:command.callbackId];
     };
     [self registerCallback:command.callbackId callback:callback];
+    TSLocationManager *bgGeo = [TSLocationManager sharedInstance];
     [bgGeo onMotionChange:callback];
 }
 
@@ -314,6 +335,7 @@
         [commandDelegate sendPluginResult:result callbackId:command.callbackId];
     };
     [self registerCallback:command.callbackId callback:callback];
+    TSLocationManager *bgGeo = [TSLocationManager sharedInstance];
     [bgGeo onHeartbeat:callback];
 }
 
@@ -330,6 +352,7 @@
         [commandDelegate sendPluginResult:result callbackId:command.callbackId];
     };
     [self registerCallback:command.callbackId callback:callback];
+    TSLocationManager *bgGeo = [TSLocationManager sharedInstance];
     [bgGeo onActivityChange:callback];
 }
 
@@ -342,6 +365,7 @@
         [commandDelegate sendPluginResult:result callbackId:command.callbackId];
     };
     [self registerCallback:command.callbackId callback:callback];
+    TSLocationManager *bgGeo = [TSLocationManager sharedInstance];
     [bgGeo onProviderChange:callback];
 }
 
@@ -354,6 +378,7 @@
         [commandDelegate sendPluginResult:result callbackId:command.callbackId];
     };
     [self registerCallback:command.callbackId callback:callback];
+    TSLocationManager *bgGeo = [TSLocationManager sharedInstance];
     [bgGeo onGeofencesChange:callback];
 }
 
@@ -368,6 +393,7 @@
         [commandDelegate sendPluginResult:result callbackId:command.callbackId];
     };
     [self registerCallback:command.callbackId callback:callback];
+    TSLocationManager *bgGeo = [TSLocationManager sharedInstance];
     [bgGeo onGeofence:callback];
 }
 
@@ -381,6 +407,7 @@
         [commandDelegate sendPluginResult:result callbackId:command.callbackId];
     };
     [self registerCallback:command.callbackId callback:callback];
+    TSLocationManager *bgGeo = [TSLocationManager sharedInstance];
     [bgGeo onSchedule:callback];
 }
 
@@ -393,6 +420,7 @@
         [commandDelegate sendPluginResult:result callbackId:command.callbackId];
     };
     [self registerCallback:command.callbackId callback:callback];
+    TSLocationManager *bgGeo = [TSLocationManager sharedInstance];
     [bgGeo onPowerSaveChange:callback];
 }
 
@@ -406,6 +434,7 @@
         [commandDelegate sendPluginResult:result callbackId:command.callbackId];
     };
     [self registerCallback:command.callbackId callback:callback];
+    TSLocationManager *bgGeo = [TSLocationManager sharedInstance];
     [bgGeo onConnectivityChange:callback];
 }
 
@@ -418,6 +447,7 @@
         [commandDelegate sendPluginResult:result callbackId:command.callbackId];
     };
     [self registerCallback:command.callbackId callback:callback];
+    TSLocationManager *bgGeo = [TSLocationManager sharedInstance];
     [bgGeo onEnabledChange:callback];
 }
 
@@ -438,6 +468,7 @@
             [commandDelegate sendPluginResult:result callbackId:command.callbackId];
             return;
         }
+        TSLocationManager *bgGeo = [TSLocationManager sharedInstance];
         [bgGeo addGeofence:geofence success:^{
             CDVPluginResult *result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK];
             [commandDelegate sendPluginResult:result callbackId:command.callbackId];
@@ -467,6 +498,7 @@
             }
         }
 
+        TSLocationManager *bgGeo = [TSLocationManager sharedInstance];
         [bgGeo addGeofences:geofences success:^{
             CDVPluginResult *result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK];
             [commandDelegate sendPluginResult:result callbackId:command.callbackId];
@@ -495,6 +527,7 @@
 {
     NSString *identifier  = [command.arguments objectAtIndex:0];
     __typeof(self.commandDelegate) __weak commandDelegate = self.commandDelegate;
+    TSLocationManager *bgGeo = [TSLocationManager sharedInstance];
     [bgGeo removeGeofence:identifier success:^{
         CDVPluginResult *result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK];
         [commandDelegate sendPluginResult:result callbackId:command.callbackId];
@@ -508,6 +541,7 @@
 {
     NSArray *identifiers = [command.arguments objectAtIndex:0];
     __typeof(self.commandDelegate) __weak commandDelegate = self.commandDelegate;
+    TSLocationManager *bgGeo = [TSLocationManager sharedInstance];
     [bgGeo removeGeofences:identifiers success:^{
         CDVPluginResult *result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK];
         [commandDelegate sendPluginResult:result callbackId:command.callbackId];
@@ -520,6 +554,7 @@
 - (void) getGeofences:(CDVInvokedUrlCommand*)command
 {
     __typeof(self.commandDelegate) __weak commandDelegate = self.commandDelegate;
+    TSLocationManager *bgGeo = [TSLocationManager sharedInstance];
     [bgGeo getGeofences:^(NSArray *geofences) {
         NSMutableArray *rs = [NSMutableArray new];
         for (TSGeofence *geofence in geofences) {
@@ -564,6 +599,7 @@
     if (options[@"extras"]) {
         request.extras = options[@"extras"];
     }
+    TSLocationManager *bgGeo = [TSLocationManager sharedInstance];
     [bgGeo getCurrentPosition:request];
 }
 
@@ -602,12 +638,13 @@
     if (options[@"timeout"]) {
         request.timeout = [options[@"timeout"] doubleValue];
     }
-
+    TSLocationManager *bgGeo = [TSLocationManager sharedInstance];
     [bgGeo watchPosition:request];
 }
 - (void) stopWatchPosition:(CDVInvokedUrlCommand*)command
 {
     [self.commandDelegate runInBackground:^{
+        TSLocationManager *bgGeo = [TSLocationManager sharedInstance];
         [bgGeo stopWatchPosition];
     }];
     // Ensure an initialized Array
@@ -623,6 +660,7 @@
 - (void) playSound:(CDVInvokedUrlCommand*)command
 {
     SystemSoundID soundId = [[command.arguments objectAtIndex:0] intValue];
+    TSLocationManager *bgGeo = [TSLocationManager sharedInstance];
     [bgGeo playSound: soundId];
     CDVPluginResult *result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK];
     [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
@@ -633,6 +671,7 @@
  */
 -(void) startBackgroundTask:(CDVInvokedUrlCommand*)command
 {
+    TSLocationManager *bgGeo = [TSLocationManager sharedInstance];
     UIBackgroundTaskIdentifier taskId = [bgGeo createBackgroundTask];
     [self.commandDelegate sendPluginResult:[CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsInt:(int)taskId] callbackId:command.callbackId];
 }
@@ -642,6 +681,7 @@
  */
 -(void) finish:(CDVInvokedUrlCommand*)command
 {
+    TSLocationManager *bgGeo = [TSLocationManager sharedInstance];
     UIBackgroundTaskIdentifier taskId = [[command.arguments objectAtIndex: 0] integerValue];
     [bgGeo stopBackgroundTask:taskId];
 
@@ -656,6 +696,7 @@
 {
     UIBackgroundTaskIdentifier taskId = [[command.arguments objectAtIndex: 0] integerValue];
     NSString *error = [command.arguments objectAtIndex:1];
+    TSLocationManager *bgGeo = [TSLocationManager sharedInstance];
     [bgGeo error:taskId message:error];
     [self.commandDelegate sendPluginResult:[CDVPluginResult resultWithStatus:CDVCommandStatus_OK] callbackId:command.callbackId];
 }
@@ -667,6 +708,7 @@
 - (void) changePace:(CDVInvokedUrlCommand *)command
 {
     BOOL moving = [[command.arguments objectAtIndex: 0] boolValue];
+    TSLocationManager *bgGeo = [TSLocationManager sharedInstance];
     [bgGeo changePace:moving];
     CDVPluginResult* result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsBool: moving];
     [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
@@ -677,6 +719,7 @@
     __typeof(self.commandDelegate) __weak commandDelegate = self.commandDelegate;
     NSDictionary *params = [command.arguments objectAtIndex: 0];
 
+    TSLocationManager *bgGeo = [TSLocationManager sharedInstance];
     [bgGeo insertLocation:params success:^(NSString* uuid){
         CDVPluginResult *result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:uuid];
         [commandDelegate sendPluginResult:result callbackId:command.callbackId];
@@ -690,6 +733,7 @@
 {
     __typeof(self.commandDelegate) __weak commandDelegate = self.commandDelegate;
     [self.commandDelegate runInBackground:^{
+        TSLocationManager *bgGeo = [TSLocationManager sharedInstance];
         int count = [bgGeo getCount];
         CDVPluginResult* result;
         if (count >= 0) {
@@ -706,6 +750,7 @@
 -(void) getLog:(CDVInvokedUrlCommand*)command
 {
     __typeof(self.commandDelegate) __weak commandDelegate = self.commandDelegate;
+    TSLocationManager *bgGeo = [TSLocationManager sharedInstance];
     [bgGeo getLog:^(NSString* log){
         CDVPluginResult* result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:log];
         [commandDelegate sendPluginResult:result callbackId:command.callbackId];
@@ -719,6 +764,7 @@
 {
     __typeof(self.commandDelegate) __weak commandDelegate = self.commandDelegate;
     [self.commandDelegate runInBackground:^{
+        TSLocationManager *bgGeo = [TSLocationManager sharedInstance];
         CDVPluginResult *result = ([bgGeo destroyLog]) ? [CDVPluginResult resultWithStatus:CDVCommandStatus_OK] : [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR];
         dispatch_sync(dispatch_get_main_queue(), ^{
             [commandDelegate sendPluginResult:result callbackId:command.callbackId];
@@ -728,6 +774,7 @@
 
 - (void) setLogLevel:(CDVInvokedUrlCommand *) command
 {
+    TSLocationManager *bgGeo = [TSLocationManager sharedInstance];
     NSInteger logLevel = [[command.arguments objectAtIndex:0] integerValue];
     [bgGeo setLogLevel:logLevel];CDVPluginResult* result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK];
     [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
@@ -737,6 +784,7 @@
 {
     NSString *email = [command.arguments objectAtIndex:0];
 
+    TSLocationManager *bgGeo = [TSLocationManager sharedInstance];
     __typeof(self.commandDelegate) __weak commandDelegate = self.commandDelegate;
     [bgGeo emailLog:email success:^{
         CDVPluginResult* result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK];
@@ -752,6 +800,7 @@
     NSString *level = [command.arguments objectAtIndex:0];
     NSString *msg = [command.arguments objectAtIndex:1];
 
+    TSLocationManager *bgGeo = [TSLocationManager sharedInstance];
     [bgGeo log:level message:msg];
     [self.commandDelegate sendPluginResult:[CDVPluginResult resultWithStatus:CDVCommandStatus_OK] callbackId:command.callbackId];
 }
@@ -759,6 +808,7 @@
 
 -(void) getSensors:(CDVInvokedUrlCommand*)command
 {
+    TSLocationManager *bgGeo = [TSLocationManager sharedInstance];
     NSDictionary *sensors = @{
                               @"platform": @"ios",
                               @"accelerometer": @([bgGeo isAccelerometerAvailable]),
@@ -772,6 +822,7 @@
 
 - (void) isPowerSaveMode:(CDVInvokedUrlCommand *) command
 {
+    TSLocationManager *bgGeo = [TSLocationManager sharedInstance];
     BOOL isPowerSaveMode = [bgGeo isPowerSaveMode];
     CDVPluginResult *result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsBool:isPowerSaveMode];
     [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
@@ -796,12 +847,14 @@
 }
 
 - (void) getProviderState:(CDVInvokedUrlCommand *) command {
+    TSLocationManager *bgGeo = [TSLocationManager sharedInstance];
     TSProviderChangeEvent *event = [bgGeo getProviderState];
     CDVPluginResult *result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:[event toDictionary]];
     [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
 }
 
 - (void) requestPermission:(CDVInvokedUrlCommand *) command {
+    TSLocationManager *bgGeo = [TSLocationManager sharedInstance];
     [bgGeo requestPermission:^(NSNumber *status) {
         CDVPluginResult* result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsInt: [status intValue]];
         [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
@@ -824,7 +877,7 @@
  * Might be desirable in certain apps.
  */
 - (void)applicationWillTerminate:(UIApplication *)application {
-    bgGeo = nil;
+
 }
 
 @end

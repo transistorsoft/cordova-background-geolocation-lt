@@ -90,12 +90,14 @@ public class CDVBackgroundGeolocation extends CordovaPlugin {
     private static final String ACTION_REQUEST_SETTINGS  = "requestSettings";
     private static final String ACTION_SHOW_SETTINGS     = "showSettings";
 
+    private boolean mReady;
     private List<TSCallback> locationAuthorizationCallbacks = new ArrayList<TSCallback>();
     private List<CallbackContext> watchPositionCallbacks = new ArrayList<CallbackContext>();
     private List<CordovaCallback> cordovaCallbacks = new ArrayList<CordovaCallback>();
 
     @Override
     protected void pluginInitialize() {
+        mReady = false;
         initializeLocationManager();
     }
 
@@ -319,6 +321,12 @@ public class CDVBackgroundGeolocation extends CordovaPlugin {
         callbackContext.success(config.toJson());
     }
     private void ready(final JSONObject params, final CallbackContext callbackContext) throws JSONException {
+        if (mReady) {
+            TSLog.logger.warn(TSLog.warn("#ready already called.  Redirecting to #setConfig"));
+            setConfig(params, callbackContext);
+            return;
+        }
+        mReady = true;
         BackgroundGeolocation adapter = getAdapter();
         final TSConfig config = TSConfig.getInstance(cordova.getActivity().getApplicationContext());
 
