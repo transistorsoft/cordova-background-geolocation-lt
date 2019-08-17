@@ -1,6 +1,13 @@
 
 # Change Log
 
+## [3.2.0] - 2019-08-17
+- [Added] iOS 13 support.
+- [Fixed] Android Geofence `DWELL` transition (`notifyOnDwell: true`) not firing.
+- [Fixed] iOS `logMaxDays` was hard-coded to `7`; Config option not being respected.
+- [Added] Android `Q` support (API 29) with new iOS-like location permission model which now requests `When In Use` or `Always`.  Android now supports the config option `locationAuthorizationRequest` which was traditionally iOS-only.  Also, Android Q now requires runtime permission from user for `ACTIVITY_RECOGNITION`.
+- [Changed] Another Android tweak to mitigate against error `Context.startForegroundService() did not then call Service.startForeground()`.
+
 ## [3.0.8] - 2019-07-08
 - [Fixed] iOS / Android issues with odometer and `getCurrentPosition` when used with `maximumAge` constraint.  Incorrect, old location was being returned instead of latest available.
 - [Fixed] Some Android methods were executing the callback in background-thread, exposed when using flutter dev channel (`#insertLocation`, `#getLocations`, `#getGeofences`, `#sync`).
