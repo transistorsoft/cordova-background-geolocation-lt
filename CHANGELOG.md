@@ -1,6 +1,21 @@
 
 # Change Log
 
+## [3.2.2] - 2019-09-18
+- [Changed] Android:  move more location-handling code into background-threads to help mitigate against ANR referencing `Context.startForegroundService`
+- [Changed] Android:  If BackgroundGeolocation adapter is instantiated headless and is enabled, force ActivityRecognitionService to start.
+- [Added] Add `mock` to `locationTemplate` data.
+- [Added] Added android script to purge SDK's debug sound-files from release build.
+- [Changed] Rebuild iOS `TSLocationManager.framework` with XCode 10.  Replace `@available` macro with `SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO`.
+- [Fixed] iOS 13 preventSuspend was not working with iOS 13.  iOS has once again decreased the max time for UIApplication beginBackgroundTask from 180s down to 30s.
+- [Added] Implement Cordova "browser" platform with a Mock implementation of BackgroundGeolocation for use while developing in browser.
+- [Changed] Upgrade `android-logback` dependency to `2.0.0`
+- [Changed] Android: move some plugin initialization into background-threads (eg: `performLogCleanup`) to help mitigate against ANR "`Context.startForegroundService` did not then call `Service.startForeground`".
+- [Added] Capacitor Support.  See README for Capacitor Setup Instructions.
+- [Fixed] Android Initial headless events can be missed when app booted due to motion transition event.
+- [Fixed] Android crash with EventBus `Subscriber already registered error`.
+- [Fixed] iOS `Crash: [TSHttpService postBatch:error:] + 6335064 (TSHttpService.m:253)`
+
 ## [3.2.0] - 2019-08-17
 - [Added] iOS 13 support.
 - [Fixed] Android Geofence `DWELL` transition (`notifyOnDwell: true`) not firing.
