@@ -44,19 +44,28 @@ The **[Android plugin](http://www.transistorsoft.com/shop/products/cordova-backg
 
 :warning: After installing the plugin, you must [Configure the Plugin](#large_blue_diamond-configuring-the-plugin) for both [iOS](#ios) &amp; [Android](#android).
 
-#### From npm
+- #### From npm
 
 ```bash
 $ cordova plugin add cordova-background-geolocation-lt
 ```
 
-#### Ionic
+- #### Ionic
 
 ```bash
 $ ionic cordova plugin add cordova-background-geolocation-lt
 ```
 
-#### Phonegap Build
+- #### Capacitor
+
+```bash
+npm install cordova-background-geolocation-lt
+npx cap sync
+```
+:information_source: See [Capacitor Setup](./help/INSTALL_CAPACITOR.md)
+
+
+- #### Phonegap Build
 
 ```xml
   <plugin name="cordova-background-geolocation-lt" source="npm">

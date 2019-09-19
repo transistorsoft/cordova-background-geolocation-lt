@@ -1,14 +1,66 @@
-repositories{
-  jcenter()
-  // Google dependencies are now hosted at Maven
-  maven {
-    url 'https://maven.google.com'
+def TAG = "[cordova-background-geolocation] "
+
+def userDir = System.getProperty("user.dir")
+def libDir = "${projectDir}/libs"
+
+File capacitorConfig = new File("${userDir}/../capacitor.config.json")
+
+if (capacitorConfig.exists()) {
+  def pluginName = ""
+  def CORDOVA_BACKGROUND_GEOLOCATION_LT = "cordova-background-geolocation-lt"
+  def CORDOVA_BACKGROUND_GEOLOCATION    = "cordova-background-geolocation"
+
+  // Capacitor app
+  libDir = "${userDir}/../node_modules"
+
+  File folder = new File("${libDir}/${CORDOVA_BACKGROUND_GEOLOCATION}")
+
+  if (folder.exists() && folder.isDirectory()) {
+    pluginName = CORDOVA_BACKGROUND_GEOLOCATION
+  } else {
+    folder = new File("${libDir}/${CORDOVA_BACKGROUND_GEOLOCATION_LT}")
+    if (folder.exists() && folder.isDirectory()) {
+      pluginName = CORDOVA_BACKGROUND_GEOLOCATION_LT
+    } else {
+      println("$TAG Gradle error: Failed to locate plugin directory")
+    }
   }
-  maven {
-    url '../app/libs'
+  libDir = "${libDir}/${pluginName}/src/android/libs"
+  println("${TAG} Capacitor detected")
+}
+
+println("${TAG} libDir: ${libDir}")
+
+dependencies {
+  // Load tslocationmanager.aar
+  implementation fileTree(include: ['*.aar'], dir: "${libDir}/tslocationmanager")
+}
+
+/**
+* Background Geolocation's aar includes about 1.5M of mp3 sound-files for its debugging sound FX.
+* This method strips those mp3s out in RELEASE builds.
+*/
+ext.postBuildExtras = {
+  android {
+    purgeBackgroundGeolocationDebugResources(applicationVariants)
   }
 }
 
-dependencies {
-  implementation(group: 'com.transistorsoft', name:'tslocationmanager', version: '+')
+def purgeBackgroundGeolocationDebugResources(applicationVariants) {
+    if ((ext.has("removeBackgroundGeolocationDebugSoundsInRelease")) && (ext.removeBackgroundGeolocationDebugSoundsInRelease == false)) return
+
+    applicationVariants.all { variant ->
+        // Only Gradle v3.3.0 has this method.  Bail out for older versions of Cordova.
+        if (!variant.hasProperty('mergeResourcesProvider')) return
+
+        if (variant.buildType.name == "release") {
+            println("[cordova-background-geolocation] Purging debug resources in release build")
+            variant.mergeResourcesProvider.configure {
+                doLast {
+                    delete(fileTree(dir: outputDir, includes: ["raw_tslocationmanager*"]))
+                }
+            }
+        }
+    }
 }
+
