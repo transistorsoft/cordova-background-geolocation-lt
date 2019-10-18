@@ -517,6 +517,37 @@ module.exports = {
             exec(success, failure, MODULE_NAME, 'getGeofences', []);
         });
     },
+
+    /**
+    * Fetch a list of all monitored geofences
+    */
+    getGeofence: function(identifier) {
+        return new Promise(function(resolve, reject) {
+            if ((typeof(identifier) !== 'string') || (identifier.length == 0)) {
+                reject("Invalid identifer: " + identifier);
+                return;
+            }
+            var success = function(rs) { resolve(rs) }
+            var failure = function(error) { reject(error) }
+            exec(success, failure, MODULE_NAME, 'getGeofence', [identifier]);
+        });
+    },
+
+    /**
+    * Fetch a list of all monitored geofences
+    */
+    geofenceExists: function(identifier) {
+        return new Promise(function(resolve, reject) {
+            if ((typeof(identifier) !== 'string') || (identifier.length == 0)) {
+                reject(false);
+                return;
+            }
+            var success = function(rs) { resolve(rs) }
+            var failure = function(error) { reject(false) }
+            exec(success, failure, MODULE_NAME, 'geofenceExists', [identifier]);
+        });
+    },
+
     /**
     * Fetch the current position
     */

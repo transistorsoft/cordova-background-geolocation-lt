@@ -356,6 +356,20 @@ module.exports = {
             API.getGeofences().then(success).catch(failure);
         }
     },
+    getGeofence: function(identifier, success, failure) {
+        if (arguments.length == 1) {
+            return API.getGeofence(identifier);
+        } else {
+            API.getGeofence(identifier).then(success).catch(failure);
+        }
+    },
+    geofenceExists: function(identifier, callback) {
+        if (arguments.length == 1) {
+            return API.geofenceExists(identifier);
+        } else {
+            API.geofenceExists(identifier).then(callback).catch(callback);
+        }
+    },
     getCurrentPosition: function(options, success, failure) {
         if (typeof (options) === 'function') {
             throw "#getCurrentPosition requires options {} as first argument";

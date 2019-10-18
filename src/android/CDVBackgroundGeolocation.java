@@ -236,6 +236,12 @@ public class CDVBackgroundGeolocation extends CordovaPlugin {
         } else if (BackgroundGeolocation.ACTION_GET_GEOFENCES.equalsIgnoreCase(action)) {
             result = true;
             getGeofences(callbackContext);
+        } else if (BackgroundGeolocation.ACTION_GET_GEOFENCE.equalsIgnoreCase(action)) {
+            result = true;
+            getGeofence(data.getString(0), callbackContext);
+        } else if (BackgroundGeolocation.ACTION_GEOFENCE_EXISTS.equalsIgnoreCase(action)) {
+            result = true;
+            geofenceExists(data.getString(0), callbackContext);
         } else if (ACTION_PLAY_SOUND.equalsIgnoreCase(action)) {
             result = true;
             getAdapter().startTone(data.getString(0));
@@ -551,9 +557,7 @@ public class CDVBackgroundGeolocation extends CordovaPlugin {
                 @Override public void onSuccess() { callbackContext.success(); }
                 @Override public void onFailure(String error) { callbackContext.error(error); }
             });
-        } catch(JSONException e) {
-            callbackContext.error(e.getMessage());
-        } catch (TSGeofence.Exception e) {
+        } catch(JSONException | TSGeofence.Exception e) {
             callbackContext.error(e.getMessage());
         }
     }
@@ -563,10 +567,7 @@ public class CDVBackgroundGeolocation extends CordovaPlugin {
         for (int i = 0; i < data.length(); i++) {
             try {
                 geofences.add(buildGeofence(data.getJSONObject(i)));
-            } catch (JSONException e) {
-                callbackContext.error(e.getMessage());
-                return;
-            } catch (TSGeofence.Exception e) {
+            } catch (JSONException | TSGeofence.Exception e) {
                 callbackContext.error(e.getMessage());
                 return;
             }
@@ -609,6 +610,26 @@ public class CDVBackgroundGeolocation extends CordovaPlugin {
             }
         });
     }
+
+    private void getGeofence(String identifier, final CallbackContext callbackContext) {
+        getAdapter().getGeofence(identifier, new TSGetGeofenceCallback() {
+            @Override public void onSuccess(TSGeofence geofence) {
+                callbackContext.success(geofence.toJson());
+            }
+            @Override public void onFailure(String error) {
+                callbackContext.error(error);
+            }
+        });
+    }
+
+    private void geofenceExists(String identifier, final CallbackContext callbackContext) {
+        getAdapter().geofenceExists(identifier, new TSGeofenceExistsCallback() {
+            @Override public void onResult(boolean exists) {
+                callbackContext.sendPluginResult(new PluginResult(PluginResult.Status.OK, exists));
+            }
+        });
+    }
+
     private void getOdometer(CallbackContext callbackContext) {
         PluginResult result = new PluginResult(PluginResult.Status.OK, getAdapter().getOdometer());
         callbackContext.sendPluginResult(result);
@@ -1061,7 +1082,7 @@ public class CDVBackgroundGeolocation extends CordovaPlugin {
     public void onStop() {
         Context context = cordova.getActivity().getApplicationContext();
         TSConfig config = TSConfig.getInstance(context);
-        if (config.getEnabled() && config.getEnableHeadless() && !config.getStopOnTerminate()) {
+        if (config.getEnabled()) {
             TSScheduleManager.getInstance(context).oneShot(TerminateEvent.ACTION, 10000);
         }
     }

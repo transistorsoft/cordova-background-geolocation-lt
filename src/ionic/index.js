@@ -341,6 +341,14 @@ var BackgroundGeolocation = /** @class */ (function () {
         var bgGeo = plugin();
         return bgGeo.getGeofences.apply(bgGeo, arguments);
     };
+    BackgroundGeolocation.getGeofence = function () {
+        var bgGeo = plugin();
+        return bgGeo.getGeofence.apply(bgGeo, arguments);
+    };
+    BackgroundGeolocation.geofenceExists = function () {
+        var bgGeo = plugin();
+        return bgGeo.geofenceExists.apply(bgGeo, arguments);
+    };
     BackgroundGeolocation.getCurrentPosition = function () {
         var bgGeo = plugin();
         return bgGeo.getCurrentPosition.apply(bgGeo, arguments);

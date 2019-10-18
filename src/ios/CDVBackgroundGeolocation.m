@@ -568,6 +568,33 @@
     }];
 }
 
+- (void) getGeofence:(CDVInvokedUrlCommand*)command
+{
+    NSString *identifier = [command.arguments objectAtIndex:0];
+    __typeof(self.commandDelegate) __weak commandDelegate = self.commandDelegate;
+    TSLocationManager *bgGeo = [TSLocationManager sharedInstance];
+    [bgGeo getGeofence:identifier success:^(TSGeofence *geofence) {
+        CDVPluginResult *result = [CDVPluginResult
+                                   resultWithStatus:CDVCommandStatus_OK
+                                   messageAsDictionary:[geofence toDictionary]];
+        [commandDelegate sendPluginResult:result callbackId:command.callbackId];
+    } failure:^(NSString *error) {
+        CDVPluginResult *result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:error];
+        [commandDelegate sendPluginResult:result callbackId:command.callbackId];
+    }];
+}
+
+- (void) geofenceExists:(CDVInvokedUrlCommand*)command
+{
+    NSString *identifier = [command.arguments objectAtIndex:0];
+    __typeof(self.commandDelegate) __weak commandDelegate = self.commandDelegate;
+    TSLocationManager *bgGeo = [TSLocationManager sharedInstance];
+    [bgGeo geofenceExists:identifier callback:^(BOOL exists) {
+        CDVPluginResult *result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsBool:exists];
+        [commandDelegate sendPluginResult:result callbackId:command.callbackId];
+    }];
+}
+
 - (void) getCurrentPosition:(CDVInvokedUrlCommand*)command
 {
     NSDictionary *options  = [command.arguments objectAtIndex:0];

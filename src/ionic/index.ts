@@ -223,6 +223,14 @@ export default class BackgroundGeolocation {
     let bgGeo = plugin();
     return bgGeo.getGeofences.apply(bgGeo, arguments);
   }
+  static getGeofence() {
+    let bgGeo = plugin();
+    return bgGeo.getGeofence.apply(bgGeo, arguments);
+  }
+  static geofenceExists() {
+    let bgGeo = plugin();
+    return bgGeo.geofenceExists.apply(bgGeo, arguments);
+  }
   static getCurrentPosition() {
     let bgGeo = plugin();
     return bgGeo.getCurrentPosition.apply(bgGeo, arguments);
