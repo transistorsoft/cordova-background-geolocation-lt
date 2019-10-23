@@ -9,6 +9,7 @@
 
 var API = require('./API');
 var DeviceSettings = require('./DeviceSettings');
+var Logger = require('./Logger');
 
 var emptyFn = function() {};
 
@@ -55,6 +56,8 @@ module.exports = {
     PERSIST_MODE_NONE: 0,
 
     deviceSettings: DeviceSettings,
+
+    logger: Logger,
 
     ready: function(defaultConfig, success, failure) {
         if (arguments.length <= 1) {
@@ -406,24 +409,27 @@ module.exports = {
         }
     },
     getLog: function(success, failure) {
+        console.warn('[⚠️  deprecated BackgroundGeolocation.getLog] Use BackgroundGeolocation.logger.getLog');
         if (!arguments.length) {
-            return API.getLog();
+            return Logger.getLog();
         } else {
-            API.getLog().then(success).catch(failure);
+            Logger.getLog().then(success).catch(failure);
         }
     },
     destroyLog: function(success, failure) {
+        console.warn('[⚠️  deprecated BackgroundGeolocation.destroyLog] Use BackgroundGeolocation.logger.destroyLog');
         if (!arguments.length) {
-            return API.destroyLog();
+            return Logger.destroyLog();
         } else {
-            API.destroyLog().then(success).catch(failure);
+            Logger.destroyLog().then(success).catch(failure);
         }
     },
     emailLog: function(email, success, failure) {
+        console.warn('[⚠️  deprecated BackgroundGeolocation.emailLog] Use BackgroundGeolocation.logger.emailLog');
         if (arguments.length == 1) {
-            return API.emailLog(email);
+            return Logger.emailLog(email);
         } else {
-            API.emailLog(email).then(success).catch(failure);
+            Logger.emailLog(email).then(success).catch(failure);
         }
     },
     isPowerSaveMode: function(success, failure) {
@@ -447,35 +453,6 @@ module.exports = {
     */
     playSound: function(soundId) {
         return API.playSound(soundId);
-    },
-    logger: {
-        error: function(msg) {
-            return API.log('error', msg);
-        },
-        warn: function(msg) {
-            return API.log('warn', msg);
-        },
-        debug: function(msg) {
-            return API.log('debug', msg);
-        },
-        info: function(msg) {
-            return API.log('info', msg);
-        },
-        notice: function(msg) {
-            return API.log('notice', msg);
-        },
-        header: function(msg) {
-            return API.log('header', msg);
-        },
-        on: function(msg) {
-            return API.log('on', msg);
-        },
-        off: function(msg) {
-            return API.log('off', msg);
-        },
-        ok: function(msg) {
-            return API.log('ok', msg);
-        }
     },
     /**
     * Returns a #params object suitable for recognition by tracker.transistorsoft.com

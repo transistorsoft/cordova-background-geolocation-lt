@@ -776,9 +776,12 @@
 
 -(void) getLog:(CDVInvokedUrlCommand*)command
 {
+    NSDictionary *params = [command.arguments objectAtIndex:0];
+    LogQuery *query = [[LogQuery alloc] initWithDictionary:params];
+
     __typeof(self.commandDelegate) __weak commandDelegate = self.commandDelegate;
     TSLocationManager *bgGeo = [TSLocationManager sharedInstance];
-    [bgGeo getLog:^(NSString* log){
+    [bgGeo getLog:query success:^(NSString* log){
         CDVPluginResult* result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:log];
         [commandDelegate sendPluginResult:result callbackId:command.callbackId];
     } failure:^(NSString* error) {
@@ -792,7 +795,7 @@
     __typeof(self.commandDelegate) __weak commandDelegate = self.commandDelegate;
     [self.commandDelegate runInBackground:^{
         TSLocationManager *bgGeo = [TSLocationManager sharedInstance];
-        CDVPluginResult *result = ([bgGeo destroyLog]) ? [CDVPluginResult resultWithStatus:CDVCommandStatus_OK] : [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR];
+        CDVPluginResult *result = ([bgGeo destroyLog]) ? [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsBool:YES] : [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:@"UNKNOWN_ERROR"];
         dispatch_sync(dispatch_get_main_queue(), ^{
             [commandDelegate sendPluginResult:result callbackId:command.callbackId];
         });
@@ -810,17 +813,37 @@
 -(void) emailLog:(CDVInvokedUrlCommand*)command
 {
     NSString *email = [command.arguments objectAtIndex:0];
-
+    NSDictionary *params = [command.arguments objectAtIndex:1];
+    LogQuery *query = [[LogQuery alloc] initWithDictionary:params];
     TSLocationManager *bgGeo = [TSLocationManager sharedInstance];
     __typeof(self.commandDelegate) __weak commandDelegate = self.commandDelegate;
-    [bgGeo emailLog:email success:^{
-        CDVPluginResult* result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK];
+    [bgGeo emailLog:email query:query success:^{
+        CDVPluginResult* result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsBool:YES];
         [commandDelegate sendPluginResult:result callbackId: command.callbackId];
     } failure:^(NSString* error) {
         CDVPluginResult* result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:error];
         [commandDelegate sendPluginResult:result callbackId:command.callbackId];
     }];
 }
+
+-(void) uploadLog:(CDVInvokedUrlCommand*)command
+{
+    NSString *url = [command.arguments objectAtIndex:0];
+    NSDictionary *params = [command.arguments objectAtIndex:1];
+
+    LogQuery *query = [[LogQuery alloc] initWithDictionary:params];
+
+    TSLocationManager *bgGeo = [TSLocationManager sharedInstance];
+    __typeof(self.commandDelegate) __weak commandDelegate = self.commandDelegate;
+    [bgGeo uploadLog:url query:query success:^{
+        CDVPluginResult* result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsInt:YES];
+        [commandDelegate sendPluginResult:result callbackId: command.callbackId];
+    } failure:^(NSString* error) {
+        CDVPluginResult* result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:error];
+        [commandDelegate sendPluginResult:result callbackId:command.callbackId];
+    }];
+}
+
 
 - (void) log:(CDVInvokedUrlCommand*)command
 {
