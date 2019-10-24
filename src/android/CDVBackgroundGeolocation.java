@@ -4,6 +4,7 @@ import com.transistorsoft.locationmanager.adapter.BackgroundGeolocation;
 import com.transistorsoft.locationmanager.adapter.TSConfig;
 import com.transistorsoft.locationmanager.adapter.callback.*;
 import com.transistorsoft.locationmanager.data.LocationModel;
+import com.transistorsoft.locationmanager.data.SQLQuery;
 import com.transistorsoft.locationmanager.device.DeviceSettingsRequest;
 import com.transistorsoft.locationmanager.event.ActivityChangeEvent;
 import com.transistorsoft.locationmanager.event.ConnectivityChangeEvent;
@@ -279,10 +280,13 @@ public class CDVBackgroundGeolocation extends CordovaPlugin {
             addScheduleListener(callbackContext);
         } else if (ACTION_GET_LOG.equalsIgnoreCase(action)) {
             result = true;
-            getLog(callbackContext);
+            getLog(data.getJSONObject(0), callbackContext);
         } else if (ACTION_EMAIL_LOG.equalsIgnoreCase(action)) {
             result = true;
-            emailLog(data.getString(0), callbackContext);
+            emailLog(data.getString(0), data.getJSONObject(1), callbackContext);
+        } else if (TSLog.ACTION_UPLOAD_LOG.equalsIgnoreCase(action)) {
+            result = true;
+            uploadLog(data.getString(0), data.getJSONObject(1), callbackContext);
         } else if (BackgroundGeolocation.ACTION_INSERT_LOCATION.equalsIgnoreCase(action)) {
             result = true;
             insertLocation(data.getJSONObject(0), callbackContext);
@@ -931,8 +935,8 @@ public class CDVBackgroundGeolocation extends CordovaPlugin {
         });
     }
 
-    private void getLog(final CallbackContext callbackContext) {
-        getAdapter().getLog(new TSGetLogCallback() {
+    private void getLog(JSONObject params, final CallbackContext callbackContext) throws JSONException {
+        TSLog.getLog(parseSQLQuery(params), new TSGetLogCallback() {
             @Override public void onSuccess(String log) {
                 callbackContext.success(log);
             }
@@ -943,9 +947,9 @@ public class CDVBackgroundGeolocation extends CordovaPlugin {
     }
 
     private void destroyLog(final CallbackContext callbackContext) {
-        getAdapter().destroyLog(new TSCallback() {
+        TSLog.destroyLog(new TSCallback() {
             @Override public void onSuccess() {
-                callbackContext.success();
+                callbackContext.sendPluginResult(new PluginResult(PluginResult.Status.OK, true));
             }
             @Override public void onFailure(String error) {
                 callbackContext.error(error);
@@ -953,15 +957,43 @@ public class CDVBackgroundGeolocation extends CordovaPlugin {
         });
     }
 
-    private void emailLog(String email, final CallbackContext callbackContext) {
-        getAdapter().emailLog(email, cordova.getActivity(), new TSEmailLogCallback() {
+    private void emailLog(String email, JSONObject params, final CallbackContext callbackContext) throws JSONException {
+        TSLog.emailLog(cordova.getActivity(), email, parseSQLQuery(params), new TSEmailLogCallback() {
             @Override public void onSuccess() {
-                callbackContext.success();
+                callbackContext.sendPluginResult(new PluginResult(PluginResult.Status.OK, true));
             }
             @Override public void onFailure(String error) {
                 callbackContext.error(error);
             }
         });
+    }
+
+    private void uploadLog(String url, JSONObject params, final CallbackContext callbackContext) throws JSONException {
+        TSLog.uploadLog(cordova.getActivity().getApplicationContext(), url, parseSQLQuery(params), new TSCallback() {
+            @Override public void onSuccess() {
+                callbackContext.sendPluginResult(new PluginResult(PluginResult.Status.OK, true));
+            }
+            @Override public void onFailure(String error) {
+                callbackContext.error(error);
+            }
+        });
+    }
+
+    private SQLQuery parseSQLQuery(JSONObject params) throws JSONException {
+        SQLQuery query = SQLQuery.create();
+        if (params.has(SQLQuery.FIELD_START)) {
+            query.setStart(params.getLong(SQLQuery.FIELD_START));
+        }
+        if (params.has(SQLQuery.FIELD_END)) {
+            query.setEnd(params.getLong(SQLQuery.FIELD_END));
+        }
+        if (params.has(SQLQuery.FIELD_ORDER)) {
+            query.setOrder(params.getInt(SQLQuery.FIELD_ORDER));
+        }
+        if (params.has(SQLQuery.FIELD_LIMIT )) {
+            query.setLimit(params.getInt(SQLQuery.FIELD_LIMIT));
+        }
+        return query;
     }
 
     private void log(JSONArray arguments, CallbackContext callbackContext) throws JSONException {

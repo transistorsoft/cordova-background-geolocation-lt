@@ -61,6 +61,7 @@
 - (void) getSensors:(CDVInvokedUrlCommand*)command;
 - (void) isPowerSaveMode:(CDVInvokedUrlCommand *) command;
 - (void) emailLog:(CDVInvokedUrlCommand*) command;
+- (void) uploadLog:(CDVInvokedUrlCommand*) command;
 - (void) playSound:(CDVInvokedUrlCommand *)command;
 - (void) log:(CDVInvokedUrlCommand*)command;
 - (void) isIgnoringBatteryOptimizations:(CDVInvokedUrlCommand*)command;

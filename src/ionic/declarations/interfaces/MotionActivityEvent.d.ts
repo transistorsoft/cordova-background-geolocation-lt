@@ -15,11 +15,12 @@ declare module "cordova-background-geolocation-lt" {
     *
     * | Activity Name  |
     * |----------------|
-    * | `in_vehicle`   |
-    * | `on_bicycle`   |
+    * | `still`        |
+    * | `walking`      |
     * | `on_foot`      |
     * | `running`      |
-    * | `walking`      |
+    * | `on_bicycle`   |
+    * | `in_vehicle`   |
     */
     activity: string;
     /**
