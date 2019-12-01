@@ -5,7 +5,7 @@ declare module "cordova-background-geolocation-lt" {
   * @example
   * ```typescript
   * BackgroundGeolocation.onProviderChange(providerChangeEvent => {
-  *   console.log('[providerchange] ', provider.enabled, provider.status, provider.network, provider.gps);
+  *   console.log("[providerchange] ", provider.enabled, provider.status, provider.network, provider.gps);
   * });
   * ```
   */

@@ -5,7 +5,7 @@ declare module "cordova-background-geolocation-lt" {
   * @example
   * ```typescript
   * BackgroundGeolocation.onGeofence(geofenceEvent => {
-  *   console.log('[geofence] ', geofenceEvent.identifier, geofence.action, geofenceEvent.location);
+  *   console.log("[geofence] ", geofenceEvent.identifier, geofence.action, geofenceEvent.location);
   * });
   * ```
   */

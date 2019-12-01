@@ -5,7 +5,7 @@ declare module "cordova-background-geolocation-lt" {
   * @example
   * ```typescript
   * BackgroundGeolocation.onActivityChange(activityChangeEvent => {
-  *   console.log('[activitychange] ', activityChangeEvent.activity, activityChangeEvent.confidence);
+  *   console.log("[activitychange] ", activityChangeEvent.activity, activityChangeEvent.confidence);
   * });
   * ```
   */

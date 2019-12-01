@@ -58,6 +58,10 @@
         if (reset) {
             [config reset];
             [config updateWithDictionary:params];
+        } else if ([params objectForKey:@"authorization"]) {
+            [config updateWithBlock:^(TSConfigBuilder *builder) {
+                builder.authorization = [TSAuthorization createWithDictionary:[params objectForKey:@"authorization"]];
+            }];
         }
     }
     TSLocationManager *bgGeo = [TSLocationManager sharedInstance];
@@ -451,6 +455,18 @@
     [bgGeo onEnabledChange:callback];
 }
 
+- (void) addAuthorizationListener:(CDVInvokedUrlCommand*)command
+{
+    __typeof(self.commandDelegate) __weak commandDelegate = self.commandDelegate;
+    void(^callback)(TSAuthorizationEvent*) = ^void(TSAuthorizationEvent* event) {
+        CDVPluginResult *result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:[event toDictionary]];
+        [result setKeepCallbackAsBool:YES];
+        [commandDelegate sendPluginResult:result callbackId:command.callbackId];
+    };
+    [self registerCallback:command.callbackId callback:callback];
+    [[TSHttpService sharedInstance] onAuthorization:callback];
+}
+
 - (void) addNotificationActionListener:(CDVInvokedUrlCommand*)command
 {
     // No iOS implementation
@@ -684,6 +700,32 @@
     [watchPositionCallbacks removeAllObjects];
 }
 
+- (void) getTransistorToken:(CDVInvokedUrlCommand *)command {
+    NSString *orgname = [command.arguments objectAtIndex:0];
+    NSString *username = [command.arguments objectAtIndex:1];
+    NSString *url = [command.arguments objectAtIndex:2];
+
+    [TransistorAuthorizationToken findOrCreateWithOrg:orgname
+                                             username:username
+                                                 url:url
+                                            framework:@"cordova"
+                                              success:^(TransistorAuthorizationToken *token) {
+        CDVPluginResult *result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:[token toDictionary]];
+        [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
+    } failure:^(NSError *error) {
+        NSDictionary *response = @{@"status": @(error.code), @"message":error.localizedDescription};
+        CDVPluginResult *result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsDictionary:response];
+        [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
+    }];
+}
+
+- (void) destroyTransistorToken:(CDVInvokedUrlCommand *)command {
+    NSString *url = [command.arguments objectAtIndex:0];
+    [TransistorAuthorizationToken destroyWithUrl:url];
+    CDVPluginResult* result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsBool:YES];
+    [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
+}
+
 - (void) playSound:(CDVInvokedUrlCommand*)command
 {
     SystemSoundID soundId = [[command.arguments objectAtIndex:0] intValue];
@@ -867,6 +909,12 @@
                               @"motion_hardware": @([bgGeo isMotionHardwareAvailable])
                               };
     CDVPluginResult *result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:sensors];
+    [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
+}
+
+- (void) getDeviceInfo:(CDVInvokedUrlCommand*)command {
+    NSDictionary *deviceInfo = [[TSDeviceInfo sharedInstance] toDictionary:@"cordova"];
+    CDVPluginResult *result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:deviceInfo];
     [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
 }
 

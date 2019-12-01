@@ -25,10 +25,12 @@
 - (void) error:(CDVInvokedUrlCommand*)command;
 - (void) changePace:(CDVInvokedUrlCommand*)command;
 - (void) setConfig:(CDVInvokedUrlCommand*)command;
+
 - (void) addLocationListener:(CDVInvokedUrlCommand *)command;
 - (void) addHttpListener:(CDVInvokedUrlCommand *)command;
 - (void) addMotionChangeListener:(CDVInvokedUrlCommand*)command;
 - (void) addActivityChangeListener:(CDVInvokedUrlCommand*)command;
+- (void) addScheduleListener:(CDVInvokedUrlCommand *)command;
 - (void) addProviderChangeListener:(CDVInvokedUrlCommand*)command;
 - (void) addGeofencesChangeListener:(CDVInvokedUrlCommand*)command;
 - (void) addGeofenceListener:(CDVInvokedUrlCommand *)command;
@@ -37,6 +39,8 @@
 - (void) addConnectivityChangeListener:(CDVInvokedUrlCommand*)command;
 - (void) addEnabledChangeListener:(CDVInvokedUrlCommand*)command;
 - (void) addNotificationActionListener:(CDVInvokedUrlCommand*)command;
+- (void) addAuthorizationListener:(CDVInvokedUrlCommand*)command;
+
 - (void) getStationaryLocation:(CDVInvokedUrlCommand *)command;
 - (void) getLocations:(CDVInvokedUrlCommand *)command;
 - (void) sync:(CDVInvokedUrlCommand *)command;
@@ -44,7 +48,7 @@
 - (void) addGeofence:(CDVInvokedUrlCommand *)command;
 - (void) addGeofences:(CDVInvokedUrlCommand *)command;
 - (void) removeGeofence:(CDVInvokedUrlCommand *)command;
-- (void) addScheduleListener:(CDVInvokedUrlCommand *)command;
+
 - (void) getGeofences:(CDVInvokedUrlCommand *)command;
 - (void) getGeofence:(CDVInvokedUrlCommand *)command;
 - (void) geofenceExists:(CDVInvokedUrlCommand *)command;
@@ -59,10 +63,13 @@
 - (void) destroyLog:(CDVInvokedUrlCommand *) command;
 - (void) setLogLevel:(CDVInvokedUrlCommand *) command;
 - (void) getSensors:(CDVInvokedUrlCommand*)command;
+- (void) getDeviceInfo:(CDVInvokedUrlCommand*)command;
 - (void) isPowerSaveMode:(CDVInvokedUrlCommand *) command;
 - (void) emailLog:(CDVInvokedUrlCommand*) command;
 - (void) uploadLog:(CDVInvokedUrlCommand*) command;
 - (void) playSound:(CDVInvokedUrlCommand *)command;
+- (void) getTransistorToken:(CDVInvokedUrlCommand *)command;
+- (void) destroyTransistorToken:(CDVInvokedUrlCommand *)command;
 - (void) log:(CDVInvokedUrlCommand*)command;
 - (void) isIgnoringBatteryOptimizations:(CDVInvokedUrlCommand*)command;
 - (void) requestSettings:(CDVInvokedUrlCommand*)command;
