@@ -10,6 +10,7 @@
 var API = require('./API');
 var DeviceSettings = require('./DeviceSettings');
 var Logger = require('./Logger');
+var TransistorAuthorizationToken = require('./TransistorAuthorizationToken');
 
 var emptyFn = function() {};
 
@@ -149,6 +150,10 @@ module.exports = {
 
     onNotificationAction: function(callback) {
         this.on('notificationaction', callback);
+    },
+
+    onAuthorization: function(callback) {
+        this.on('authorization', callback);
     },
 
     on: function(event, success, failure) {
@@ -446,6 +451,10 @@ module.exports = {
             API.getSensors().then(success).catch(failure);
         }
     },
+    getDeviceInfo: function() {
+        return API.getDeviceInfo();
+    },
+
     /**
     * Play a system sound.  This is totally experimental.
     * iOS http://iphonedevwiki.net/index.php/AudioServices
@@ -473,6 +482,18 @@ module.exports = {
             }
         };
     },
+    /**
+    * Register a device with tracker.transistorsoft.com.  The server returns an authorization token (JWT)
+    * This behaviour is specific to the Demo app.
+    */
+    findOrCreateTransistorAuthorizationToken(orgname, username, url) {
+        return TransistorAuthorizationToken.findOrCreate(orgname, username, url);
+    },
+
+    destroyTransistorAuthorizationToken(url) {
+        return TransistorAuthorizationToken.destroy(url);
+    },
+
     test: function(delay) {
         test(this, delay);
     }

@@ -5,7 +5,7 @@ declare module "cordova-background-geolocation-lt" {
 	* @example
 	* ```typescript
 	* BackgroundGeolocation.onConnectivityChange(connectivityChangeEvent => {
-	*   console.log('[connectivitychange] ', connectivityChangeEvent.connected);
+	*   console.log("[connectivitychange] ", connectivityChangeEvent.connected);
 	* });
 	* ```
 	*/

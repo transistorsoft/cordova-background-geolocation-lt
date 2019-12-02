@@ -3,7 +3,7 @@
 <plugin xmlns="http://www.phonegap.com/ns/plugins/1.0"
     xmlns:android="http://schemas.android.com/apk/res/android"
     id="cordova-background-geolocation-lt"
-    version="3.3.1">
+    version="3.4.0">
 
     <name>BackgroundGeolocation</name>
     <description>The most sophisticated, battery-efficient background-geolocation and geofencing plugin for Cordova</description>
@@ -24,11 +24,11 @@
     <js-module src="www/API.js" name="API"></js-module>
     <js-module src="www/DeviceSettings.js" name="DeviceSettings"></js-module>
     <js-module src="www/Logger.js" name="Logger"></js-module>
+    <js-module src="www/TransistorAuthorizationToken.js" name="TransistorAuthorizationToken"></js-module>
 
      <platform name="ios">
         <preference name="BACKGROUND_MODE_LOCATION" default="&lt;string&gt;location&lt;/string&gt;" />
 
-        <dependency id="cordova-plugin-cocoalumberjack" version="~0.0.4" />
         <!-- required background modes:  App registers for location updates -->
         <config-file target="*-Info.plist" parent="UIBackgroundModes">
             <array>
@@ -42,6 +42,7 @@
             </feature>
         </config-file>
 
+	<framework src="CocoaLumberjack" type="podspec" spec="~> 3.5.0" />
         <framework src="AudioToolbox.framework" weak="true" />
         <framework src="SystemConfiguration.framework" weak="true" />
         <framework src="AVFoundation.framework" weak="true" />

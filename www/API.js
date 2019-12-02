@@ -9,10 +9,15 @@
 var MODULE_NAME = "BackgroundGeolocation";
 var exec = require("cordova/exec");
 
+var TransistorAuthorizationToken = require('./TransistorAuthorizationToken');
+
 // Plugin callback registry.
 var CALLBACK_REGEXP = new RegExp("^" + MODULE_NAME + ".*");
 
 var cordovaCallbacks = [];
+
+// Cached copy of DeviceInfo
+var deviceInfo = null;
 
 // Validate provided config for #ready, #setConfig
 var validateConfig = function(config) {
@@ -38,6 +43,7 @@ var validateConfig = function(config) {
       priority: config.notificationPriority
     };
   }
+  config = TransistorAuthorizationToken.applyIf(config);
   return config;
 };
 
@@ -75,8 +81,6 @@ function removeCordovaCallback(callback) {
                 cordovaCallbacks.splice(n, 1);
                 return callbackId;
             } else {
-                var error = '#un ' + event + ' failed to locate cordova callback';
-                console.warn(error);
                 return null;
             }
             break;
@@ -89,11 +93,26 @@ function removeCordovaCallback(callback) {
 */
 function removeCordovaCallbacks() {
     var callbacks = window.cordova.callbacks;
-    for (var callbackId in callbacks) {
-        if (callbacks.hasOwnProperty(callbackId) && CALLBACK_REGEXP.test(callbackId)) {
+
+    for (var n=0,len=cordovaCallbacks.length;n<len;n++) {
+        var cordovaCallback = cordovaCallbacks[n];
+        var callbackId = cordovaCallback.callbackId;
+        if (typeof(callbacks[callbackId]) === 'object') {
+            // Destroy Cordova callback.
             delete callbacks[callbackId];
         }
     }
+    /*
+    for (var callbackId in callbacks) {
+        if (callbacks.hasOwnProperty(callbackId) && CALLBACK_REGEXP.test(callbackId)) {
+
+            var cb = callbacks[callbackId];
+            console.log('- removeCallback: ', cb);
+
+            delete callbacks[callbackId];
+        }
+    }
+    */
 }
 
 /**
@@ -208,6 +227,8 @@ module.exports = {
                 return this.onEnabledChange(success, fail);
             case 'notificationaction':
                 return this.onNotificationAction(success, fail);
+            case 'authorization':
+                return this.onAuthorization(success, fail);
         }
     },
 
@@ -223,9 +244,7 @@ module.exports = {
                 var failure = function(error)   { reject(error) }
                 exec(success, failure, MODULE_NAME, 'removeListener', [event, callbackId]);
             } else {
-                var error = MODULE_NAME + '#removeListener ' + event + ' failed to locate cordova callback';
-                console.warn(error);
-                reject(error);
+                resolve();
             }
         });
     },
@@ -309,6 +328,9 @@ module.exports = {
     },
     onNotificationAction: function(success, failure) {
         exec(success, failure, MODULE_NAME, 'addNotificationActionListener', []);
+    },
+    onAuthorization: function(success, failure) {
+        exec(success, failure, MODULE_NAME, 'addAuthorizationListener', []);
     },
     getState: function() {
         return new Promise(function(resolve, reject) {
@@ -654,6 +676,20 @@ module.exports = {
             var success = function(sensors) { resolve(sensors) };
             var failure = function(error) { reject(error) };
             exec(success, failure, MODULE_NAME, 'getSensors', []);
+        });
+    },
+    getDeviceInfo: function() {
+        return new Promise((resolve, reject) => {
+            if (deviceInfo != null) {
+                return resolve(deviceInfo);
+            }
+            var success = (result) => {
+                // Cache DeviceInfo
+                deviceInfo = result;
+                resolve(result);
+            }
+            var failure = (error)  => { reject(error) }
+            exec(success, failure, MODULE_NAME, 'getDeviceInfo', []);
         });
     }
 };

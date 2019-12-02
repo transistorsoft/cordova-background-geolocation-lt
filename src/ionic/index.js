@@ -228,6 +228,10 @@ var BackgroundGeolocation = /** @class */ (function () {
         var bgGeo = plugin();
         bgGeo.onNotificationAction.apply(bgGeo, arguments);
     };
+    BackgroundGeolocation.onAuthorization = function (callback) {
+        var bgGeo = plugin();
+        bgGeo.onAuthorization.apply(bgGeo, arguments);
+    };
     BackgroundGeolocation.on = function () {
         var bgGeo = plugin();
         return bgGeo.on.apply(bgGeo, arguments);
@@ -389,6 +393,10 @@ var BackgroundGeolocation = /** @class */ (function () {
         var bgGeo = plugin();
         return bgGeo.getSensors.apply(bgGeo, arguments);
     };
+    BackgroundGeolocation.getDeviceInfo = function () {
+        var bgGeo = plugin();
+        return bgGeo.getDeviceInfo.apply(bgGeo, arguments);
+    };
     BackgroundGeolocation.playSound = function () {
         var bgGeo = plugin();
         return bgGeo.playSound.apply(bgGeo, arguments);
@@ -396,6 +404,14 @@ var BackgroundGeolocation = /** @class */ (function () {
     BackgroundGeolocation.transistorTrackerParams = function () {
         var bgGeo = plugin();
         return bgGeo.transistorTrackerParams.apply(bgGeo, arguments);
+    };
+    BackgroundGeolocation.findOrCreateTransistorAuthorizationToken = function (orgname, username, host) {
+        var bgGeo = plugin();
+        return bgGeo.findOrCreateTransistorAuthorizationToken.apply(bgGeo, arguments);
+    };
+    BackgroundGeolocation.destroyTransistorAuthorizationToken = function (host) {
+        var bgGeo = plugin();
+        return bgGeo.destroyTransistorAuthorizationToken.apply(bgGeo, arguments);
     };
     BackgroundGeolocation.getProviderState = function () {
         var bgGeo = plugin();

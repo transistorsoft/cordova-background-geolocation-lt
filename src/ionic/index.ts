@@ -109,7 +109,10 @@ export default class BackgroundGeolocation {
     let bgGeo = plugin();
     bgGeo.onNotificationAction.apply(bgGeo, arguments);
   }
-
+  static onAuthorization(callback:Function) {
+    let bgGeo = plugin();
+    bgGeo.onAuthorization.apply(bgGeo, arguments);
+  }
   static on() {
     let bgGeo = plugin();
     return bgGeo.on.apply(bgGeo, arguments);
@@ -271,6 +274,10 @@ export default class BackgroundGeolocation {
     let bgGeo = plugin();
     return bgGeo.getSensors.apply(bgGeo, arguments);
   }
+  static getDeviceInfo() {
+    let bgGeo = plugin();
+    return bgGeo.getDeviceInfo.apply(bgGeo, arguments);
+  }
   static playSound() {
     let bgGeo = plugin();
     return bgGeo.playSound.apply(bgGeo, arguments);
@@ -278,6 +285,14 @@ export default class BackgroundGeolocation {
   static transistorTrackerParams() {
     let bgGeo = plugin();
     return bgGeo.transistorTrackerParams.apply(bgGeo, arguments);
+  }
+  static findOrCreateTransistorAuthorizationToken(orgname:string, username:string, host?:string) {
+    let bgGeo = plugin();
+    return bgGeo.findOrCreateTransistorAuthorizationToken.apply(bgGeo, arguments);
+  }
+  static destroyTransistorAuthorizationToken(host:string) {
+    let bgGeo = plugin();
+    return bgGeo.destroyTransistorAuthorizationToken.apply(bgGeo, arguments);
   }
   static getProviderState() {
     let bgGeo = plugin();
