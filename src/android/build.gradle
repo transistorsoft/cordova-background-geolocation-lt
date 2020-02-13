@@ -40,11 +40,11 @@ dependencies {
 * Background Geolocation's aar includes about 1.5M of mp3 sound-files for its debugging sound FX.
 * This method strips those mp3s out in RELEASE builds.
 */
-ext.postBuildExtras = {
+cdvPluginPostBuildExtras.add({
   android {
     purgeBackgroundGeolocationDebugResources(applicationVariants)
   }
-}
+})
 
 def purgeBackgroundGeolocationDebugResources(applicationVariants) {
     if ((ext.has("removeBackgroundGeolocationDebugSoundsInRelease")) && (ext.removeBackgroundGeolocationDebugSoundsInRelease == false)) return
