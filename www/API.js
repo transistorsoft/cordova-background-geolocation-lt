@@ -679,16 +679,16 @@ module.exports = {
         });
     },
     getDeviceInfo: function() {
-        return new Promise((resolve, reject) => {
+        return new Promise(function(resolve, reject) {
             if (deviceInfo != null) {
                 return resolve(deviceInfo);
             }
-            var success = (result) => {
+            var success = function(result) {
                 // Cache DeviceInfo
                 deviceInfo = result;
                 resolve(result);
             }
-            var failure = (error)  => { reject(error) }
+            var failure = function(error) { reject(error) }
             exec(success, failure, MODULE_NAME, 'getDeviceInfo', []);
         });
     }
