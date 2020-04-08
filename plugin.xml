@@ -3,7 +3,7 @@
 <plugin xmlns="http://www.phonegap.com/ns/plugins/1.0"
     xmlns:android="http://schemas.android.com/apk/res/android"
     id="cordova-background-geolocation-lt"
-    version="3.4.2">
+    version="3.6.2">
 
     <name>BackgroundGeolocation</name>
     <description>The most sophisticated, battery-efficient background-geolocation and geofencing plugin for Cordova</description>
@@ -16,7 +16,7 @@
         <engine name="cordova-ios" version=">=4.5.0"/>
     </engines>
 
-    <dependency id="cordova-plugin-background-fetch" version="~5.6.0" />
+    <dependency id="cordova-plugin-background-fetch" version="~6.0.3" />
 
     <js-module src="www/BackgroundGeolocation.js" name="BackgroundGeolocation">
         <clobbers target="window.BackgroundGeolocation" />

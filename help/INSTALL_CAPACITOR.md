@@ -29,38 +29,10 @@ Edit **`Info.plist`**.  Add the following items (Set **Value** as desired):
 
 ![](https://dl.dropbox.com/s/9non3j83jj0rimu/ios-setup-plist-strings.png?dl=1)
 
-### `AppDelegate.swift`
+## [Configure `cordova-plugin-background-fetch`](https://github.com/transistorsoft/cordova-plugin-background-fetch/blob/master/docs/INSTALL_CAPACITOR.md#ios-setup)
 
-The Background Geolocation SDK is integrated with the [iOS Background Fetch API](https://developer.apple.com/documentation/uikit/core_app/managing_your_app_s_life_cycle/preparing_your_app_to_run_in_the_background/updating_your_app_with_background_app_refresh).
+The BackgroundGeolocation SDK makes use internally on __`cordova-plugin-background-fetch`__.  Regardless of whether you instend to implement the BackgroundFetch Javascript API in your app, you **must** perform the [Background Fetch iOS Setup](https://github.com/transistorsoft/cordova-plugin-background-fetch/blob/master/docs/INSTALL_CAPACITOR.md#ios-setup) at __`cordova-plugin-background-fetch`__.
 
-In Your **`AppDelegate.swift`**, add the following code (just the **`+green`** lines):
-
-```diff
-import UIKit
-import Capacitor
-+import TSBackgroundFetch
-
-@UIApplicationMain
-class AppDelegate: UIResponder, UIApplicationDelegate {
-
-  var window: UIWindow?
-
-  func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
-    // Override point for customization after application launch.
-    return true
-  }
-
-+ //Added for cordova-plugin-background-fetch
-+ func application(_ application: UIApplication, performFetchWithCompletionHandler completionHandler:@escaping (UIBackgroundFetchResult) -> Void) {
-+   NSLog("AppDelegate received fetch event");
-+   let fetchManager = TSBackgroundFetch.sharedInstance();
-+   fetchManager?.perform(completionHandler: completionHandler, applicationState: application.applicationState);
-+ }
-  .
-  .
-  .
-}
-```
 
 # Android
 
