@@ -4,6 +4,7 @@
 npm install cordova-background-geolocation-lt
 npx cap sync
 ```
+:information_source: Append optional `#version` tag (eg: `#3.6.3`) to url above (See [Releases](../../../releases))
 
 # iOS
 
@@ -36,13 +37,37 @@ The BackgroundGeolocation SDK makes use internally on __`cordova-plugin-backgrou
 
 # Android
 
+## `app/build.gradle`
+
+Add the following code to your `build.gradle (Module: app)`:
+
+```diff
+apply plugin: 'com.android.application'
+
++def background_geolocation = "../../node_modules/cordova-background-geolocation-lt/src/android"
++apply from: "$background_geolocation/app.gradle"
+
+android {
+    .
+    .
+    .
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
++           proguardFiles "$background_geolocation/proguard-rules.pro"
+        }
+    }
+}
+```
+
 ## AndroidManifest.xml (License Configuration)
 
-If you've **not** [purchased a license](https://www.transistorsoft.com/shop/products/react-native-background-geolocation#plans), **ignore this step** &mdash; the plugin is fully functional in *DEBUG* builds so you can try before you [buy](https://www.transistorsoft.com/shop/products/react-native-background-geolocation#plans).
+If you've **not** [purchased a license](https://www.transistorsoft.com/shop/products/cordova-background-geolocation#plans), **ignore this step** &mdash; the plugin is fully functional in *DEBUG* builds so you can try before you [buy](https://www.transistorsoft.com/shop/products/cordova-background-geolocation#plans).
 
 ```diff
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.transistorsoft.backgroundgeolocation.react">
+    package="com.your.app">
 
   <application
     android:name=".MainApplication"
@@ -59,40 +84,4 @@ If you've **not** [purchased a license](https://www.transistorsoft.com/shop/prod
   </application>
 </manifest>
 
-```
-
-
-## Proguard Config
-
-If you've enabled **`minifyEnabled = true`** in your `app/build.gradle`, be sure to add the following items to your `proguard-rules.pro`:
-
-### :open_file_folder: `proguard-rules.pro` (`android/app/proguard-rules.pro`)
-
-```proguard
--keepnames class com.transistorsoft.cordova.bggeo.CDVBackgroundGeolocation
-
-# BackgroundGeolocation lib tslocationmanager.aar is *already* proguarded
--keep class com.transistorsoft.** { *; }
--dontwarn com.transistorsoft.**
-
-# BackgroundGeolocation (EventBus)
--keepclassmembers class * extends de.greenrobot.event.util.ThrowableFailureEvent {
-    <init>(java.lang.Throwable);
-}
--keepattributes *Annotation*
--keepclassmembers class ** {
-    @org.greenrobot.eventbus.Subscribe <methods>;
-}
--keep enum org.greenrobot.eventbus.ThreadMode { *; }
--keepclassmembers class * extends org.greenrobot.eventbus.util.ThrowableFailureEvent {
-    <init>(java.lang.Throwable);
-}
-
-# logback
--keep class ch.qos.** { *; }
--keep class org.slf4j.** { *; }
--dontwarn ch.qos.logback.core.net.*
-
-# OkHttp3
--dontwarn okio.**
 ```

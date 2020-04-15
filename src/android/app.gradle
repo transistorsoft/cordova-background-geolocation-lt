@@ -1,0 +1,21 @@
+android {
+    purgeBackgroundGeolocationDebugResources(applicationVariants)
+}
+
+def purgeBackgroundGeolocationDebugResources(applicationVariants) {
+    if ((ext.has("removeBackgroundGeolocationDebugSoundsInRelease")) && (ext.removeBackgroundGeolocationDebugSoundsInRelease == false)) return
+
+    applicationVariants.all { variant ->
+        // Only Gradle v3.3.0 has this method.  Bail out for older versions of Cordova.
+        if (!variant.hasProperty('mergeResourcesProvider')) return
+
+        if (variant.buildType.name == "release") {
+            println("[cordova-background-geolocation] Purging debug resources in release build")
+            variant.mergeResourcesProvider.configure {
+                doLast {
+                    delete(fileTree(dir: outputDir, includes: ["raw_tslocationmanager*"]))
+                }
+            }
+        }
+    }
+}
