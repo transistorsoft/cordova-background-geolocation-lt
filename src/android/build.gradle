@@ -27,6 +27,14 @@ if (capacitorConfig.exists()) {
   }
   libDir = "${libDir}/${pluginName}/src/android/libs"
   println("${TAG} Capacitor detected")
+} else {
+  // Capacitor does not have the scope here to use android.applicationVariants.
+  // Capacitor users must manually include app.gradle in their app's gradle file.
+  cdvPluginPostBuildExtras.add({
+    android {
+      purgeBackgroundGeolocationDebugResources(applicationVariants)
+    }
+  })
 }
 
 println("${TAG} libDir: ${libDir}")
@@ -40,11 +48,6 @@ dependencies {
 * Background Geolocation's aar includes about 1.5M of mp3 sound-files for its debugging sound FX.
 * This method strips those mp3s out in RELEASE builds.
 */
-cdvPluginPostBuildExtras.add({
-  android {
-    purgeBackgroundGeolocationDebugResources(applicationVariants)
-  }
-})
 
 def purgeBackgroundGeolocationDebugResources(applicationVariants) {
     if ((ext.has("removeBackgroundGeolocationDebugSoundsInRelease")) && (ext.removeBackgroundGeolocationDebugSoundsInRelease == false)) return

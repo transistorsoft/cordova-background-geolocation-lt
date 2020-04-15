@@ -1,5 +1,8 @@
 # Change Log
 
+## 3.6.3 - 2020-04-15
+- [Fixed][Android] Fix breaking gradle configuration change for Capacitor 2.0.  See new [Capacitor Setup](./help/INSTALL_CAPACITOR.md#android).
+
 ## 3.6.2 - 2020-04-08
 - [Added] [Android] Add new `Config.motionTriggerDelay (milliseconds)` for preventing false-positive triggering of location-tracking (while walking around one's house, for example).  If the motion API triggers back to `still` before `motionTriggerDelay` expires, triggering to the *moving* state will be cancelled.
 - [Fixed] Address issue with rare reports of iOS crashing with error referencing `SOMotionDetector.m`.
