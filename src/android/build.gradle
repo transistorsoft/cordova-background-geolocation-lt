@@ -4,7 +4,7 @@ def userDir = System.getProperty("user.dir")
 def libDir = "${projectDir}/libs"
 
 File capacitorConfig = new File("${userDir}/../capacitor.config.json")
-
+println("${TAG}: userDir:" ${userDir})
 if (capacitorConfig.exists()) {
   def pluginName = ""
   def CORDOVA_BACKGROUND_GEOLOCATION_LT = "cordova-background-geolocation-lt"
