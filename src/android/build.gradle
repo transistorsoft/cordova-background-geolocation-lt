@@ -1,7 +1,7 @@
 def TAG = "[cordova-background-geolocation] "
 
 def userDir = System.getProperty("user.dir")
-def libDir = "${projectDir}/libs"
+// def libDir = "${projectDir}/libs"
 
 File capacitorConfig = new File("${userDir}/capacitor.config.json")
 println("${TAG}: userDir: ${userDir}")
