@@ -305,6 +305,10 @@ var BackgroundGeolocation = /** @class */ (function () {
         var bgGeo = plugin();
         return bgGeo.destroyLocations.apply(bgGeo, arguments);
     };
+    BackgroundGeolocation.destroyLocation = function (uuid) {
+        var bgGeo = plugin();
+        return bgGeo.destroyLocation(uuid);
+    };
     BackgroundGeolocation.insertLocation = function () {
         var bgGeo = plugin();
         return bgGeo.insertLocation.apply(bgGeo, arguments);

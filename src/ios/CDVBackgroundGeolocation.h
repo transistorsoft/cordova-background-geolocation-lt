@@ -57,6 +57,7 @@
 - (void) stopWatchPosition:(CDVInvokedUrlCommand *)command;
 - (void) clearDatabase:(CDVInvokedUrlCommand *) command;
 - (void) destroyLocations:(CDVInvokedUrlCommand *) command;
+- (void) destroyLocation:(CDVInvokedUrlCommand *) command;
 - (void) insertLocation:(CDVInvokedUrlCommand *) command;
 - (void) getCount:(CDVInvokedUrlCommand *) command;
 - (void) getLog:(CDVInvokedUrlCommand *) command;

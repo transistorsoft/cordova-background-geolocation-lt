@@ -277,6 +277,9 @@ module.exports = {
             API.destroyLocations().then(success).catch(failure);
         }
     },
+    destroyLocation: function(uuid) {
+        return API.destroyLocation(uuid);
+    },
     // @deprecated
     clearDatabase: function() {
         return this.destroyLocations.apply(this, arguments);
