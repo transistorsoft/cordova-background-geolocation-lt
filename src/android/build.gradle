@@ -1,9 +1,10 @@
 def TAG = "[cordova-background-geolocation] "
 
-def userDir = System.getProperty("user.dir")
+def useAndroidX = (project.hasProperty("android.useAndroidX")) ? project.property("android.useAndroidX") : false
+
 def libDir = "${projectDir}/libs"
 
-File capacitorConfig = new File("${userDir}/../capacitor.config.json")
+File capacitorConfig = new File("${projectDir}/../../capacitor.config.json")
 
 if (capacitorConfig.exists()) {
   def pluginName = ""
@@ -11,7 +12,7 @@ if (capacitorConfig.exists()) {
   def CORDOVA_BACKGROUND_GEOLOCATION    = "cordova-background-geolocation"
 
   // Capacitor app
-  libDir = "${userDir}/../node_modules"
+  libDir = "${projectDir}/../../node_modules"
 
   File folder = new File("${libDir}/${CORDOVA_BACKGROUND_GEOLOCATION}")
 
@@ -41,7 +42,11 @@ println("${TAG} libDir: ${libDir}")
 
 dependencies {
   // Load tslocationmanager.aar
-  implementation fileTree(include: ['*.aar'], dir: "${libDir}/tslocationmanager")
+  if (useAndroidX) {
+    api fileTree(include: ['*.aar'], dir: "${libDir}/tslocationmanager")
+  } else {
+    api fileTree(include: ['*.aar'], dir: "${libDir}/tslocationmanager/reverse")
+  }
 }
 
 /**

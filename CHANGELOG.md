@@ -1,5 +1,20 @@
 # Change Log
 
+## 3.7.0 - 2020-05-28
+
+- [Fixed][Android] `onGeofence` event-handler fails to be fired when `maxRecordsToPersist: 0`.
+- [Fixed][Android] `requestPermission` method was always returning `AUTHORIZATION_STATUS_ALWAYS` even when *When in Use* was selected.
+- [Fixed][iOS] When using `disableStopDetection: true` with `pausesLocationUpdatesAutomatically: true`, the `CLLocationManagerDelegate didPauseLocationUpdates` fired a `motionchange` with `isMoving: true` (should be `false`).
+- [Fixed][Android] Capacitor `build.gradle` issue.  When building with 3rd-party build-service, the gradle file could fail to detect Capacitor apps due to unexpected result of `$userDir` variable.  Fixed by detecting Capacitor relative to `$projectDir` instead (Thanks to @soleary1222).  Fixes [issue](https://github.com/transistorsoft/cordova-background-geolocation-lt/issues/1123).
+- [Fixed][Android] Fix `@UIThread` issue executing location error handler on background-thread.
+- [Changed][Android] Gradle import `tslocationmanager.aar` using `api` rather than `implementation` in order to allow overrides in `AndroidManifest.xml`.
+- [Fixed][iOS] When upgrading from a version previous `<3.4.0`, if any records exist within plugin's SQLite database, those records could fail to be properly migrated to new schema.
+- [Added] Implement `BackgroundGeolocation.destroyLocation(uuid)` for destroying single location by uuid.
+- [Added] New method `BackgroundGeolocation.destroyLocation(uuid)` for destroying a single location by `Location.uuid`.
+- [Fixed] Allow firebase-adapter to validate license flavors on same key (eg: .development, .staging).
+- [Fixed] iOS geofence listeners on `onGeofence` method *could possibly* fail to be called when a geofence event causes iOS to re-launch the app in the background (this would **not** prevent the plugin posting the geofence event to your `Config.url`, only a failure of the Javascript `onGeofence` to be fired).
+- [Changed] Android library `tslocationmanager.aar` is now compiled using `androidx`.  For backwards-compatibility with those how haven't migrated to `androidX`, a *reverse-jetified* build is included.  Usage is detected automatically based upon `android.useAndroidX` in one's `gradle.properties`.
+
 ## 3.6.3 - 2020-04-15
 - [Fixed][Android] Fix breaking gradle configuration change for Capacitor 2.0.  See new [Capacitor Setup](./help/INSTALL_CAPACITOR.md#android).
 

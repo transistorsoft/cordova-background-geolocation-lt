@@ -270,6 +270,9 @@ public class CDVBackgroundGeolocation extends CordovaPlugin {
         } else if (BackgroundGeolocation.ACTION_DESTROY_LOCATIONS.equalsIgnoreCase(action)) {
             result = true;
             destroyLocations(callbackContext);
+        } else if (BackgroundGeolocation.ACTION_DESTROY_LOCATION.equalsIgnoreCase(action)) {
+            result = true;
+            destroyLocation(data.getString(0), callbackContext);
         } else if (ACTION_ADD_HTTP_LISTENER.equalsIgnoreCase(action)) {
             result = true;
             addHttpListener(callbackContext);
@@ -973,6 +976,17 @@ public class CDVBackgroundGeolocation extends CordovaPlugin {
         });
     }
 
+    private void destroyLocation(String uuid, final CallbackContext callbackContext) {
+        getAdapter().destroyLocation(uuid, new TSCallback() {
+            @Override public void onSuccess() {
+                callbackContext.success();
+            }
+            @Override public void onFailure(String error) {
+                callbackContext.error(error);
+            }
+        });
+    }
+
     private void getLog(JSONObject params, final CallbackContext callbackContext) throws JSONException {
         TSLog.getLog(parseSQLQuery(params), new TSGetLogCallback() {
             @Override public void onSuccess(String log) {
@@ -1115,7 +1129,12 @@ public class CDVBackgroundGeolocation extends CordovaPlugin {
                 callbackContext.success(token.toJson());
             }
             @Override public void onFailure(String error) {
-                callbackContext.error(error);
+                JSONObject response = new JSONObject();
+                try {
+                    response.put("status", error);
+                    response.put("message", error);
+                    callbackContext.error(response);
+                } catch (JSONException e) {}
             }
         });
     }

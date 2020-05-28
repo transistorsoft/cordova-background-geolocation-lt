@@ -436,6 +436,13 @@ module.exports = {
             exec(success, failure, MODULE_NAME, 'destroyLocations', []);
         });
     },
+    destroyLocation: function(uuid) {
+        return new Promise(function(resolve, reject) {
+            var success = function() { resolve(); }
+            var failure = function(error) { reject(error) }
+            exec(success, failure, MODULE_NAME, 'destroyLocation', [uuid]);
+        });
+    },
     insertLocation: function(location) {
         return new Promise(function(resolve, reject) {
             location = location || {};

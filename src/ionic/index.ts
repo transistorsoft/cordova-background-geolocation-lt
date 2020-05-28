@@ -186,6 +186,10 @@ export default class BackgroundGeolocation {
     let bgGeo = plugin();
     return bgGeo.destroyLocations.apply(bgGeo, arguments);
   }
+  static destroyLocation(uuid:string) {
+    let bgGeo = plugin();
+    return bgGeo.destroyLocation(uuid);
+  }
   static insertLocation() {
     let bgGeo = plugin();
     return bgGeo.insertLocation.apply(bgGeo, arguments);

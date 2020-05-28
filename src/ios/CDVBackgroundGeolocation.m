@@ -243,6 +243,21 @@
     }];
 }
 
+- (void) destroyLocation:(CDVInvokedUrlCommand*)command
+{
+    NSString *uuid  = [command.arguments objectAtIndex:0];
+    __typeof(self.commandDelegate) __weak commandDelegate = self.commandDelegate;
+    TSLocationManager *bgGeo = [TSLocationManager sharedInstance];
+
+    [bgGeo destroyLocation:uuid success:^{
+        CDVPluginResult *result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK];
+        [commandDelegate sendPluginResult:result callbackId:command.callbackId];
+    } failure:^(NSString* error) {
+        CDVPluginResult *result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:error];
+        [commandDelegate sendPluginResult:result callbackId:command.callbackId];
+    }];
+}
+
 /**
  * Fetches current stationaryLocation
  */
