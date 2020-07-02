@@ -1,5 +1,13 @@
 # Change Log
 
+## 3.8.1 - 2020-07-09
+- [Added][Android] New Config option `Notification.sticky` (default `false`) for allowing the Android foreground-service notification to be always shown.  The default behavior is the only show the notification when the SDK is in the *moving* state, but Some developers have expressed the need to provide full disclosure to their users when the SDK is enabled, regardless if the device is stationary with location-services OFF.
+- [Fixed][iOS] Geofence `EXIT` sometimes not firing when using `notifyOnDwell`.
+- [Fixed][Javascript] @kbrownlees found typescript in `TransistorAuthorizationToken` causing old browsers to crash, defining a function as `foo()` vs `foo: function()`.
+- [Changed][Android] Refactor geofencing-only mode to not initiate "Infinite Geofencing" when the total number of added geofences is `< 99` (the maximum number of simultaneous geofences that can be monitored on Android).  This prevents the SDK from periodically requesting location to query "geofences within `geofenceProximityRadius`".  iOS already has this behaviour (where its maximum simultaneous geofences is `19`).
+- [Fixed][iOS] When using `#ready` with `reset: true` (the default), and `autoSync: false`, the SDK could initiate HTTP service if any records exist within plugin's SQLite database, since `reset: true` causes `autoSync: true` for a fraction of a millisecond, initiating the HTTP Service.
+- [Fixed][Android] `onConnectivityChange` can report incorrect value for `enabled` when toggling between Wifi Off / Airplane mode.
+
 ## 3.7.0 - 2020-05-28
 
 - [Fixed][Android] `onGeofence` event-handler fails to be fired when `maxRecordsToPersist: 0`.

@@ -1,32 +1,21 @@
 def TAG = "[cordova-background-geolocation] "
+def CORDOVA_BACKGROUND_GEOLOCATION_LT = "cordova-background-geolocation-lt"
+def CORDOVA_BACKGROUND_GEOLOCATION    = "cordova-background-geolocation"
 
+def pluginName = ""
 def useAndroidX = (project.hasProperty("android.useAndroidX")) ? project.property("android.useAndroidX") : false
 
-def libDir = "${projectDir}/libs"
+// Default libDir for Cordova/Ionic app.
+def libDir = "${projectDir}/../../../plugins"
 
 File capacitorConfig = new File("${projectDir}/../../capacitor.config.json")
 
+// Is this a Capacitor app?
 if (capacitorConfig.exists()) {
-  def pluginName = ""
-  def CORDOVA_BACKGROUND_GEOLOCATION_LT = "cordova-background-geolocation-lt"
-  def CORDOVA_BACKGROUND_GEOLOCATION    = "cordova-background-geolocation"
-
   // Capacitor app
-  libDir = "${projectDir}/../../node_modules"
+  def nodeModulesDir = (project.hasProperty("nodeModulesDirectory")) ? project.property("nodeModulesDirectory") : "../../node_modules"
+  libDir = "${projectDir}/${nodeModulesDir}"
 
-  File folder = new File("${libDir}/${CORDOVA_BACKGROUND_GEOLOCATION}")
-
-  if (folder.exists() && folder.isDirectory()) {
-    pluginName = CORDOVA_BACKGROUND_GEOLOCATION
-  } else {
-    folder = new File("${libDir}/${CORDOVA_BACKGROUND_GEOLOCATION_LT}")
-    if (folder.exists() && folder.isDirectory()) {
-      pluginName = CORDOVA_BACKGROUND_GEOLOCATION_LT
-    } else {
-      println("$TAG Gradle error: Failed to locate plugin directory")
-    }
-  }
-  libDir = "${libDir}/${pluginName}/src/android/libs"
   println("${TAG} Capacitor detected")
 } else {
   // Capacitor does not have the scope here to use android.applicationVariants.
@@ -38,14 +27,38 @@ if (capacitorConfig.exists()) {
   })
 }
 
+// Determine which version of background-geolocation (public or private) by stat folder
+File pluginFolder = new File("${libDir}/${CORDOVA_BACKGROUND_GEOLOCATION}")
+
+if (pluginFolder.exists() && pluginFolder.isDirectory()) {
+  pluginName = CORDOVA_BACKGROUND_GEOLOCATION
+} else {
+  pluginFolder = new File("${libDir}/${CORDOVA_BACKGROUND_GEOLOCATION_LT}")
+  if (pluginFolder.exists() && pluginFolder.isDirectory()) {
+    pluginName = CORDOVA_BACKGROUND_GEOLOCATION_LT
+  } else {
+    println("$TAG Gradle error: Failed to locate plugin directory")
+  }
+}
+
+// Now we know which version of plugin.
+libDir = "${libDir}/${pluginName}/src/android/libs"
+
 println("${TAG} libDir: ${libDir}")
+
+// Add custom maven url tslocationmanager.aar
+repositories {
+  maven {
+    url libDir
+  }
+}
 
 dependencies {
   // Load tslocationmanager.aar
   if (useAndroidX) {
-    api fileTree(include: ['*.aar'], dir: "${libDir}/tslocationmanager")
+    api(group: 'com.transistorsoft', name:'tslocationmanager', version: '+')
   } else {
-    api fileTree(include: ['*.aar'], dir: "${libDir}/tslocationmanager/reverse")
+    api(group: 'com.transistorsoft', name:'tslocationmanager-reverse', version: '+')
   }
 }
 
