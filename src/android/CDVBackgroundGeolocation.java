@@ -111,7 +111,6 @@ public class CDVBackgroundGeolocation extends CordovaPlugin {
 
     private void initializeLocationManager() {
         Activity activity   = cordova.getActivity();
-        Intent launchIntent = activity.getIntent();
 
         TSConfig config = TSConfig.getInstance(activity.getApplicationContext());
         config.useCLLocationAccuracy(true);
@@ -120,9 +119,6 @@ public class CDVBackgroundGeolocation extends CordovaPlugin {
             .setHeadlessJobService(getClass().getPackage().getName() + "." + HEADLESS_JOB_SERVICE_CLASS)
             .commit();
 
-        if (launchIntent.hasExtra("forceReload")) {
-            activity.moveTaskToBack(true);
-        }
         getAdapter().onPlayServicesConnectError((new TSPlayServicesConnectErrorCallback() {
             @Override
             public void onPlayServicesConnectError(int errorCode) {

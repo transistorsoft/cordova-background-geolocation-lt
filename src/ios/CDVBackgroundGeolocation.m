@@ -56,7 +56,7 @@
     } else {
         BOOL reset = (params[@"reset"]) ? [params[@"reset"] boolValue] : YES;
         if (reset) {
-            [config reset];
+            [config reset:YES];
             [config updateWithDictionary:params];
         } else if ([params objectForKey:@"authorization"]) {
             [config updateWithBlock:^(TSConfigBuilder *builder) {
@@ -73,10 +73,12 @@
 - (void) reset:(CDVInvokedUrlCommand*) command
 {
     TSConfig *config = [TSConfig sharedInstance];
-    [config reset];
     if ([command.arguments count]) {
         NSDictionary *params = [command.arguments objectAtIndex:0];
+        [config reset:YES];
         [config updateWithDictionary:params];
+    } else {
+        [config reset];
     }
 
     CDVPluginResult *result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:[config toDictionary]];

@@ -489,11 +489,11 @@ module.exports = {
     * Register a device with tracker.transistorsoft.com.  The server returns an authorization token (JWT)
     * This behaviour is specific to the Demo app.
     */
-    findOrCreateTransistorAuthorizationToken(orgname, username, url) {
+    findOrCreateTransistorAuthorizationToken: function(orgname, username, url) {
         return TransistorAuthorizationToken.findOrCreate(orgname, username, url);
     },
 
-    destroyTransistorAuthorizationToken(url) {
+    destroyTransistorAuthorizationToken: function(url) {
         return TransistorAuthorizationToken.destroy(url);
     },
 
