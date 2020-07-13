@@ -1,6 +1,6 @@
 # Change Log
 
-## 3.8.1 - 2020-07-09
+## 3.8.1 - 2020-07-13
 - [Added][Android] New Config option `Notification.sticky` (default `false`) for allowing the Android foreground-service notification to be always shown.  The default behavior is the only show the notification when the SDK is in the *moving* state, but Some developers have expressed the need to provide full disclosure to their users when the SDK is enabled, regardless if the device is stationary with location-services OFF.
 - [Fixed][iOS] Geofence `EXIT` sometimes not firing when using `notifyOnDwell`.
 - [Fixed][Javascript] @kbrownlees found typescript in `TransistorAuthorizationToken` causing old browsers to crash, defining a function as `foo()` vs `foo: function()`.
