@@ -41,20 +41,26 @@
 
 - (void) ready:(CDVInvokedUrlCommand*) command
 {
+    NSDictionary *params = [command.arguments objectAtIndex:0];
+    BOOL reset = (params[@"reset"]) ? [params[@"reset"] boolValue] : YES;
+
     if (ready) {
         TSLocationManager *bgGeo = [TSLocationManager sharedInstance];
-        [bgGeo log:@"warn" message:@"#ready already called.  Redirecting to #setConfig"];
-        [self setConfig:command];
+        if (reset) {
+            [bgGeo log:@"warn" message:@"#ready already called.  Redirecting to #setConfig"];
+            [self setConfig:command];
+        } else {
+            [bgGeo log:@"warn" message:@"#ready already called.  Ignored"];
+        }
         return;
     }
 
     ready = YES;
     TSConfig *config = [TSConfig sharedInstance];
-    NSDictionary *params = [command.arguments objectAtIndex:0];
+
     if (config.isFirstBoot) {
         [config updateWithDictionary:params];
     } else {
-        BOOL reset = (params[@"reset"]) ? [params[@"reset"] boolValue] : YES;
         if (reset) {
             [config reset:YES];
             [config updateWithDictionary:params];
