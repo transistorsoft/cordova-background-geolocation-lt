@@ -6,7 +6,7 @@ def pluginName = ""
 def useAndroidX = (project.hasProperty("android.useAndroidX")) ? project.property("android.useAndroidX") : false
 
 // Default libDir for Cordova/Ionic app.
-def libDir = "${projectDir}/../../../plugins"
+def libDir = "${projectDir}/libs"
 
 File capacitorConfig = new File("${projectDir}/../../capacitor.config.json")
 
@@ -17,6 +17,24 @@ if (capacitorConfig.exists()) {
   libDir = "${projectDir}/${nodeModulesDir}"
 
   println("${TAG} Capacitor detected")
+
+  // Determine which version of background-geolocation (public or private) by stat folder
+  File pluginFolder = new File("${libDir}/${CORDOVA_BACKGROUND_GEOLOCATION}")
+
+  if (pluginFolder.exists() && pluginFolder.isDirectory()) {
+    pluginName = CORDOVA_BACKGROUND_GEOLOCATION
+  } else {
+    pluginFolder = new File("${libDir}/${CORDOVA_BACKGROUND_GEOLOCATION_LT}")
+    if (pluginFolder.exists() && pluginFolder.isDirectory()) {
+      pluginName = CORDOVA_BACKGROUND_GEOLOCATION_LT
+    } else {
+      println("$TAG Gradle error: Failed to locate plugin directory")
+    }
+  }
+
+  // Now we know which version of plugin.
+  libDir = "${libDir}/${pluginName}/src/android/libs"
+
 } else {
   // Capacitor does not have the scope here to use android.applicationVariants.
   // Capacitor users must manually include app.gradle in their app's gradle file.
@@ -27,22 +45,6 @@ if (capacitorConfig.exists()) {
   })
 }
 
-// Determine which version of background-geolocation (public or private) by stat folder
-File pluginFolder = new File("${libDir}/${CORDOVA_BACKGROUND_GEOLOCATION}")
-
-if (pluginFolder.exists() && pluginFolder.isDirectory()) {
-  pluginName = CORDOVA_BACKGROUND_GEOLOCATION
-} else {
-  pluginFolder = new File("${libDir}/${CORDOVA_BACKGROUND_GEOLOCATION_LT}")
-  if (pluginFolder.exists() && pluginFolder.isDirectory()) {
-    pluginName = CORDOVA_BACKGROUND_GEOLOCATION_LT
-  } else {
-    println("$TAG Gradle error: Failed to locate plugin directory")
-  }
-}
-
-// Now we know which version of plugin.
-libDir = "${libDir}/${pluginName}/src/android/libs"
 
 println("${TAG} libDir: ${libDir}")
 
