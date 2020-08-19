@@ -49,6 +49,10 @@
 - (void) addGeofences:(CDVInvokedUrlCommand *)command;
 - (void) removeGeofence:(CDVInvokedUrlCommand *)command;
 
+- (void) requestPermission:(CDVInvokedUrlCommand *) command;
+- (void) getProviderState:(CDVInvokedUrlCommand *) command;
+- (void) requestTemporaryFullAccuracy:(CDVInvokedUrlCommand *) command;
+
 - (void) getGeofences:(CDVInvokedUrlCommand *)command;
 - (void) getGeofence:(CDVInvokedUrlCommand *)command;
 - (void) geofenceExists:(CDVInvokedUrlCommand *)command;

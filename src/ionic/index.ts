@@ -40,6 +40,9 @@ export default class BackgroundGeolocation {
   static get PERSIST_MODE_GEOFENCE()  { return plugin().PERSIST_MODE_GEOFENCE; }
   static get PERSIST_MODE_NONE()      { return plugin().PERSIST_MODE_NONE; }
 
+  static get ACCURACY_AUTHORIZATION_FULL() { return plugin().ACCURACY_AUTHORIZATION_FULL; }
+  static get ACCURACY_AUTHORIZATION_REDUCED() { return plugin().ACCURACY_AUTHORIZATION_REDUCED; }
+
   static get logger() { return plugin().logger; }
 
   static get deviceSettings() { return plugin().deviceSettings; }
@@ -305,5 +308,9 @@ export default class BackgroundGeolocation {
   static requestPermission() {
     let bgGeo = plugin();
     return bgGeo.requestPermission.apply(bgGeo, arguments);
+  }
+  static requestTemporaryFullAccuracy() {
+    let bgGeo = plugin();
+    return bgGeo.requestTemporaryFullAccuracy.apply(bgGeo, arguments);
   }
 }

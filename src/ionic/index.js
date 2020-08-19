@@ -154,6 +154,16 @@ var BackgroundGeolocation = /** @class */ (function () {
         enumerable: true,
         configurable: true
     });
+    Object.defineProperty(BackgroundGeolocation, "ACCURACY_AUTHORIZATION_FULL", {
+        get: function () { return plugin().ACCURACY_AUTHORIZATION_FULL; },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(BackgroundGeolocation, "ACCURACY_AUTHORIZATION_REDUCED", {
+        get: function () { return plugin().ACCURACY_AUTHORIZATION_REDUCED; },
+        enumerable: true,
+        configurable: true
+    });
     Object.defineProperty(BackgroundGeolocation, "logger", {
         get: function () { return plugin().logger; },
         enumerable: true,
@@ -424,6 +434,10 @@ var BackgroundGeolocation = /** @class */ (function () {
     BackgroundGeolocation.requestPermission = function () {
         var bgGeo = plugin();
         return bgGeo.requestPermission.apply(bgGeo, arguments);
+    };
+    BackgroundGeolocation.requestTemporaryFullAccuracy = function () {
+        var bgGeo = plugin();
+        return bgGeo.requestTemporaryFullAccuracy.apply(bgGeo, arguments);
     };
     return BackgroundGeolocation;
 }());

@@ -85,6 +85,7 @@ public class CDVBackgroundGeolocation extends CordovaPlugin {
     public static final String ACTION_ADD_POWERSAVECHANGE_LISTENER = "addPowerSaveChangeListener";
     public static final String ACTION_ADD_NOTIFICATIONACTION_LISTENER = "addNotificationActionListener";
     public static final String ACTION_ADD_AUTHORIZATION_LISTENER = "addAuthorizationListener";
+    public static final String ACTION_REQUEST_TEMPORARY_FULL_ACCURACY = "requestTemporaryFullAccuracy";
 
     public static final String ACTION_PLAY_SOUND        = "playSound";
     public static final String ACTION_GET_STATE         = "getState";
@@ -332,6 +333,9 @@ public class CDVBackgroundGeolocation extends CordovaPlugin {
         } else if (BackgroundGeolocation.ACTION_REQUEST_PERMISSION.equalsIgnoreCase(action)) {
             result = true;
             requestPermission(callbackContext);
+        } else if (ACTION_REQUEST_TEMPORARY_FULL_ACCURACY.equalsIgnoreCase(action)) {
+            result = true;
+            requestTemporaryFullAccuracy(data.getString(0), callbackContext);
         } else if (TransistorAuthorizationToken.ACTION_GET.equalsIgnoreCase(action)) {
             result = true;
             getTransistorToken(data.getString(0), data.getString(1), data.getString(2), callbackContext);
@@ -1116,6 +1120,11 @@ public class CDVBackgroundGeolocation extends CordovaPlugin {
                 callbackContext.sendPluginResult(result);
             }
         });
+    }
+
+    // [iOS 14+ only] -- No Android implementation.  Just return CLAccuracyAuthorizationFull (0)
+    private void requestTemporaryFullAccuracy(String purpose, CallbackContext callbackContext) {
+        callbackContext.success(LocationProviderChangeEvent.ACCURACY_AUTHORIZATION_FULL);
     }
 
     private void getTransistorToken(String orgname, String username, String url, final CallbackContext callbackContext) {

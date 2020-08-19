@@ -985,7 +985,19 @@
     }];
 }
 
--(void) registerCallback:(NSString*)callbackId callback:(void(^)(id))callback
+- (void) requestTemporaryFullAccuracy:(CDVInvokedUrlCommand *) command {
+    NSString *purpose = [command.arguments objectAtIndex:0];
+    TSLocationManager *bgGeo = [TSLocationManager sharedInstance];
+    [bgGeo requestTemporaryFullAccuracy:purpose success:^(NSInteger accuracyAuthorization) {
+        CDVPluginResult* result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsInt:accuracyAuthorization];
+        [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
+    } failure:^(NSError *error) {
+        CDVPluginResult* result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:error.userInfo[@"NSDebugDescription"]];
+        [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
+    }];
+}
+
+- (void) registerCallback:(NSString*)callbackId callback:(void(^)(id))callback
 {
     @synchronized (callbacks) {
         [callbacks setObject:callback forKey:callbackId];
