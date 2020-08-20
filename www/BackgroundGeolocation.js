@@ -56,6 +56,9 @@ module.exports = {
     PERSIST_MODE_GEOFENCE: -1,
     PERSIST_MODE_NONE: 0,
 
+    ACCURACY_AUTHORIZATION_FULL: 0,
+    ACCURACY_AUTHORIZATION_REDUCED: 1,
+
     deviceSettings: DeviceSettings,
 
     logger: Logger,
@@ -92,6 +95,9 @@ module.exports = {
         } else {
             API.requestPermission().then(success).catch(failure);
         }
+    },
+    requestTemporaryFullAccuracy: function(purpose) {
+        return API.requestTemporaryFullAccuracy(purpose);
     },
     getProviderState: function(success, failure) {
         if (!arguments.length) {
