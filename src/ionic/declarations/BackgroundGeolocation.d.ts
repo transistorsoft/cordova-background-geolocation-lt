@@ -1450,7 +1450,8 @@ declare module "cordova-background-geolocation-lt" {
     * ### ℹ️ See also:
     * - [[Config.locationAuthorizationRequest]]
     * - [[Config.disableLocationAuthorizationAlert]]
-    * - [[Config.LocationAuthorizationAlert]]
+    * - [[Config.locationAuthorizationAlert]]
+    * - [[Config.backgroundPermissionRationale]] (*Android 11+*)
     * - [[requestTemporaryFullAccuracy]] (*iOS 14+*)
     */
     static requestPermission(success?:(status:AuthorizationStatus) => void, failure?:(status:AuthorizationStatus) => void): Promise<AuthorizationStatus>;
