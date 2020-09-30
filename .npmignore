@@ -2,6 +2,7 @@
 *.png
 *.log
 node_modules
+bin
 docs
 help
 scripts

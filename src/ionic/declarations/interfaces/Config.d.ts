@@ -309,9 +309,35 @@ declare module "cordova-background-geolocation-lt" {
     stationaryRadius?: number;
 
     /**
-    * Disable automatic, speed-based [[distanceFilter]] scaling.
+    * The default timeout in _seconds_ when requesting a location before the SDK gives up and fires a [[LocationError]].
     *
-    * Defaults to **`false`**.  Set **`true`** to disable automatic, speed-based [[distanceFilter]] elasticity.
+    * Defaults to `60` seconds.
+    *
+    * @example
+    * ```typescript
+    * // With onLocation event
+    * BackgroundGeolocation.onLocation((Location location) => {
+    *   console.log('[onLocation] success:', location);
+    * }, ((error) => {
+    *   if (error.code == 408) {
+    *     console.log("[onLocation] error: LOCATION TIMEOUT", error);
+    *   }
+    * });
+    *
+    * // With getCurrentPosition:
+    * try {
+    *   let location = await BackgroundGeolocation.getCurrentPosition({samples: 3});
+    * } catch((error) => {
+    *   if (error.code == 408) {
+    *     console.log("[getCurrentPosition] error: LOCATION TIMEOUT",  error);
+    *   }
+    * });
+    * ```
+    *
+    * ## See Also:
+    * - [[BackgroundGeolocation.getCurrentPosition]]
+    * - [[BackgroundGeolocation.onLocation]]
+    *
     */
     locationTimeout?: number;
 

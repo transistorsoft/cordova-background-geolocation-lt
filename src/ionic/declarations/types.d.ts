@@ -91,7 +91,7 @@ declare module "cordova-background-geolocation-lt" {
     * | 408   | Location timeout            |
     * | 499   | Location request cancelled  |
 	*/
-	type LocationError = 0 | 1 | 2 | 408;
+	type LocationError = 0 | 1 | 2 | 408 | 499;
 
 	/**
 	* iOS Location authorization request.
