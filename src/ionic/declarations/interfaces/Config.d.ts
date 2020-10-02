@@ -194,7 +194,7 @@ declare module "cordova-background-geolocation-lt" {
     *   BackgroundGeolocation.findOrCreateTransistorAuthorizationToken("my-company-name", "my-username");
     *
     * BackgroundGeolocation.ready({
-    *   url: url + "/v2/locations",
+    *   url: url + "/api/locations",
     *   authorization: {
     *     strategy: "JWT",
     *     accessToken: token.accessToken,

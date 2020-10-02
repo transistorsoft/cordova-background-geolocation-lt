@@ -1,6 +1,6 @@
 {
   "name": "cordova-background-geolocation-lt",
-  "version": "3.9.1",
+  "version": "3.9.2",
   "description": "Cordova / Capacitor Background Geolocation.  The most sophisticated, cross-platform location-tracking and geofencing plugin with battery-conscious motion-detection intelligence.",
   "cordova": {
     "id": "cordova-background-geolocation-lt",
@@ -16,7 +16,7 @@
     "url": "git+https://github.com/transistorsoft/cordova-background-geolocation-lt"
   },
   "scripts": {
-    "build": "tsc -p src/ionic",
+    "build": "tsc -p ./src/ionic",
     "prepublish": "npm run build"
   },
   "keywords": [
