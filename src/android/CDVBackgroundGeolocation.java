@@ -120,7 +120,10 @@ public class CDVBackgroundGeolocation extends CordovaPlugin {
             .setHeadlessJobService(getClass().getPackage().getName() + "." + HEADLESS_JOB_SERVICE_CLASS)
             .commit();
 
-        getAdapter().onPlayServicesConnectError((new TSPlayServicesConnectErrorCallback() {
+        BackgroundGeolocation adapter = getAdapter();
+        adapter.setActivity(activity);
+
+        adapter.onPlayServicesConnectError((new TSPlayServicesConnectErrorCallback() {
             @Override
             public void onPlayServicesConnectError(int errorCode) {
                 handlePlayServicesConnectError(errorCode);

@@ -6,172 +6,172 @@ var BackgroundGeolocation = /** @class */ (function () {
     }
     Object.defineProperty(BackgroundGeolocation, "LOG_LEVEL_OFF", {
         get: function () { return plugin().LOG_LEVEL_OFF; },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     Object.defineProperty(BackgroundGeolocation, "LOG_LEVEL_ERROR", {
         get: function () { return plugin().LOG_LEVEL_ERROR; },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     Object.defineProperty(BackgroundGeolocation, "LOG_LEVEL_WARNING", {
         get: function () { return plugin().LOG_LEVEL_WARNING; },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     Object.defineProperty(BackgroundGeolocation, "LOG_LEVEL_INFO", {
         get: function () { return plugin().LOG_LEVEL_INFO; },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     Object.defineProperty(BackgroundGeolocation, "LOG_LEVEL_DEBUG", {
         get: function () { return plugin().LOG_LEVEL_DEBUG; },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     Object.defineProperty(BackgroundGeolocation, "LOG_LEVEL_VERBOSE", {
         get: function () { return plugin().LOG_LEVEL_VERBOSE; },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     Object.defineProperty(BackgroundGeolocation, "DESIRED_ACCURACY_NAVIGATION", {
         get: function () { return plugin().DESIRED_ACCURACY_NAVIGATION; },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     Object.defineProperty(BackgroundGeolocation, "DESIRED_ACCURACY_HIGH", {
         get: function () { return plugin().DESIRED_ACCURACY_HIGH; },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     Object.defineProperty(BackgroundGeolocation, "DESIRED_ACCURACY_MEDIUM", {
         get: function () { return plugin().DESIRED_ACCURACY_MEDIUM; },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     Object.defineProperty(BackgroundGeolocation, "DESIRED_ACCURACY_LOW", {
         get: function () { return plugin().DESIRED_ACCURACY_LOW; },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     Object.defineProperty(BackgroundGeolocation, "DESIRED_ACCURACY_VERY_LOW", {
         get: function () { return plugin().DESIRED_ACCURACY_VERY_LOW; },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     Object.defineProperty(BackgroundGeolocation, "DESIRED_ACCURACY_THREE_KILOMETER", {
         get: function () { return plugin().DESIRED_ACCURACY_THREE_KILOMETER; },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     Object.defineProperty(BackgroundGeolocation, "AUTHORIZATION_STATUS_NOT_DETERMINED", {
         get: function () { return plugin().AUTHORIZATION_STATUS_NOT_DETERMINED; },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     Object.defineProperty(BackgroundGeolocation, "AUTHORIZATION_STATUS_RESTRICTED", {
         get: function () { return plugin().AUTHORIZATION_STATUS_RESTRICTED; },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     Object.defineProperty(BackgroundGeolocation, "AUTHORIZATION_STATUS_DENIED", {
         get: function () { return plugin().AUTHORIZATION_STATUS_DENIED; },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     Object.defineProperty(BackgroundGeolocation, "AUTHORIZATION_STATUS_ALWAYS", {
         get: function () { return plugin().AUTHORIZATION_STATUS_ALWAYS; },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     Object.defineProperty(BackgroundGeolocation, "AUTHORIZATION_STATUS_WHEN_IN_USE", {
         get: function () { return plugin().AUTHORIZATION_STATUS_WHEN_IN_USE; },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     Object.defineProperty(BackgroundGeolocation, "NOTIFICATION_PRIORITY_DEFAULT", {
         get: function () { return plugin().NOTIFICATION_PRIORITY_DEFAULT; },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     Object.defineProperty(BackgroundGeolocation, "NOTIFICATION_PRIORITY_HIGH", {
         get: function () { return plugin().NOTIFICATION_PRIORITY_HIGH; },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     Object.defineProperty(BackgroundGeolocation, "NOTIFICATION_PRIORITY_LOW", {
         get: function () { return plugin().NOTIFICATION_PRIORITY_LOW; },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     Object.defineProperty(BackgroundGeolocation, "NOTIFICATION_PRIORITY_MAX", {
         get: function () { return plugin().NOTIFICATION_PRIORITY_MAX; },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     Object.defineProperty(BackgroundGeolocation, "NOTIFICATION_PRIORITY_MIN", {
         get: function () { return plugin().NOTIFICATION_PRIORITY_MIN; },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     Object.defineProperty(BackgroundGeolocation, "ACTIVITY_TYPE_OTHER", {
         get: function () { return plugin().ACTIVITY_TYPE_OTHER; },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     Object.defineProperty(BackgroundGeolocation, "ACTIVITY_TYPE_AUTOMOTIVE_NAVIGATION", {
         get: function () { return plugin().ACTIVITY_TYPE_AUTOMOTIVE_NAVIGATION; },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     Object.defineProperty(BackgroundGeolocation, "ACTIVITY_TYPE_FITNESS", {
         get: function () { return plugin().ACTIVITY_TYPE_FITNESS; },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     Object.defineProperty(BackgroundGeolocation, "ACTIVITY_TYPE_OTHER_NAVIGATION", {
         get: function () { return plugin().ACTIVITY_TYPE_OTHER_NAVIGATION; },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     Object.defineProperty(BackgroundGeolocation, "PERSIST_MODE_ALL", {
         get: function () { return plugin().PERSIST_MODE_ALL; },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     Object.defineProperty(BackgroundGeolocation, "PERSIST_MODE_LOCATION", {
         get: function () { return plugin().PERSIST_MODE_LOCATION; },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     Object.defineProperty(BackgroundGeolocation, "PERSIST_MODE_GEOFENCE", {
         get: function () { return plugin().PERSIST_MODE_GEOFENCE; },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     Object.defineProperty(BackgroundGeolocation, "PERSIST_MODE_NONE", {
         get: function () { return plugin().PERSIST_MODE_NONE; },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     Object.defineProperty(BackgroundGeolocation, "ACCURACY_AUTHORIZATION_FULL", {
         get: function () { return plugin().ACCURACY_AUTHORIZATION_FULL; },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     Object.defineProperty(BackgroundGeolocation, "ACCURACY_AUTHORIZATION_REDUCED", {
         get: function () { return plugin().ACCURACY_AUTHORIZATION_REDUCED; },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     Object.defineProperty(BackgroundGeolocation, "logger", {
         get: function () { return plugin().logger; },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     Object.defineProperty(BackgroundGeolocation, "deviceSettings", {
         get: function () { return plugin().deviceSettings; },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     BackgroundGeolocation.ready = function (config, success, failure) {
