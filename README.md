@@ -1,4 +1,4 @@
-Cordova Background Geolocation &middot; [![npm](https://img.shields.io/npm/dm/cordova-background-geolocation-lt.svg)]() [![npm](https://img.shields.io/npm/v/cordova-background-geolocation-lt.svg)]()
+Cordova / Capacitor Background Geolocation &middot; [![npm](https://img.shields.io/npm/dm/cordova-background-geolocation-lt.svg)]() [![npm](https://img.shields.io/npm/v/cordova-background-geolocation-lt.svg)]()
 ===========================================================================
 
 [![](https://dl.dropboxusercontent.com/s/nm4s5ltlug63vv8/logo-150-print.png?dl=1)](https://www.transistorsoft.com)
@@ -104,6 +104,53 @@ $ cordova plugin add https://github.com/transistorsoft/cordova-background-geoloc
           <meta-data
             android:name="com.transistorsoft.locationmanager.license_key"
             android:value="YOUR_LICENSE_KEY_HERE" />
+      </config-file>
+      <!-- /background-geolocation -->
+</platform>
+```
+
+### AndroidX (`cordova-android >= 9.0.0`)
+
+It's *highly* recommended to configure your app for *Android X* when using *Cordova 10* / `cordova-android >= 9.0.0`.
+
+```xml
+<platform name="android">
+        <preference name="AndroidXEnabled" value="true" />
+        .
+        .
+        .
+</platform>
+```
+
+```bash
+$ cordova plugin add cordova-plugin-androidx-adapter
+```
+
+:warning: If you see the following error, you need to configure your app for *Android X*.
+```
+java.lang.RuntimeException: Unable to get provider com.transistorsoft.locationmanager.util.LogFileProvider: java.lang.ClassNotFoundException
+```
+
+### Android 10 and *When in Use* Location Authorization
+
+Android 10 introduces *When in Use* location authorization.  If you're building with __`compileSdkVersion 29`__, add the following elements to your **`config.xml`**, within the same `<config-file>` block above.  This allows your app to continue location-tracking when location-services are initiated while your app is in the foreground.  For example:
+
+```javascript
+onClickStartTracking() {
+    // Initiate tracking while app is in foreground.
+    BackgroundGeolocation.changePace(true);
+}
+```
+
+```diff
+<platform name="android">
+      <!-- background-geolocation -->
+      <config-file parent="/manifest/application" target="app/src/main/AndroidManifest.xml">
+          <meta-data
+            android:name="com.transistorsoft.locationmanager.license_key"
+            android:value="YOUR_LICENSE_KEY_HERE" />
++         <service android:name="com.transistorsoft.locationmanager.service.TrackingService" android:foregroundServiceType="location" />
++         <service android:name="com.transistorsoft.locationmanager.service.LocationRequestService" android:foregroundServiceType="location" />
       </config-file>
       <!-- /background-geolocation -->
 </platform>
