@@ -1,5 +1,14 @@
 # Change Log
 
+## 3.9.4 &mdash; 2020-11-06
+
+- [Fixed][iOS] Fix issue with iOS buffer-timer with requestPermission.  Could execute callback twice.
+- [Fixed][iOS] When requesting `WhenInUse` location permission, if user grants "Allow Once" then you attempt to upgrade to `Always`, iOS simply does nothing and the `requestPermission` callback would not be called.  Implemented a `500ms` buffer timer to detect if the iOS showed a system dialog (signalled by the firing of `WillResignActive` life-cycle notification).  If the app does *not* `WillResignActive`, the buffer timer will fire, causing the callback to `requestPermission` to fire.
+- [Fixed][Android] Issue with `requestPermission` not showing `backgroundPermissionRationale` dialog on `targetSdkVersion 29` when using `locationAuthorizationRequest: 'WhenInUse'` followed by upgrade to `Always`.
+- [Added] Added two new `Location.coords` attributes `speed_accuracy` and `heading_accuracy`.
+- [Fixed][iOS] fix bug providing wrong Array of records to `sync` method when no HTTP service is configured.
+- [Fixed][Android] Add extra logic for `isMainActivityActive` to detect when `TSLocationManagerActivity` is active.
+
 ## 3.9.2 &mdash; 2020-10-02
 
 - [Added][Android] Added special mechanism for *Capacitor* to allow for *Android Headless Mode*.  See the updated Setup instructions in the Wiki.
