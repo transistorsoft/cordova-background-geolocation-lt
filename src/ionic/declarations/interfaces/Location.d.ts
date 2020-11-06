@@ -55,10 +55,20 @@ declare module "cordova-background-geolocation-lt" {
     */
     heading?: number;
     /**
+    * Heading accuracy in degrees.
+    * ⚠️ Note:  Only present when location came from GPS.  `-1` otherwise.
+    */
+    heading_accuracy?: number;
+    /**
     * Speed in meters / second.
     * ⚠️ Note:  Only present when location came from GPS.  `-1` otherwise.
     */
     speed?: number;
+    /**
+    * Speed accuracy in meters / second.
+    * ⚠️ Note:  Only present when location came from GPS.  `-1` otherwise.
+    */
+    speed_accuracy?: number;
   }
 
   /**
