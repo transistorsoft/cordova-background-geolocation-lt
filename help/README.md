@@ -2822,12 +2822,12 @@ Example:
 
 ```javascript
 BackgroundGeolocation.getGeofences(function(geofences) {
-  for (var n=0,len=geofences.length;n<len;n++) {
-    console.log("Geofence: ", geofence.identifier, geofence.radius, geofence.latitude, geofence.longitude);
-  }
-}, function(error) {
-  console.warn("Failed to fetch geofences from server");
-});
+    for (var n=0,len=geofences.length;n<len;n++) {
+      console.log("Geofence: ", geofences[n].identifier, geofences[n].radius, geofences[n].latitude, geofences[n].longitude);
+    }
+  }, function(error) {
+    console.warn("Failed to fetch geofences from server", error);
+  });
 ```
 
 #### `failureFn` Parameters
