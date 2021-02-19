@@ -70,7 +70,7 @@
 						<dd><pre><code class="language-typescript"><span class="hljs-keyword">let</span> myToken = <span class="hljs-built_in">this</span>.getMyAuthorizationToken();
 
 BackgroundGeolocation.onAuthorization(<span class="hljs-function">(<span class="hljs-params">event</span>) =&gt;</span> {
-  <span class="hljs-keyword">if</span> (event.success) {
+  <span class="hljs-keyword">if</span> (!event.success) {
     <span class="hljs-built_in">console</span>.log(<span class="hljs-string">&quot;[authorization] ERROR: &quot;</span>, event.error);
   } <span class="hljs-keyword">else</span> {
     <span class="hljs-built_in">console</span>.log(<span class="hljs-string">&quot;[authorization] SUCCESS: &quot;</span>, event.response);
