@@ -1,5 +1,23 @@
 # Change Log
 
+## 4.0.0 &mdash; 2021-03-09
+
+* [Changed][iOS] Migrate `TSLocationManager.framework` to new `.xcframework` for *MacCatalyst* support with new Apple silcon.
+
+### :warning: Breaking Change:  Requires `cocoapods >= 1.10+`.
+
+*iOS'* new `.xcframework` requires *cocoapods >= 1.10+*:
+
+```console
+$ pod --version
+// if < 1.10.0
+$ sudo gem install cocoapods
+```
+
+### :warning: Breaking Change: `cordova-plugin-background-fetch`.
+
+- See [Breaking Changes with `cordova-plugin-background-fetch@7.0.0`](https://github.com/transistorsoft/cordova-plugin-background-fetch/blob/master/CHANGELOG.md#701--2021-02-18)
+
 ## 3.10.0 &mdash; 2020-11-26
 - [Changed] Remove `Config.encrypt` feature.  This feature has always been flagging a Security Issue with Google Play Console and now the iOS `TSLocationManager` is being flagged for a virus by *Avast* *MacOS:Pirrit-CS[PUP]*.  This seems to be a false-positive due to importing [RNCryptor](https://github.com/RNCryptor/RNCryptor) package.
 
