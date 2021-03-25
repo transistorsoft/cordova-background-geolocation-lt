@@ -11,4 +11,5 @@ ISSUE_TEMPLATE.md
 src/ionic/index.ts
 src/ionic/tsconfig.json
 
+*.tgz
 
