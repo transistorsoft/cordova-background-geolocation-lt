@@ -1,6 +1,6 @@
 declare module "cordova-background-geolocation-lt" {
   /**
-  * Response object returned by [[BackgroundGeolocation.findOrCreateTransistorAuthorizationToken]] for configuring the SDK's [[Authorization]] with Transistor Software's Demo Server at [http://tracker.transistorsoft.com](http://tracker.transistorsoft.com).
+  * Response object returned by [[BackgroundGeolocation.findOrCreateTransistorAuthorizationToken]] for configuring the SDK's [[interfaces/Authorization.Authorization | Authorization]] with Transistor Software's Demo Server at [http://tracker.transistorsoft.com](http://tracker.transistorsoft.com).
   *
   * You may also run your own instance of Demo Server locally.  See [background-geolocation-console](https://github.com/transistorsoft/background-geolocation-console)
   *

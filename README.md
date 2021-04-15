@@ -43,6 +43,12 @@ The **[Android plugin](http://www.transistorsoft.com/shop/products/cordova-backg
 ## :large_blue_diamond: Installing the plugin ##
 
 :warning: After installing the plugin, you must [Configure the Plugin](#large_blue_diamond-configuring-the-plugin) for both [iOS](#ios) &amp; [Android](#android).
+:warning: Cocoapods __`>= 1.10.0`__ is required.
+```console
+$ pod --version
+// if < 1.10.0
+$ sudo gem install cocoapods
+```
 
 - #### From npm
 

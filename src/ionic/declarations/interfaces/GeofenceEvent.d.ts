@@ -19,7 +19,7 @@ declare module "cordova-background-geolocation-lt" {
     */
     action: string;
     /**
-    * The [[Location]] where the geofence transition occurred.
+    * The [[interfaces/Location.Location | Location]] where the geofence transition occurred.
     */
     location: Location;
     /**
