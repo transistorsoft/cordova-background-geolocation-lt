@@ -17,12 +17,8 @@ typedoc --out docs \
 	--gaSite "auto" \
 	--plugin ./node_modules/\@transistorsoft/typedoc-theme/node_modules/\@transistorsoft/typedoc-plugin-mediaplayer \
 	--plugin ./node_modules/\@transistorsoft/typedoc-theme/node_modules/\@transistorsoft/typedoc-plugin-gitlink \
+    	--plugin ./node_modules/\@transistorsoft/typedoc-theme/node_modules/typedoc-plugin-merge-modules \
 	./src/ionic/declarations/
 
-#cp ./node_modules/typedoc-theme-transistor/bin/default/assets/css/main.css ./docs/assets/css/main.css
-#cp docs/modules/backgroundgeolocation.html docs/index.html
-cp docs/index.html docs/globals.html
-cp ./scripts/docs-index.html ./docs/index.html
-cp ./docs/index.html ./docs/globals.html
 touch ./docs/.nojekyll
 
