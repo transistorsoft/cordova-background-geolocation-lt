@@ -4,7 +4,7 @@ declare module "cordova-background-geolocation-lt" {
   /**
   * The event-object provided to [[BackgroundGeolocation.onGeofencesChange]].
   *
-  * The [[interfaces/GeofencesChangeEvent.GeofencesChangeEvent | GeofencesChangeEvent]] provides only the *changed* geofences, those which just activated or de-activated.
+  * The [[GeofencesChangeEvent]] provides only the *changed* geofences, those which just activated or de-activated.
   *
   * @example
   * ```typescript

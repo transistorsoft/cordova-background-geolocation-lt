@@ -8,7 +8,7 @@ declare module "cordova-background-geolocation-lt" {
 		*/
 		isMoving: boolean;
 		/**
-		* The corresponding [[interfaces/Location.Location | Location]] where the event occurred.
+		* The corresponding [[Location]] where the event occurred.
 		*/
 		location: Location;
 	}
