@@ -13,6 +13,10 @@ if (!capacitorConfig.exists()) {
   // Capacitor V3?
   capacitorConfig = new File("${projectDir}/../../capacitor.config.ts")
 }
+if (!capacitorConfig.exists()) {
+  capacitorConfig = new File("${projectDir}/../../capacitor.config.js")
+}
+
 
 // Is this a Capacitor app?
 if (capacitorConfig.exists()) {
