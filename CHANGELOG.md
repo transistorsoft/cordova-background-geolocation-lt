@@ -1,5 +1,8 @@
 # Change Log
 
+## 4.0.2 &mdash; 2021-05-25
+* [Fixed][Android] Fix failure to detect Capacitor 3 projects with capacitor.config.ts instead of expected capacitor.config.json
+
 ## 4.0.1 &mdash; 2021-03-25
 
 * [Changed] Re-generate docs with latest typedoc.  The docs search feature now actually works.

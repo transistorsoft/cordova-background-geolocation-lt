@@ -9,6 +9,10 @@ def useAndroidX = (project.hasProperty("android.useAndroidX")) ? project.propert
 def libDir = "${projectDir}/libs"
 
 File capacitorConfig = new File("${projectDir}/../../capacitor.config.json")
+if (!capacitorConfig.exists()) {
+  // Capacitor V3?
+  capacitorConfig = new File("${projectDir}/../../capacitor.config.ts")
+}
 
 // Is this a Capacitor app?
 if (capacitorConfig.exists()) {
