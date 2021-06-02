@@ -1,5 +1,6 @@
 # Capacitor Setup
 
+-----------------------------------------------------------------
 ### :new: *Capacitor* version now available at [__`capacitor-background-geolocation`__](https://github.com/transistorsoft/capacitor-background-geolocation) :new:
 -----------------------------------------------------------------
 
