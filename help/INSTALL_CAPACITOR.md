@@ -1,7 +1,7 @@
 # Capacitor Setup
 
 -----------------------------------------------------------------
-### :new: *Capacitor* version now available! See [__`capacitor-background-geolocation`__](https://github.com/transistorsoft/capacitor-background-geolocation) :new:
+### :new: :stop_sign: *Capacitor* version now available! See [__`capacitor-background-geolocation`__](https://github.com/transistorsoft/capacitor-background-geolocation) :new:
 -----------------------------------------------------------------
 
 ```
