@@ -3,7 +3,7 @@ Cordova / Capacitor Background Geolocation &middot; [![npm](https://img.shields.
 
 [![](https://dl.dropboxusercontent.com/s/nm4s5ltlug63vv8/logo-150-print.png?dl=1)](https://www.transistorsoft.com)
 
-## :new: Pure *Capacitor* version now available at [__`capacitor-background-geolocation`__](https://github.com/transistorsoft/capacitor-background-geolocation)
+### :new: Pure *Capacitor* version now available at [__`capacitor-background-geolocation`__](https://github.com/transistorsoft/capacitor-background-geolocation)
 
 -------------------------------------------------------------------------------
 
