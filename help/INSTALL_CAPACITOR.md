@@ -1,5 +1,9 @@
 # Capacitor Setup
 
+-----------------------------------------------------------------
+### :new: :stop_sign: *Capacitor* version now available! See [__`capacitor-background-geolocation`__](https://github.com/transistorsoft/capacitor-background-geolocation) :stop_sign: :new:
+-----------------------------------------------------------------
+
 ```
 npm install cordova-background-geolocation-lt
 npx cap sync
