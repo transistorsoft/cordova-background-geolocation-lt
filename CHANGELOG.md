@@ -1,5 +1,12 @@
 # Change Log
 
+## 4.1.0 &mdash; 2021-06-07
+* [Added] Add typescript constants for plugin events, eg: `BackgroundGeolocation.EVENT_MOTIONCHANGE`.
+- [Changed] `Config.authorization` will perform regexp on the received response, searching for keys such as `accessToken`, `access_token`, `refreshToken`, `refresh_token`.
+- [Fixed][Android] Fix threading issue `ConcurrentMmodificationException` in `TSConfig`
+- [Fixed][Android] Don't synchronize access to ThreadPool.  Addresses ANR issues
+- [Fixed][Android] Implmementing State.didDeviceReboot in previous version introduced a source of ANR due time required to generate and persist JSON Config.  Solution is to simply perform in Background-thread.
+
 ## 4.0.2 &mdash; 2021-05-25
 * [Fixed][Android] Fix failure to detect Capacitor 3 projects with capacitor.config.ts instead of expected capacitor.config.json
 

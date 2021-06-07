@@ -2,7 +2,43 @@ const plugin = function() {
 	return (<any>window).BackgroundGeolocation;
 }
 
+const Events:any = {
+  BOOT               : "boot",
+  TERMINATE          : "terminate",
+  LOCATION           : "location",
+  HTTP               : "http",
+  MOTIONCHANGE       : "motionchange",
+  PROVIDERCHANGE     : "providerchange",
+  HEARTBEAT          : "heartbeat",
+  ACTIVITYCHANGE     : "activitychange",
+  GEOFENCE           : "geofence",
+  GEOFENCESCHANGE    : "geofenceschange",
+  SCHEDULE           : "schedule",
+  CONNECTIVITYCHANGE : "connectivitychange",
+  ENABLEDCHANGE      : "enabledchange",
+  POWERSAVECHANGE    : "powersavechange",
+  NOTIFICATIONACTION : "notificationaction",
+  AUTHORIZATION      : "authorization",
+};
+
+
 export default class BackgroundGeolocation {
+  static get EVENT_BOOT()                  { return Events.BOOT; }
+  static get EVENT_TERMINATE()             { return Events.TERMINATE; }
+  static get EVENT_LOCATION()              { return Events.LOCATION; }
+  static get EVENT_MOTIONCHANGE()          { return Events.MOTIONCHANGE; }
+  static get EVENT_HTTP()                  { return Events.HTTP; }
+  static get EVENT_HEARTBEAT()             { return Events.HEARTBEAT; }
+  static get EVENT_PROVIDERCHANGE()        { return Events.PROVIDERCHANGE; }
+  static get EVENT_ACTIVITYCHANGE()        { return Events.ACTIVITYCHANGE; }
+  static get EVENT_GEOFENCE()              { return Events.GEOFENCE; }
+  static get EVENT_GEOFENCESCHANGE()       { return Events.GEOFENCESCHANGE; }
+  static get EVENT_ENABLEDCHANGE()         { return Events.ENABLEDCHANGE; }
+  static get EVENT_CONNECTIVITYCHANGE()    { return Events.CONNECTIVITYCHANGE; }
+  static get EVENT_SCHEDULE()              { return Events.SCHEDULE; }
+  static get EVENT_POWERSAVECHANGE()       { return Events.POWERSAVECHANGE; }
+  static get EVENT_NOTIFICATIONACTION()    { return Events.NOTIFICATIONACTION; }
+  static get EVENT_AUTHORIZATION()         { return Events.AUTHORIZATION; }
 
   static get LOG_LEVEL_OFF() { return plugin().LOG_LEVEL_OFF; }
   static get LOG_LEVEL_ERROR() { return plugin().LOG_LEVEL_ERROR; }
