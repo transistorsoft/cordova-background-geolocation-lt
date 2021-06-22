@@ -1,5 +1,9 @@
 # Change Log
 
+## 4.1.2 &mdash; 2021-06-22
+* [Changed][Android] Update okhttp default version from `3.12.+` -> `3.14.+`.  Bump `play-services-lo
+cation:16.+` -> `18.+`
+
 ## 4.1.1 &mdash; 2021-06-11
 * [Fixed][iOS] Reports 2 reports of iOS crash `NSInvalidArgumentException (TSLocation.m line 178)` with iOS 14
 .x.  Wrap JSON serialization in @try/@catch block.  iOS JSON serialization docs state the supplied NSError err
