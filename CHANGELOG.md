@@ -1,5 +1,9 @@
 # Change Log
 
+## 4.1.3 &mdash; 2021-07-26
+* [Fixed][Android] Add dependency `localbroadcastmanager` when using AndroidX.
+* [Changed][Android] Load Android dependency `android-permissions` from MavenCentral instead of deprecated jCenter.
+
 ## 4.1.2 &mdash; 2021-06-22
 * [Changed][Android] Update okhttp default version from `3.12.+` -> `3.14.+`.  Bump `play-services-lo
 cation:16.+` -> `18.+`

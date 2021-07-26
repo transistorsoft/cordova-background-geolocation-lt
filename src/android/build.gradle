@@ -67,6 +67,7 @@ dependencies {
   // Load tslocationmanager.aar
   if (useAndroidX) {
     api(group: 'com.transistorsoft', name:'tslocationmanager', version: '+')
+    implementation "androidx.localbroadcastmanager:localbroadcastmanager:1.0.+"
   } else {
     api(group: 'com.transistorsoft', name:'tslocationmanager-reverse', version: '+')
   }
