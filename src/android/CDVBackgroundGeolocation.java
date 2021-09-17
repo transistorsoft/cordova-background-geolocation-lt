@@ -1126,9 +1126,17 @@ public class CDVBackgroundGeolocation extends CordovaPlugin {
     }
 
     // [iOS 14+ only] -- No Android implementation.  Just return CLAccuracyAuthorizationFull (0)
-    private void requestTemporaryFullAccuracy(String purpose, CallbackContext callbackContext) {
-        callbackContext.success(LocationProviderChangeEvent.ACCURACY_AUTHORIZATION_FULL);
+    private void requestTemporaryFullAccuracy(String purpose, final CallbackContext callbackContext) {
+        getAdapter().requestTemporaryFullAccuracy(purpose, new TSRequestPermissionCallback() {
+            @Override public void onSuccess(int accuracyAuthorization) {
+                callbackContext.success(accuracyAuthorization);
+            }
+            @Override public void onFailure(int accuracyAuthorization) {
+                callbackContext.success(accuracyAuthorization);
+            }
+        });
     }
+
 
     private void getTransistorToken(String orgname, String username, String url, final CallbackContext callbackContext) {
         Context context = cordova.getActivity().getApplicationContext();

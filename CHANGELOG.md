@@ -1,5 +1,16 @@
 # Change Log
 
+## 4.3.0 &mdash; 2021-09-13
+* [Added][Android] Implement new Android 12 "reduced accuracy" mechanism`requestTemporaryFullAccuracy`.
+* [Fixed][iOS] `Authorization.refreshPayload refreshToken` was not performing a String replace on the `{refreshToken}` template, instead over-writing the entire string.  Eg:  if provided with `'refresh_token': 'Bearer {refreshToken}`, `Bearer ` would be over-written and replaced with only the refresh-token.
+* [Fixed][Android] Fixed crash reported by Huawei device, where verticalAccuracy returns NaN.
+* [Fixed][iOS] add config change listeners for `heartbeatInterval` and `preventSuspend` to dynamically update interval when changed with `setConfig`.
+774
+* [Changed][Android] Update Android default `okhttp` version to `3.12.+`.
+* [Changed][Android] Update Android `eventbus` to `3.2.0`.
+* [Changed][iOS] Re-compile iOS `TSLocationManager` using XCode 12.4 instead of `12.5.1`.
+* [Fixed][Android] Fix an edge-case requesting motion permission.  If `getCurrentPosition()` is executed before `.start()`, the Android SDK fails to request motion permission.
+
 ## 4.1.3 &mdash; 2021-07-26
 * [Fixed][Android] Add dependency `localbroadcastmanager` when using AndroidX.
 * [Changed][Android] Load Android dependency `android-permissions` from MavenCentral instead of deprecated jCenter.
