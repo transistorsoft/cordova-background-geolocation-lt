@@ -286,59 +286,59 @@ var BackgroundGeolocation = /** @class */ (function () {
     };
     BackgroundGeolocation.onLocation = function (success, failure) {
         var bgGeo = plugin();
-        bgGeo.onLocation.apply(bgGeo, arguments);
+        return bgGeo.onLocation.apply(bgGeo, arguments);
     };
     BackgroundGeolocation.onMotionChange = function (callback) {
         var bgGeo = plugin();
-        bgGeo.onMotionChange.apply(bgGeo, arguments);
+        return bgGeo.onMotionChange.apply(bgGeo, arguments);
     };
     BackgroundGeolocation.onHttp = function (callback) {
         var bgGeo = plugin();
-        bgGeo.onHttp.apply(bgGeo, arguments);
+        return bgGeo.onHttp.apply(bgGeo, arguments);
     };
     BackgroundGeolocation.onHeartbeat = function (callback) {
         var bgGeo = plugin();
-        bgGeo.onHeartbeat.apply(bgGeo, arguments);
+        return bgGeo.onHeartbeat.apply(bgGeo, arguments);
     };
     BackgroundGeolocation.onProviderChange = function (callback) {
         var bgGeo = plugin();
-        bgGeo.onProviderChange.apply(bgGeo, arguments);
+        return bgGeo.onProviderChange.apply(bgGeo, arguments);
     };
     BackgroundGeolocation.onActivityChange = function (callback) {
         var bgGeo = plugin();
-        bgGeo.onActivityChange.apply(bgGeo, arguments);
+        return bgGeo.onActivityChange.apply(bgGeo, arguments);
     };
     BackgroundGeolocation.onGeofence = function (callback) {
         var bgGeo = plugin();
-        bgGeo.onGeofence.apply(bgGeo, arguments);
+        return bgGeo.onGeofence.apply(bgGeo, arguments);
     };
     BackgroundGeolocation.onGeofencesChange = function (callback) {
         var bgGeo = plugin();
-        bgGeo.onGeofencesChange.apply(bgGeo, arguments);
+        return bgGeo.onGeofencesChange.apply(bgGeo, arguments);
     };
     BackgroundGeolocation.onSchedule = function (callback) {
         var bgGeo = plugin();
-        bgGeo.onSchedule.apply(bgGeo, arguments);
+        return bgGeo.onSchedule.apply(bgGeo, arguments);
     };
     BackgroundGeolocation.onEnabledChange = function (callback) {
         var bgGeo = plugin();
-        bgGeo.onEnabledChange.apply(bgGeo, arguments);
+        return bgGeo.onEnabledChange.apply(bgGeo, arguments);
     };
     BackgroundGeolocation.onConnectivityChange = function (callback) {
         var bgGeo = plugin();
-        bgGeo.onConnectivityChange.apply(bgGeo, arguments);
+        return bgGeo.onConnectivityChange.apply(bgGeo, arguments);
     };
     BackgroundGeolocation.onPowerSaveChange = function (callback) {
         var bgGeo = plugin();
-        bgGeo.onPowerSaveChange.apply(bgGeo, arguments);
+        return bgGeo.onPowerSaveChange.apply(bgGeo, arguments);
     };
     BackgroundGeolocation.onNotificationAction = function (callback) {
         var bgGeo = plugin();
-        bgGeo.onNotificationAction.apply(bgGeo, arguments);
+        return bgGeo.onNotificationAction.apply(bgGeo, arguments);
     };
     BackgroundGeolocation.onAuthorization = function (callback) {
         var bgGeo = plugin();
-        bgGeo.onAuthorization.apply(bgGeo, arguments);
+        return bgGeo.onAuthorization.apply(bgGeo, arguments);
     };
     BackgroundGeolocation.on = function () {
         var bgGeo = plugin();

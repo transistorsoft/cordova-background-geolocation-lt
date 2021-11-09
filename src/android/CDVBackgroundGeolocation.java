@@ -356,22 +356,29 @@ public class CDVBackgroundGeolocation extends CordovaPlugin {
         callbackContext.success(config.toJson());
     }
     private void ready(final JSONObject params, final CallbackContext callbackContext) throws JSONException {
+        final TSConfig config = TSConfig.getInstance(cordova.getActivity().getApplicationContext());
+
+        boolean reset = true;
+        if (params.has("reset")) {
+            reset = params.getBoolean("reset");
+        }
         if (mReady) {
-            TSLog.logger.warn(TSLog.warn("#ready already called.  Redirecting to #setConfig"));
-            setConfig(params, callbackContext);
+            if (reset) {
+                TSLog.logger.warn(TSLog.warn("#ready already called.  Redirecting to #setConfig"));
+                setConfig(params, callbackContext);
+            } else {
+                TSLog.logger.warn(TSLog.warn("#ready already called.  Ignored"));
+                callbackContext.success(config.toJson());
+            }
             return;
         }
         mReady = true;
         BackgroundGeolocation adapter = getAdapter();
-        final TSConfig config = TSConfig.getInstance(cordova.getActivity().getApplicationContext());
+
 
         if (config.isFirstBoot()) {
             config.updateWithJSONObject(setHeadlessJobService(params));
         } else {
-            boolean reset = true;
-            if (params.has("reset")) {
-                reset = params.getBoolean("reset");
-            }
             if (reset) {
                 config.reset();
                 config.updateWithJSONObject(setHeadlessJobService(params));

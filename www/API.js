@@ -19,6 +19,23 @@ var cordovaCallbacks = [];
 // Cached copy of DeviceInfo
 var deviceInfo = null;
 
+var Events = {
+    LOCATION: 'location',
+    HTTP: 'http',
+    MOTIONCHANGE: 'motionchange',
+    PROVIDERCHANGE: 'providerchange',
+    HEARTBEAT: 'heartbeat',
+    ACTIVITYCHANGE: 'activitychange',
+    GEOFENCE: 'geofence',
+    GEOFENCESCHANGE: 'geofenceschange',
+    SCHEDULE: 'schedule',
+    CONNECTIVITYCHANGE: 'connectivitychange',
+    ENABLEDCHANGE: 'enabledchange',
+    POWERSAVECHANGE: 'powersavechange',
+    NOTIFICATIONACTION: 'notificationaction',
+    AUTHORIZATION: 'authorization'
+};
+
 // Validate provided config for #ready, #setConfig
 var validateConfig = function(config) {
   // Detect obsolete notification* fields and re-map to Notification instance.
@@ -61,7 +78,7 @@ function registerCordovaCallback(userSuccess, mySuccess) {
                     callbackId: callbackId,
                     success: userSuccess
                 });
-                break;
+                return callbackId;
             }
         }
     }
@@ -102,17 +119,20 @@ function removeCordovaCallbacks() {
             delete callbacks[callbackId];
         }
     }
-    /*
-    for (var callbackId in callbacks) {
-        if (callbacks.hasOwnProperty(callbackId) && CALLBACK_REGEXP.test(callbackId)) {
+}
 
-            var cb = callbacks[callbackId];
-            console.log('- removeCallback: ', cb);
-
-            delete callbacks[callbackId];
+/**
+ * Object returned from BackgroundGeolocation.addListener for removing an event-listener.
+ */
+function createSubscription(event, handler) {
+    return {
+        remove: function() {
+            var callbackId = removeCordovaCallback(handler);
+            if (callbackId) {
+                exec(emptyFn, emptyFn, MODULE_NAME, 'removeListener', [event, callbackId]);
+            }
         }
     }
-    */
 }
 
 /**
@@ -135,6 +155,7 @@ function setTimestamp(rs) {
 var emptyFn = function(){};
 
 module.exports = {
+    Events: Events,
     /**
     * If this is not the first-boot, configure using already persisted config.  Ignores defaultConfig.
     * If this IS the first boot, #ready acts like tradition #configure method, resetting the config
@@ -206,43 +227,63 @@ module.exports = {
         if (typeof(success) !== 'function') {
             throw MODULE_NAME + "#on " + event + " requires a success callback";
         }
-        fail = fail || emptyFn;
-        switch (event) {
-            case 'location':
-                return this.onLocation(success, fail);
-            case 'http':
-                return this.onHttp(success, fail);
-            case 'geofence':
-                return this.onGeofence(success, fail);
-            case 'motionchange':
-                return this.onMotionChange(success, fail);
-            case 'heartbeat':
-                return this.onHeartbeat(success, fail);
-            case 'schedule':
-                return this.onSchedule(success, fail);
-            case 'activitychange':
-                return this.onActivityChange(success, fail);
-            case 'providerchange':
-                return this.onProviderChange(success, fail);
-            case 'geofenceschange':
-                return this.onGeofencesChange(success, fail);
-            case 'powersavechange':
-                return this.onPowerSaveChange(success, fail);
-            case 'connectivitychange':
-                return this.onConnectivityChange(success, fail);
-            case 'enabledchange':
-                return this.onEnabledChange(success, fail);
-            case 'notificationaction':
-                return this.onNotificationAction(success, fail);
-            case 'authorization':
-                return this.onAuthorization(success, fail);
+        if (!Events[event.toUpperCase()]) {
+            throw MODULE_NAME + ".addListener:  Unknown event: " + event;
         }
+        fail = fail || emptyFn;
+
+        switch (event) {
+            case Events.LOCATION:
+                this.onLocation(success, fail);
+                break;
+            case Events.HTTP:
+                this.onHttp(success, fail);
+                break;
+            case Events.GEOFENCE:
+                this.onGeofence(success, fail);
+                break;
+            case Events.MOTIONCHANGE:
+                this.onMotionChange(success, fail);
+                break;
+            case Events.HEARTBEAT:
+                this.onHeartbeat(success, fail);
+                break;
+            case Events.SCHEDULE:
+                this.onSchedule(success, fail);
+                break;
+            case Events.ACTIVITYCHANGE:
+                this.onActivityChange(success, fail);
+                break;
+            case Events.PROVIDERCHANGE:
+                this.onProviderChange(success, fail);
+                break;
+            case Events.GEOFENCESCHANGE:
+                this.onGeofencesChange(success, fail);
+                break;
+            case Events.POWERSAVECHANGE:
+                this.onPowerSaveChange(success, fail);
+                break;
+            case Events.CONNECTIVITYCHANGE:
+                this.onConnectivityChange(success, fail);
+                break;
+            case Events.ENABLEDCHANGE:
+                this.onEnabledChange(success, fail);
+                break;
+            case Events.NOTIFICATIONACTION:
+                this.onNotificationAction(success, fail);
+                break;
+            case Events.AUTHORIZATION:
+                this.onAuthorization(success, fail);
+                break;
+        }
+        return createSubscription(event, success);
     },
 
     /**
     * remove event-listener
     */
     removeListener: function(event, handler) {
+        console.warn('BackgroundGeolocation.removeListener is deprecated.  Event-listener methods (eg: onLocation) now return a subscription instance.  Call subscription.remove() on the returned subscription instead.  Eg:\nconst subscription = BackgroundGeolocation.onLocation(myLocationHandler)\n...\nsubscription.remove()');
         // Compose remove-listener method name, eg:  "removeLocationListener"
         return new Promise(function(resolve, reject) {
             var callbackId = removeCordovaCallback(handler);
@@ -280,7 +321,7 @@ module.exports = {
             success(location);
         }
         exec(mySuccess, failure, MODULE_NAME, 'addLocationListener', []);
-        registerCordovaCallback(success, mySuccess);
+        return registerCordovaCallback(success, mySuccess);
     },
     onMotionChange: function(success, failure) {
         var mySuccess = function(params) {
@@ -291,53 +332,55 @@ module.exports = {
             success(params);
         };
         exec(mySuccess, failure, MODULE_NAME, 'addMotionChangeListener', []);
-        registerCordovaCallback(success, mySuccess);
+        return registerCordovaCallback(success, mySuccess);
     },
     onActivityChange: function(success) {
         exec(success, emptyFn, MODULE_NAME, 'addActivityChangeListener', []);
-        registerCordovaCallback(success, success);
+        return registerCordovaCallback(success, success);
     },
     onProviderChange: function(success) {
         exec(success, emptyFn, MODULE_NAME, 'addProviderChangeListener', []);
-        registerCordovaCallback(success, success);
+        return registerCordovaCallback(success, success);
     },
     onGeofence: function(success, failure) {
         exec(success, failure || emptyFn, MODULE_NAME, 'addGeofenceListener', []);
-        registerCordovaCallback(success, success);
+        return registerCordovaCallback(success, success);
     },
     onGeofencesChange: function(success, failure) {
         exec(success, failure, MODULE_NAME, 'addGeofencesChangeListener', []);
-        registerCordovaCallback(success, success);
+        return registerCordovaCallback(success, success);
     },
     onHttp: function(success, failure) {
         exec(success, failure, MODULE_NAME, 'addHttpListener', []);
-        registerCordovaCallback(success, success);
+        return registerCordovaCallback(success, success);
     },
     onPowerSaveChange: function(success, failure) {
         exec(success, failure, MODULE_NAME, 'addPowerSaveChangeListener', []);
-        registerCordovaCallback(success, success);
+        return registerCordovaCallback(success, success);
     },
     onConnectivityChange: function(success, failure) {
         exec(success, failure, MODULE_NAME, 'addConnectivityChangeListener', []);
-        registerCordovaCallback(success, success);
+        return registerCordovaCallback(success, success);
     },
     onEnabledChange: function(success, failure) {
         exec(success, failure, MODULE_NAME, 'addEnabledChangeListener', []);
-        registerCordovaCallback(success, success);
+        return registerCordovaCallback(success, success);
     },
     onHeartbeat: function(success, failure) {
         exec(success, failure, MODULE_NAME, 'addHeartbeatListener', []);
-        registerCordovaCallback(success, success);
+        return registerCordovaCallback(success, success);
     },
     onSchedule: function(success, failure) {
         exec(success, failure, MODULE_NAME, 'addScheduleListener', []);
-        registerCordovaCallback(success, success);
+        return registerCordovaCallback(success, success);
     },
     onNotificationAction: function(success, failure) {
         exec(success, failure, MODULE_NAME, 'addNotificationActionListener', []);
+        return registerCordovaCallback(success, success);
     },
     onAuthorization: function(success, failure) {
         exec(success, failure, MODULE_NAME, 'addAuthorizationListener', []);
+        return registerCordovaCallback(success, success);
     },
     getState: function() {
         return new Promise(function(resolve, reject) {

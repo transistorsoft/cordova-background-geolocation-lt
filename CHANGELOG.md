@@ -1,5 +1,26 @@
 # Change Log
 
+## 4.4.0 &mdash; 2021-10-29
+* [Added] New `Authorization.strategy "SAS"` (alternative to default `JWT`).
+* [Changed] **Deprecated** `BackgroundGeolocation.removeListener`.  All event-handlers now return a `Subscription` instance containing a `.remove()` method.  You will keep track of your own `subscription` instances and call `.remove()` upon them when you wish to remove an event listener.  Eg:
+
+```javascript
+/// OLD
+const onLocation = (location) => {
+    console.log('[onLocation');
+}
+BackgroundGeolocation.onLocation(onLocation);
+...
+// deprecated: removeListener
+BackgroundGeolocation.removeListener('location', onLocation);
+
+/// NEW:  capture returned subscription instance.
+const onLocationSubscription = BackgroundGeolocation.onLocation(onLocation);
+...
+// Removing an event-listener.
+onLocationSubscription.remove();
+```
+
 ## 4.3.0 &mdash; 2021-09-13
 * [Added][Android] Implement new Android 12 "reduced accuracy" mechanism`requestTemporaryFullAccuracy`.
 * [Fixed][iOS] `Authorization.refreshPayload refreshToken` was not performing a String replace on the `{refreshToken}` template, instead over-writing the entire string.  Eg:  if provided with `'refresh_token': 'Bearer {refreshToken}`, `Bearer ` would be over-written and replaced with only the refresh-token.
