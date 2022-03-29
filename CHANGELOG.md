@@ -1,5 +1,14 @@
 # Change Log
 
+## 4.4.2 &mdash; 2022-03-29
+* [Android] While testing adding 20k geofences, the Logger can cause an `OutOfMemory` error.  Define a dedicated thread executor `Executors.newFixedThreadPool(2)` for posting log messages in background.
+* [iOS] remote event-listeners in onAppTerminate to prevent onEnabledChange event being fired in a dying app configured for `stopOnTerminate: true`
+
+# 4.4.1 &mdash; 2022-01-20
+* [Fixed][iOS] Regression bug in iOS SAS authorization strategy
+* [Fixed][Android] Android logger defaulting to LOG_LEVEL_VERBOSE when initially launched configured for LOG_LEVEL_OFF
+* [Changed][iOS] Rebuild with latest XCode `13.2.1`
+
 ## 4.4.0 &mdash; 2021-10-29
 * [Added] New `Authorization.strategy "SAS"` (alternative to default `JWT`).
 * [Changed] **Deprecated** `BackgroundGeolocation.removeListener`.  All event-handlers now return a `Subscription` instance containing a `.remove()` method.  You will keep track of your own `subscription` instances and call `.remove()` upon them when you wish to remove an event listener.  Eg:
