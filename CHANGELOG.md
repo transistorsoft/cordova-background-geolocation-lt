@@ -1,5 +1,11 @@
 # Change Log
 
+## 4.8.1 &mdash; 2022-08-08
+* [Android] Fix `java.lang.IllegalArgumentException `TSProviderManager.handleProviderChangeEvent`.
+* [Android] `startOnBoot: false` with `stopOnTerminate: false` could start-on-boot.
+* [Android] `State.enabled` returned by calling `.stop()` returns `true` due to implementation running in a background-thread but `callback` executed immediately on the main-thread.  However, requesting `.getState()` immediately after calling `.stop` *would* return the correct value of `State.enabled`
+* [Android] Fix `notification.sticky` not being respected.
+
 ## 4.8.0 &mdash; 2022-06-21
 * [Android] Fix bug in `onProviderChange` event:  not properly detecting when location-services disabled.
 * [Android] __Android 12__:  Guard `Context.startForegroundService` with `try / catch`: the plugin will now catch exception `ForegroundServiceStartNotAllowedException` and automatically retry with an `AlarmManager` *oneShot* event.
