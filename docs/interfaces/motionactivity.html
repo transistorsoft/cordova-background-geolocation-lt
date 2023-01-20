@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>Battery | Cordova Background Geolocation</title>
+	<title>MotionActivity | Cordova Background Geolocation</title>
 	<meta name="description" content="Documentation for Cordova Background Geolocation">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../assets/css/main.css">
@@ -61,10 +61,10 @@
 					<a href="../index.html">Cordova Background Geolocation</a>
 				</li>
 				<li>
-					<a href="battery.html">Battery</a>
+					<a href="motionactivity.html">MotionActivity</a>
 				</li>
 			</ul>
-			<h1>Interface Battery</h1>
+			<h1>Interface MotionActivity</h1>
 		</div>
 	</div>
 </header>
@@ -74,7 +74,7 @@
 			<section class="tsd-panel tsd-comment">
 				<div class="tsd-comment tsd-typography">
 					<div class="lead">
-						<p>This object is attached to instances of <a href="location.html#battery">Location.battery</a>.</p>
+						<p>The last known motion-activity when this location was recorded.</p>
 					</div>
 				</div>
 			</section>
@@ -82,7 +82,7 @@
 				<h3>Hierarchy</h3>
 				<ul class="tsd-hierarchy">
 					<li>
-						<span class="target">Battery</span>
+						<span class="target">MotionActivity</span>
 					</li>
 				</ul>
 			</section>
@@ -93,8 +93,8 @@
 						<section class="tsd-index-section ">
 							<h3>Properties</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="battery.html#is_charging" class="tsd-kind-icon">is_<wbr>charging</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="battery.html#level" class="tsd-kind-icon">level</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="motionactivity.html#confidence" class="tsd-kind-icon">confidence</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="motionactivity.html#type" class="tsd-kind-icon">type</a></li>
 							</ul>
 						</section>
 					</div>
@@ -103,27 +103,55 @@
 			<section class="tsd-panel-group tsd-member-group ">
 				<h2>Properties</h2>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
-					<a name="is_charging" class="tsd-anchor"></a>
-					<h3>is_<wbr>charging</h3>
-					<div class="tsd-signature tsd-kind-icon">is_<wbr>charging<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">boolean</span></div>
+					<a name="confidence" class="tsd-anchor"></a>
+					<h3>confidence</h3>
+					<div class="tsd-signature tsd-kind-icon">confidence<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span></div>
 					<aside class="tsd-sources">
 					</aside>
 					<div class="tsd-comment tsd-typography">
 						<div class="lead">
-							<p><code>true</code> when device is plugged in to power.</p>
+							<p>Confidence of the reported device motion activity in %.</p>
 						</div>
 					</div>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
-					<a name="level" class="tsd-anchor"></a>
-					<h3>level</h3>
-					<div class="tsd-signature tsd-kind-icon">level<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span></div>
+					<a name="type" class="tsd-anchor"></a>
+					<h3>type</h3>
+					<div class="tsd-signature tsd-kind-icon">type<span class="tsd-signature-symbol">:</span> <a href="../index.html#motionactivitytype" class="tsd-signature-type" data-tsd-kind="Type alias">MotionActivityType</a></div>
 					<aside class="tsd-sources">
 					</aside>
 					<div class="tsd-comment tsd-typography">
 						<div class="lead">
-							<p>Battery level.  <code>0.0</code> = empty; <code>1.0</code> = full charge.</p>
+							<p>The reported device motion activity.</p>
 						</div>
+						<table>
+							<thead>
+								<tr>
+									<th>Activity Name</th>
+								</tr>
+							</thead>
+							<tbody><tr>
+									<td><code>still</code></td>
+								</tr>
+								<tr>
+									<td><code>walking</code></td>
+								</tr>
+								<tr>
+									<td><code>on_foot</code></td>
+								</tr>
+								<tr>
+									<td><code>running</code></td>
+								</tr>
+								<tr>
+									<td><code>on_bicycle</code></td>
+								</tr>
+								<tr>
+									<td><code>in_vehicle</code></td>
+								</tr>
+								<tr>
+									<td><code>unknown</code></td>
+								</tr>
+						</tbody></table>
 					</div>
 				</section>
 			</section>
@@ -134,13 +162,13 @@
 				</ul>
 				<ul class="current">
 					<li class="current tsd-kind-interface">
-						<a href="battery.html" class="tsd-kind-icon">Battery</a>
+						<a href="motionactivity.html" class="tsd-kind-icon">Motion<wbr>Activity</a>
 						<ul>
 							<li class=" tsd-kind-property tsd-parent-kind-interface">
-								<a href="battery.html#is_charging" class="tsd-kind-icon">is_<wbr>charging</a>
+								<a href="motionactivity.html#confidence" class="tsd-kind-icon">confidence</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-interface">
-								<a href="battery.html#level" class="tsd-kind-icon">level</a>
+								<a href="motionactivity.html#type" class="tsd-kind-icon">type</a>
 							</li>
 						</ul>
 					</li>
@@ -153,13 +181,13 @@
 				</ul>
 				<ul class="current">
 					<li class="current tsd-kind-interface">
-						<a href="battery.html" class="tsd-kind-icon">Battery</a>
+						<a href="motionactivity.html" class="tsd-kind-icon">Motion<wbr>Activity</a>
 						<ul>
 							<li class=" tsd-kind-property tsd-parent-kind-interface">
-								<a href="battery.html#is_charging" class="tsd-kind-icon">is_<wbr>charging</a>
+								<a href="motionactivity.html#confidence" class="tsd-kind-icon">confidence</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-interface">
-								<a href="battery.html#level" class="tsd-kind-icon">level</a>
+								<a href="motionactivity.html#type" class="tsd-kind-icon">type</a>
 							</li>
 						</ul>
 					</li>
