@@ -1,5 +1,16 @@
 # Change Log
 
+## 4.10.0 &mdash; 2023-02-01
+* [Fixed][Android] Implement support for `play-services-location v21` (`GOOGLE_API_VERSION` in the plugin Config).  The plugin can now work with either `<= v20` or `>= v21`.
+* [CHANGE] :warning: *AndroidX* is now **required**.  You must enable *AndroidXEnabled* in your `config.xml`:
+```xml
+  <platform name="android">
+    <preference name="AndroidXEnabled" value="true" />
+  </platform>
+```
+* [Changed][Android] Change default `GOOGLE_API_VERSION 20.+`.
+* [Changed][Android] Moved dependency `com.google.android.gms:play-services-location` from `plugin.xml` (using `<framework />` tag  -> plugin's own `build.gradle`.
+
 ## 4.9.4 &mdash; 2023-01-19
 * [Fixed] Fixed inconsistency in API docs with `location.activity` (`location.activity.type`) and `MotionChangeEvent` provided to `onActivityChange` (`motionActivityEvent.activity`).
 * [Changed] __Android__ Update `logback-android` version.
