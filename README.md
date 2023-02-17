@@ -102,20 +102,41 @@ $ cordova plugin add https://github.com/transistorsoft/cordova-background-geoloc
   xmlns:cdv="http://cordova.apache.org/ns/1.0">
 ```
 
-- Within the `<platform name="android">` container, add the `license_key` key using a `<config-file />` element:
+- Within the `<platform name="android">` container, add the `license` key using a `<config-file />` element:
 - :information_source: If you haven't yet [purchased a license](http://www.transistorsoft.com/shop/products/cordova-background-geolocation), you can skip this step &mdash; the plugin is **fully functional in *DEBUG* builds without a license** so you can *try before you buy*.  You will see a Toast message "*License Validation Failure*" when your app boots &mdash; **ignore it**.
 
 ```xml
 <platform name="android">
-      <!-- background-geolocation -->
+      <!-- Cordova Background Geolocation License -->
       <config-file parent="/manifest/application" target="app/src/main/AndroidManifest.xml">
           <meta-data
-            android:name="com.transistorsoft.locationmanager.license_key"
+            android:name="com.transistorsoft.locationmanager.license"
             android:value="YOUR_LICENSE_KEY_HERE" />
       </config-file>
-      <!-- /background-geolocation -->
 </platform>
 ```
+
+### Huawei Mobile Services (HMS) Support
+
+If you've [purchased an *HMS Background Geolocation* License](https://shop.transistorsoft.com/collections/frontpage/products/huawei-background-geolocation) for installing the plugin on _Huawei_ devices without *Google Play Services* installed, add your *HMS Background Geolocation* license key:
+
+```xml
+<platform name="android">
+      <!-- Cordova Background Geolocation License -->
+      <config-file parent="/manifest/application" target="app/src/main/AndroidManifest.xml">
+          <meta-data
+            android:name="com.transistorsoft.locationmanager.license"
+            android:value="YOUR_LICENSE_KEY_HERE" />
+      </config-file>
+      <!-- HMS Background Geolocation License -->
+      <config-file parent="/manifest/application" target="app/src/main/AndroidManifest.xml">
+          <meta-data
+            android:name="com.transistorsoft.locationmanager.hms.license"
+            android:value="YOUR_HMS_LICENSE_KEY_HERE" />
+      </config-file>
+</platform>
+```
+:warning: Huawei HMS support requires `cordova-background-geolocation >= 3.11.0`.
 
 ### AndroidX (`cordova-android >= 9.0.0`)
 
@@ -130,16 +151,13 @@ It's *highly* recommended to configure your app for *Android X* when using *Cord
 </platform>
 ```
 
-```bash
-$ cordova plugin add cordova-plugin-androidx-adapter
-```
-
 :warning: If you see the following error, you need to configure your app for *Android X*.
 ```
 java.lang.RuntimeException: Unable to get provider com.transistorsoft.locationmanager.util.LogFileProvider: java.lang.ClassNotFoundException
 ```
 
 ------------------------------------------------------------------------------------------
+
 :warning: On older version of Cordova, If you **change your license key** after building android, you might receive an error:
 ```diff
 BUILD FAILED in 1s
