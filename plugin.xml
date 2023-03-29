@@ -3,7 +3,7 @@
 <plugin xmlns="http://www.phonegap.com/ns/plugins/1.0"
     xmlns:android="http://schemas.android.com/apk/res/android"
     id="cordova-background-geolocation-lt"
-    version="4.10.0">
+    version="4.11.0">
 
     <name>BackgroundGeolocation</name>
     <description>The most sophisticated, battery-efficient background-geolocation and geofencing plugin for Cordova</description>
@@ -56,7 +56,7 @@
      <!-- android -->
     <platform name="android">
         <preference name="GOOGLE_API_VERSION" default="20.+" />
-
+        <preference name="HMS_LOCATION_VERSION" default="6.0.0.302" />
         <preference name="OKHTTP_VERSION" default="3.12.+" />
         <framework src="com.squareup.okhttp3:okhttp:$OKHTTP_VERSION"/>
         <preference name="EVENTBUS_VERSION" default="3.3.1" />

@@ -1,6 +1,5 @@
 import groovy.json.JsonSlurper
 
-
 def TAG = "[cordova-background-geolocation] "
 def CORDOVA_BACKGROUND_GEOLOCATION_LT = "cordova-background-geolocation-lt"
 def CORDOVA_BACKGROUND_GEOLOCATION    = "cordova-background-geolocation"
@@ -9,8 +8,10 @@ def pluginName = ""
 def useAndroidX = (project.hasProperty("android.useAndroidX")) ? project.property("android.useAndroidX") : false
 
 def DEFAULT_PLAY_SERVICES_LOCATION_VERSION = "20.+"
+def DEFAULT_HMS_LOCATION_VERSION = "6.0.0.302"
 
 def playServicesLocationVersion = DEFAULT_PLAY_SERVICES_LOCATION_VERSION
+def hmsLocationVersion = DEFAULT_HMS_LOCATION_VERSION
 
 def safeExtGet(prop, fallback) {
     rootProject.ext.has(prop) ? rootProject.ext.get(prop) : fallback
@@ -39,6 +40,7 @@ if (!capacitorConfig.exists()) {
 // Is this a Capacitor app?
 if (capacitorConfig.exists()) {
   playServicesLocationVersion = safeExtGet('playServicesLocationVersion', DEFAULT_PLAY_SERVICES_LOCATION_VERSION)
+  hmsLocationVersion = safeExtGet('hmsLocationVersion', DEFAULT_HMS_LOCATION_VERSION)
 
   // Capacitor app
   def nodeModulesDir = (project.hasProperty("nodeModulesDirectory")) ? project.property("nodeModulesDirectory") : "../../node_modules"
@@ -78,6 +80,7 @@ if (capacitorConfig.exists()) {
   }
   if (pluginConfig != null) {
     playServicesLocationVersion = pluginConfig["GOOGLE_API_VERSION"]
+    hmsLocationVersion = pluginConfig["HMS_LOCATION_VERSION"]
   } else {
     println("* ERROR: cordova-background-geolocation failed to find plugin config from package.json")
 
@@ -104,6 +107,14 @@ repositories {
 
 println("$TAG playServicesLocationVersion: ${playServicesLocationVersion}")
 
+rootProject.allprojects {
+    repositories {
+        google()
+        mavenCentral()
+        maven { url 'https://developer.huawei.com/repo/' }
+    }
+}
+
 dependencies {
   // Load tslocationmanager.aar
 
@@ -115,6 +126,11 @@ dependencies {
   }
 
   implementation "com.google.android.gms:play-services-location:$playServicesLocationVersion"
+  // HMS location
+  implementation("com.huawei.hms:location:$hmsLocationVersion") {
+    exclude(group: "com.huawei.hms", module: 'hianalytics')
+  }
+
   implementation "androidx.localbroadcastmanager:localbroadcastmanager:1.0.+"
 }
 
