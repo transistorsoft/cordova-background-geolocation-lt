@@ -1,6 +1,6 @@
 # Change Log
 
-## 4.11.0 &mdash; 2023-02-18
+## 4.11.0 &mdash; 2023-03-29
 * [Android] Introduce __Huawei HMS Support__.  Requires a separate license key [purchased here](https://shop.transistorsoft.com/collections/frontpage/products/huawei-background-geolocation).
 * [iOS] Fix for iOS 16.4.  iOS 16.4 introduces changes to CoreLocation behaviour when using Config.showsBackgroundLocationIndi
 cator: false.
