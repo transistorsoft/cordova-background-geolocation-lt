@@ -16,7 +16,7 @@ import com.transistorsoft.locationmanager.http.HttpResponse;
 import com.transistorsoft.locationmanager.location.TSLocation;
 import com.transistorsoft.locationmanager.logger.TSLog;
 
-
+import org.json.JSONException;
 /**
  * BackgroundGeolocationHeadlessTask
  * This component allows you to receive events from the BackgroundGeolocation plugin in the native Android environment while your app has been *terminated*,
@@ -39,7 +39,11 @@ public class BackgroundGeolocationHeadlessTask  {
         if (name.equals(BackgroundGeolocation.EVENT_TERMINATE)) {
             JSONObject state = event.getTerminateEvent();
         } else if (name.equals(BackgroundGeolocation.EVENT_LOCATION)) {
-            TSLocation location = event.getLocationEvent();
+            try {
+                TSLocation location = event.getLocationEvent();
+            } catch (JSONException e) {
+                TSLog.logger.error(e.getMessage(), e);
+            }
         } else if (name.equals(BackgroundGeolocation.EVENT_MOTIONCHANGE)) {
             MotionChangeEvent motionChangeEvent = event.getMotionChangeEvent();
             TSLocation location = motionChangeEvent.getLocation();

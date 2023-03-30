@@ -8,7 +8,7 @@ def pluginName = ""
 def useAndroidX = (project.hasProperty("android.useAndroidX")) ? project.property("android.useAndroidX") : false
 
 def DEFAULT_PLAY_SERVICES_LOCATION_VERSION = "20.+"
-def DEFAULT_HMS_LOCATION_VERSION = "6.0.0.302"
+def DEFAULT_HMS_LOCATION_VERSION = "6.9.0.300"
 
 def playServicesLocationVersion = DEFAULT_PLAY_SERVICES_LOCATION_VERSION
 def hmsLocationVersion = DEFAULT_HMS_LOCATION_VERSION
