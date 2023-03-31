@@ -1,5 +1,5 @@
 var MODULE_NAME = "BackgroundGeolocation";
-var DEFAULT_URL = 'http://tracker.transistorsoft.com';
+var DEFAULT_URL = 'https://tracker.transistorsoft.com';
 var DUMMY_TOKEN = 'DUMMY_TOKEN';
 var LOCATIONS_PATH = '/api/locations';
 var REFRESH_TOKEN_PATH = '/api/refresh_token';
