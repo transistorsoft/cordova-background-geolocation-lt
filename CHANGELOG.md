@@ -1,5 +1,8 @@
 # Change Log
 
+## 4.13.0 &mdash; 2023-07-12
+* [iOS] Migrate `<framework type="podspec" />` for `CocoaLumberjack` dependency to new `<podspec>` definition in `plugin.xml`, required for `cordova-ios >= 7.0.0.
+##
 ## 4.12.0 &mdash; 2023-05-04
 * [iOS] iOS 16.4 made a major change to location-services, exposed only when `Config.showsBackgroundLocationIndicator` is `false` (the default).  As a result of this change, `Config.showsBackgroundLocationIndicator` will now default to `true`.
 

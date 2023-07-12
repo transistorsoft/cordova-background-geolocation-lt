@@ -3,7 +3,7 @@
 <plugin xmlns="http://www.phonegap.com/ns/plugins/1.0"
     xmlns:android="http://schemas.android.com/apk/res/android"
     id="cordova-background-geolocation-lt"
-    version="4.12.0">
+    version="4.13.0">
 
     <name>BackgroundGeolocation</name>
     <description>The most sophisticated, battery-efficient background-geolocation and geofencing plugin for Cordova</description>
@@ -42,7 +42,16 @@
             </feature>
         </config-file>
 
-        <framework src="CocoaLumberjack" type="podspec" spec="~> 3.7.2" />
+
+        <podspec>
+            <config>
+                <source url="https://github.com/CocoaPods/Specs.git"/>
+            </config>
+            <pods>
+                <pod name="CocoaLumberjack" spec="~> 3.7.2" />
+            </pods>
+        </podspec>
+
         <framework src="AudioToolbox.framework" weak="true" />
         <framework src="SystemConfiguration.framework" weak="true" />
         <framework src="AVFoundation.framework" weak="true" />
