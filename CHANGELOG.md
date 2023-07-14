@@ -1,5 +1,8 @@
 # Change Log
 
+## 4.13.1 &mdash; 2023-07-14
+* [iOS] Use cocoapods source url from CDN instead of Git clone
+
 ## 4.13.0 &mdash; 2023-07-12
 * [iOS] Migrate `<framework type="podspec" />` for `CocoaLumberjack` dependency to new `<podspec>` definition in `plugin.xml`, required for `cordova-ios >= 7.0.0.
 ##
