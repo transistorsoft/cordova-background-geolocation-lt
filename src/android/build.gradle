@@ -8,7 +8,7 @@ def pluginName = ""
 def useAndroidX = (project.hasProperty("android.useAndroidX")) ? project.property("android.useAndroidX") : false
 
 def DEFAULT_PLAY_SERVICES_LOCATION_VERSION = "20.+"
-def DEFAULT_HMS_LOCATION_VERSION = "6.9.0.300"
+def DEFAULT_HMS_LOCATION_VERSION = "6.11.0.301"
 
 def playServicesLocationVersion = DEFAULT_PLAY_SERVICES_LOCATION_VERSION
 def hmsLocationVersion = DEFAULT_HMS_LOCATION_VERSION
@@ -81,6 +81,7 @@ if (capacitorConfig.exists()) {
   if (pluginConfig != null) {
     playServicesLocationVersion = pluginConfig["GOOGLE_API_VERSION"]
     hmsLocationVersion = pluginConfig["HMS_LOCATION_VERSION"]
+
   } else {
     println("* ERROR: cordova-background-geolocation failed to find plugin config from package.json")
 
@@ -132,6 +133,10 @@ dependencies {
   }
 
   implementation "androidx.localbroadcastmanager:localbroadcastmanager:1.0.+"
+  
+  def work_version = "2.8.1"
+  implementation "androidx.work:work-runtime:$work_version"
+  implementation "androidx.concurrent:concurrent-futures:1.1.0"
 }
 
 /**

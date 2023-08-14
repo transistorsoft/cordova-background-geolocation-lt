@@ -706,6 +706,7 @@ public class CDVBackgroundGeolocation extends CordovaPlugin {
             @Override public void onStart(int taskId) {
                 callbackContext.success(taskId);
             }
+            @Override public void onCancel(int taskId) { } // NO IMPLEMENTATION
         });
     }
 

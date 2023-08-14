@@ -1,5 +1,9 @@
 # Change Log
 
+## 4.14.0 &mdash; UNRELEASED
+* [Android] Android 14 (API 34) support:  All foreground-services now require an `android:foregroundServiceType` in the plugin's `AndroidManifest` (handled automatically by the plugin).
+* [Android] Android 14 (API 34) support: Fix error "*One of RECEIVER_EXPORTED or RECEIVER_NOT_EXPORTED should be specified*" in `DeviceSettings.startMonitoringPowerSaveChanges`.
+
 ## 4.13.1 &mdash; 2023-07-14
 * [iOS] Use cocoapods source url from CDN instead of Git clone
 
