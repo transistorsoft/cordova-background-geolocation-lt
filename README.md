@@ -116,6 +116,21 @@ $ cordova plugin add https://github.com/transistorsoft/cordova-background-geoloc
 </platform>
 ```
 
+#### Polygon Geofencing Add-on
+
+If you've purchased a license for the [Polygon Geofencing add-on](https://shop.transistorsoft.com/products/polygon-geofencing), add the following license key to your __`AndroidManifest`__ (Polygon Geofencing is fully functional in DEBUG builds so you can try before you buy):
+
+```xml
+<platform name="android">
+      <!-- Cordova Background Geolocation License -->
+      <config-file parent="/manifest/application" target="app/src/main/AndroidManifest.xml">
+          <meta-data
+            android:name="com.transistorsoft.locationmanager.polygon.license"
+            android:value="YOUR_POLYGON_LICENSE_KEY_HERE" />
+      </config-file>
+</platform>
+```
+
 #### Huawei Mobile Services (HMS) Support
 
 If you've [purchased an *HMS Background Geolocation* License](https://shop.transistorsoft.com/collections/frontpage/products/huawei-background-geolocation) for installing the plugin on _Huawei_ devices without *Google Play Services* installed, add your *HMS Background Geolocation* license key:

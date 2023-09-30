@@ -550,9 +550,11 @@
 }
 
 -(TSGeofence*) buildGeofence:(NSDictionary*)params {
-    if (!params[@"identifier"] || !params[@"radius"] || !params[@"latitude"] || !params[@"longitude"]) {
+    
+    if (!params[@"identifier"] || (!params[@"vertices"] && (!params[@"radius"] || !params[@"latitude"] || !params[@"longitude"]))) {
         return nil;
     }
+    
     return [[TSGeofence alloc] initWithIdentifier: params[@"identifier"]
                                            radius: [params[@"radius"] doubleValue]
                                          latitude: [params[@"latitude"] doubleValue]
@@ -561,7 +563,8 @@
                                      notifyOnExit: (params[@"notifyOnExit"])  ? [params[@"notifyOnExit"] boolValue] : NO
                                     notifyOnDwell: (params[@"notifyOnDwell"]) ? [params[@"notifyOnDwell"] boolValue] : NO
                                    loiteringDelay: (params[@"loiteringDelay"]) ? [params[@"loiteringDelay"] doubleValue] : 0
-                                           extras: params[@"extras"]];
+                                           extras: params[@"extras"]
+                                         vertices: params[@"vertices"]];
 }
 - (void) removeGeofence:(CDVInvokedUrlCommand*)command
 {

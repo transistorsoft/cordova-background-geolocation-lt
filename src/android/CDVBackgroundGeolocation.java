@@ -29,6 +29,7 @@ import com.transistorsoft.locationmanager.scheduler.TSScheduleManager;
 import com.transistorsoft.locationmanager.util.Sensors;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -644,6 +645,16 @@ public class CDVBackgroundGeolocation extends CordovaPlugin {
         if (config.has("notifyOnDwell"))    { builder.setNotifyOnDwell(config.getBoolean("notifyOnDwell")); }
         if (config.has("loiteringDelay"))   { builder.setLoiteringDelay(config.getInt("loiteringDelay")); }
         if (config.has("extras"))           { builder.setExtras(config.getJSONObject("extras")); }
+        // Polygon Geofence?
+        if (config.has("vertices")) {
+          JSONArray json = config.getJSONArray("vertices");
+          List<List<Double>> vertices = new ArrayList<>();
+          for (int i=0; i < json.length(); i++) {
+            JSONArray jVertex = json.getJSONArray(i);
+            vertices.add(Arrays.asList(jVertex.getDouble(0), jVertex.getDouble(1)));
+          }
+          builder.setVertices(vertices);
+        }
         return builder.build();
     }
 
