@@ -1,6 +1,9 @@
 # CHANGELOG
 
-## 4.15.1 &mdash; 2012-10-02
+## 4.15.2 &mdash; 2023-10-12
+* [Android] Fix `IllegalStateException` calling addGeofences when number of geofences exceeds platform maximum (100).
+
+## 4.15.1 &mdash; 2023-10-02
 * [iOS] Fix "*Duplicate symbol error DummyPods_TSLocationManager*".
 * [Android] Fix timeout issue in `.watchPosition`.
 
