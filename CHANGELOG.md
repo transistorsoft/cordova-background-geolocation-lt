@@ -1,5 +1,9 @@
 # CHANGELOG
 
+# 4.15.4 &mdash; 2012-11-16
+* [Android] Fix problem with polygon-geofencing license-validation not working in DEBUG builds when configured with pro
+duct flavors.
+
 ## 4.15.3 &mdash; 2023-11-06
 * [Android] HMS geolocation event does not provide a timestamp for the triggering location!!  Use System current time.
 * [Android] Guard against Geofence SQLite query returning null in `GeofencingService`.
