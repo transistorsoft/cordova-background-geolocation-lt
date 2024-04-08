@@ -265,6 +265,66 @@ Paste **all** the following elements into the `<platform name="ios">` container:
 </platform>
 ```
 
+#### Privacy Manifest
+
+Apple now requires apps provide a [Privacy Manifest for "sensitive" APIs](https://developer.apple.com/documentation/bundleresources/privacy_manifest_files/describing_use_of_required_reason_api?language=objc) which could be abused for "fingerprinting" a user for malicious marketing activity.
+
+:warning: You **MUST** upgrade your `cordova-ios` platform to [`>= 7.1.0` for *iOS Privacy Manifest Support*](https://github.com/apache/cordova-ios/blob/master/RELEASENOTES.md#710-apr-01-2024):
+
+- :open_file_folder: __`config.xml`__
+- Add the following `<privacy-manifest>` __four__ block within the `NSPrivacyAccessedAPITypes` container:
+
+```xml
+  <platform name="ios">
+      <privacy-manifest>
+          <key>NSPrivacyAccessedAPITypes</key>
+          <array>
+              <!-- [1] cordova-background-fetch: UserDefaults -->
+              <dict>
+                  <key>NSPrivacyAccessedAPIType</key>
+                  <string>NSPrivacyAccessedAPICategoryUserDefaults</string>
+
+                  <key>NSPrivacyAccessedAPITypeReasons</key>
+                  <array>
+                      <string>CA92.1</string>
+                  </array>
+              </dict>
+
+              <!-- [2] cordova-background-geolocation: UserDefaults -->
+              <dict>
+                  <key>NSPrivacyAccessedAPIType</key>
+                  <string>NSPrivacyAccessedAPICategoryUserDefaults</string>
+
+                  <key>NSPrivacyAccessedAPITypeReasons</key>
+                  <array>
+                      <string>CA92.1</string>
+                      <string>1C8F.1</string>
+                  </array>
+              </dict>
+              <!-- [3] cordova-background-geolocation (CocoaLumberjack): FileTimestamp -->
+              <dict>
+                  <key>NSPrivacyAccessedAPIType</key>
+                  <string>NSPrivacyAccessedAPICategoryFileTimestamp</string>
+                  <key>NSPrivacyAccessedAPITypeReasons</key>
+                  <array>
+                      <string>C617.1</string>
+                      <string>0A2A.1</string>
+                  </array>
+              </dict>
+              <!-- [4] cordova-background-geolocation (CocoaLumberjack): DiskSpace -->
+              <dict>
+                  <key>NSPrivacyAccessedAPIType</key>
+                  <string>NSPrivacyAccessedAPICategoryDiskSpace</string>
+                  <key>NSPrivacyAccessedAPITypeReasons</key>
+                  <array>
+                      <string>E174.1</string>
+                  </array>
+              </dict>
+          </array>
+      </privacy-manifest>
+  </platform>
+```
+
 #### Configuring for `useSignificantChangesOnly`
 
 For those using `useSignificantChangesOnly: true`, possibly because Apple *denied* your use of the background `location` capability, you can disable background `location` by providing the `BACKGROUND_MODE_LOCATION` `--variable` with an empty-string:
