@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 4.16.2 &mdash; 2024-04-08
+* [iOS] Implement new [iOS Privacy Manifest](https://developer.apple.com/documentation/bundleresources/privacy_manifest_files?language=objc) (__See Updated iOS Setup Instructions in README__).
+* [iOS] codesign `TSBackgroundGeolocation.xcframework`
+
 ## 4.16.1 &mdash; 2024-03-19
 * [iOS] Fix bug in iOS scheduler, triggering ON incorrectly.  For example, given a `schedule: ['1 00:00-23:59'], the plu
 gin was trigging on for `DAY 2`.
