@@ -16,7 +16,7 @@
         <engine name="cordova-ios" version=">=4.5.0"/>
     </engines>
 
-    <dependency id="cordova-plugin-background-fetch" version="~7.2.2" />
+    <dependency id="cordova-plugin-background-fetch" version="~7.2.3" />
 
     <js-module src="www/BackgroundGeolocation.js" name="BackgroundGeolocation">
         <clobbers target="window.BackgroundGeolocation" />
