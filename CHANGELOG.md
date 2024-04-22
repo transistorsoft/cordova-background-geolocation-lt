@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## 4.16.3 &mdash; 2024-04-22
+* [iOS] Code-sign `TSLocationManager.xcframework` with new Apple Organization (*9224-2932 Quebec Inc*) certificate.
+
 ## 4.16.2 &mdash; 2024-04-08
 * [iOS] Implement new [iOS Privacy Manifest](https://developer.apple.com/documentation/bundleresources/privacy_manifest_files?language=objc) (__See Updated iOS Setup Instructions in README__).
 * [iOS] codesign `TSBackgroundGeolocation.xcframework`
