@@ -114,6 +114,11 @@ rootProject.allprojects {
         google()
         mavenCentral()
         maven { url 'https://developer.huawei.com/repo/' }
+        configurations.all{
+            resolutionStrategy{
+                force "com.google.android.gms:play-services-location:21.0.1"
+            }
+        }
     }
 }
 
