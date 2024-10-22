@@ -70,6 +70,7 @@ export default class BackgroundGeolocation {
   static get ACTIVITY_TYPE_AUTOMOTIVE_NAVIGATION() { return plugin().ACTIVITY_TYPE_AUTOMOTIVE_NAVIGATION; }
   static get ACTIVITY_TYPE_FITNESS() { return plugin().ACTIVITY_TYPE_FITNESS; }
   static get ACTIVITY_TYPE_OTHER_NAVIGATION() { return plugin().ACTIVITY_TYPE_OTHER_NAVIGATION; }
+  static get ACTIVITY_TYPE_AIRBORNE() { return plugin().ACTIVITY_TYPE_AIRBORNE; }
 
   static get PERSIST_MODE_ALL()       { return plugin().PERSIST_MODE_ALL; }
   static get PERSIST_MODE_LOCATION()  { return plugin().PERSIST_MODE_LOCATION; }
