@@ -1,6 +1,16 @@
 # CHANGELOG
 
-## 4.17.3 &mdash; 2024-11=12
+## 4.17.5 &mdash; 2025-06-16
+* [Android] Fix issue with polygon geofencing where `identifier` consists of long strings, such as `aaaa-bbbb-cccccccc-dddd-eeeee
+eeeeeee`.
+* [Android] Fix edge-case where polygons can fail to fire after the containing geofence is exited.  This could happen if the containing geofence was exited without trigger an onMotionChange event.
+* [iOS] Fix edge-case where polygon could fail to fire EXIT event after launching from terminated state when the containing geofence is exit causes background app restart.
+* [Android] Support 16KB page sizes
+* [Android] Fix `java.util.ConcurrentModificationException at com.transistorsoft.locationmanager.location.SingleLocationRequest.getBestLocation`.
+* [Android] Fix `ConcurrentModificationException` in `StopTimeoutEvaluator`.
+* [iOS] Fix `ProviderChangeEvent.enabled` not showing the result of global *Privacy -> Location Services -> Enabled* switch
+
+## 4.17.4 &mdash; 2024-11=12
 * [Android] Remove enforcement of minimum Geofence radius `150`
 * [Android] Fix issue with `TSLocationManagerActivity` (responsible for showing location permission / authorization dialogs).  Minimizing the app with an active permission dialog would cause the app's `MainActivity` to terminate on some devices.
 
