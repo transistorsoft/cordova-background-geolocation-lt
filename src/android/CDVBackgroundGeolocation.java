@@ -41,7 +41,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import org.json.JSONException;
 
-import com.transistorsoft.xms.g.common.ExtensionApiAvailability;
+import com.google.android.gms.common.GoogleApiAvailability;
 
 import android.app.AlertDialog;
 import android.content.Context;
@@ -1240,7 +1240,7 @@ public class CDVBackgroundGeolocation extends CordovaPlugin {
 
     private void handlePlayServicesConnectError(Integer errorCode) {
         Activity activity = cordova.getActivity();
-        ExtensionApiAvailability.getInstance().getErrorDialog(activity, errorCode, 1001).show();
+        GoogleApiAvailability.getInstance().getErrorDialog(activity, errorCode, 1001).show();
     }
 
     private BackgroundGeolocation getAdapter() {
