@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## 4.18.2 &mdash; 2025-11-29
+* [Android] Rebuild android for Android ELF Alignnment
+
 ## 4.18.1 &mdash; 2025-11-08
 * [Android] pin `tslocationmanager` at `3.+` in preparation for next release..
 

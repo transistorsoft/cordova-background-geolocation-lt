@@ -83,6 +83,10 @@ if (capacitorConfig.exists()) {
     if (pluginConfig["HMS_LOCATION_VERSION"]) {
       hmsLocationVersion = pluginConfig["HMS_LOCATION_VERSION"]
     }
+    if (!playServicesLocationVersion) {
+      playServicesLocationVersion = DEFAULT_PLAY_SERVICES_LOCATION_VERSION
+    }
+
   } else {
     println("* ERROR: cordova-background-geolocation failed to find plugin config from package.json")
 
