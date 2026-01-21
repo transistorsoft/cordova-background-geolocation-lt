@@ -231,7 +231,7 @@ $ cordova plugin add cordova-background-geolocation-lt --variable OKHTTP_VERSION
 
 ### iOS
 
-iOS requires a number of "Usage Strings" for location and motion-usage authorization.  iOS will render these strings upon the dialog used to request permission from the user.  Take care to write relevent descriptions of *why* your app requires these authorizations as they can affect whether Apple accepts your app or not.
+iOS requires a number of "Usage Strings" for location and motion-usage authorization.  iOS will render these strings upon the dialog used to request permission from the user.  Take care to write relevant descriptions of *why* your app requires these authorizations as they can affect whether Apple accepts your app or not.
 
 Paste **all** the following elements into the `<platform name="ios">` container:
 
