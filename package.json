@@ -1,7 +1,7 @@
 {
   "name": "cordova-background-geolocation-lt",
-  "version": "4.18.3",
-  "description": "Cordova / Capacitor Background Geolocation.  The most sophisticated, cross-platform location-tracking and geofencing plugin with battery-conscious motion-detection intelligence.",
+  "version": "5.0.0",
+  "description": "Cordova Background Geolocation.  The most sophisticated, cross-platform location-tracking and geofencing plugin with battery-conscious motion-detection intelligence.",
   "cordova": {
     "id": "cordova-background-geolocation-lt",
     "platforms": [
@@ -29,9 +29,7 @@
     "ecosystem:cordova",
     "cordova-android",
     "cordova-ios",
-    "cordova",
-    "capacitor",
-    "phonegap"
+    "cordova"
   ],
   "engines": {
     "cordovaDependencies": {

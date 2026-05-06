@@ -9,9 +9,6 @@
 
 @interface CDVBackgroundGeolocation : CDVPlugin
 
-@property (nonatomic, strong) NSString* syncCallbackId;
-@property (nonatomic) UIBackgroundTaskIdentifier syncTaskId;
-
 - (void) configure:(CDVInvokedUrlCommand*)command;
 - (void) removeListener:(CDVInvokedUrlCommand*)command;
 - (void) removeListeners:(CDVInvokedUrlCommand*)command;
