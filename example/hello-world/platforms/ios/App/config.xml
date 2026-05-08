@@ -36,6 +36,9 @@
     <description>Background Geolocation Hello World Example</description>
     <author email="chris@transistorsoft.com" href="https://transistorsoft.com">Transistor Software</author>
     <content src="index.html" />
+    <config-file parent="TSLocationManagerLicense" target="*-Info.plist">
+        <string>eyJhbGciOiJFZERTQSIsImtpZCI6ImVkMjU1MTktbWFpbi12MSJ9.eyJvcyI6ImlvcyIsImFwcF9pZCI6ImNvbS50cmFuc2lzdG9yc29mdC5jb3Jkb3ZhLmhlbGxvd29ybGQiLCJvcmRlcl9udW1iZXIiOjEwMDIzLCJyZW5ld2FsX3VybCI6Imh0dHBzOi8vc2hvcC50cmFuc2lzdG9yc29mdC5jb20vY2FydC8xMDg2MzA3Mzg1NzoxP25vdGU9MTA3NTMiLCJjdXN0b21lcl9pZCI6NjQ2NiwicHJvZHVjdCI6ImNvcmRvdmEtYmFja2dyb3VuZC1nZW9sb2NhdGlvbiIsImtleV92ZXJzaW9uIjoxLCJhbGxvd2VkX3N1ZmZpeGVzIjpbIi5kZXYiLCIuZGV2ZWxvcG1lbnQiLCIuc3RhZ2luZyIsIi5zdGFnZSIsIi5xYSIsIi51YXQiLCIudGVzdCIsIi5kZWJ1ZyJdLCJtYXhfYnVpbGRfc3RhbXAiOjIwNDcwNjA4LCJncmFjZV9idWlsZHMiOjAsImVudGl0bGVtZW50cyI6WyJjb3JlIiwicG9seWdvbi1nZW9mZW5jaW5nIl0sImlhdCI6MTc3ODI1MzkxNH0.EqhmjkZEU-oTXsxH0CUuM6GuNkhBhE6H7k_QzN1l0s2ATDjH8hVTfLbrMwaPWxxjkEchVN2llUGdBp6118BqDg</string>
+    </config-file>
     <edit-config file="*-Info.plist" mode="merge" target="NSLocationAlwaysAndWhenInUseUsageDescription">
         <string>Always allow access to device location so the app can track your position in the background.</string>
     </edit-config>

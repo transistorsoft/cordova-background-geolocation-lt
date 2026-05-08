@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget id="com.transistorsoft.cordova.helloworld" version="1.0.0" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+<widget id="com.transistorsoft.cordova.helloworld" version="1.0.0" xmlns="http://www.w3.org/ns/widgets" xmlns:android="http://schemas.android.com/apk/res/android" xmlns:cdv="http://cordova.apache.org/ns/1.0">
     <name>BGGeo Hello World</name>
     <description>Background Geolocation Hello World Example</description>
     <author email="chris@transistorsoft.com" href="https://transistorsoft.com">Transistor Software</author>
@@ -8,6 +8,10 @@
     <preference name="StatusBarBackgroundColor" value="#2196F3" />
     <preference name="StatusBarStyle" value="lightcontent" />
     <platform name="ios">
+        <config-file parent="TSLocationManagerLicense" target="*-Info.plist">
+            <string>eyJhbGciOiJFZERTQSIsImtpZCI6ImVkMjU1MTktbWFpbi12MSJ9.eyJvcyI6ImlvcyIsImFwcF9pZCI6ImNvbS50cmFuc2lzdG9yc29mdC5jb3Jkb3ZhLmhlbGxvd29ybGQiLCJvcmRlcl9udW1iZXIiOjEwMDIzLCJyZW5ld2FsX3VybCI6Imh0dHBzOi8vc2hvcC50cmFuc2lzdG9yc29mdC5jb20vY2FydC8xMDg2MzA3Mzg1NzoxP25vdGU9MTA3NTMiLCJjdXN0b21lcl9pZCI6NjQ2NiwicHJvZHVjdCI6ImNvcmRvdmEtYmFja2dyb3VuZC1nZW9sb2NhdGlvbiIsImtleV92ZXJzaW9uIjoxLCJhbGxvd2VkX3N1ZmZpeGVzIjpbIi5kZXYiLCIuZGV2ZWxvcG1lbnQiLCIuc3RhZ2luZyIsIi5zdGFnZSIsIi5xYSIsIi51YXQiLCIudGVzdCIsIi5kZWJ1ZyJdLCJtYXhfYnVpbGRfc3RhbXAiOjIwNDcwNjA4LCJncmFjZV9idWlsZHMiOjAsImVudGl0bGVtZW50cyI6WyJjb3JlIiwicG9seWdvbi1nZW9mZW5jaW5nIl0sImlhdCI6MTc3ODI1MzkxNH0.EqhmjkZEU-oTXsxH0CUuM6GuNkhBhE6H7k_QzN1l0s2ATDjH8hVTfLbrMwaPWxxjkEchVN2llUGdBp6118BqDg</string>
+        </config-file>
+
         <preference name="WKWebViewOnly" value="true" />
         <preference name="deployment-target" value="13.0" />
         <edit-config file="*-Info.plist" mode="merge" target="NSLocationAlwaysAndWhenInUseUsageDescription">
@@ -21,6 +25,11 @@
         </edit-config>
     </platform>
     <platform name="android">
+        <config-file parent="/manifest/application" target="app/src/main/AndroidManifest.xml">
+            <meta-data
+                android:name="com.transistorsoft.locationmanager.license" android:value="eyJhbGciOiJFZERTQSIsImtpZCI6ImVkMjU1MTktbWFpbi12MSJ9.eyJvcyI6ImFuZHJvaWQiLCJhcHBfaWQiOiJjb20udHJhbnNpc3RvcnNvZnQuY29yZG92YS5oZWxsb3dvcmxkIiwib3JkZXJfbnVtYmVyIjoxMDAyMywicmVuZXdhbF91cmwiOiJodHRwczovL3Nob3AudHJhbnNpc3RvcnNvZnQuY29tL2NhcnQvMTA4NjMwNzM4NTc6MT9ub3RlPTEwNzUzIiwiY3VzdG9tZXJfaWQiOjY0NjYsInByb2R1Y3QiOiJjb3Jkb3ZhLWJhY2tncm91bmQtZ2VvbG9jYXRpb24iLCJrZXlfdmVyc2lvbiI6MSwiYWxsb3dlZF9zdWZmaXhlcyI6WyIuZGV2IiwiLmRldmVsb3BtZW50IiwiLnN0YWdpbmciLCIuc3RhZ2UiLCIucWEiLCIudWF0IiwiLnRlc3QiLCIuZGVidWciXSwibWF4X2J1aWxkX3N0YW1wIjoyMDQ3MDYwOCwiZ3JhY2VfYnVpbGRzIjowLCJlbnRpdGxlbWVudHMiOlsiY29yZSIsInBvbHlnb24tZ2VvZmVuY2luZyJdLCJpYXQiOjE3NzgyNTM5MTV9.mgu0KEscXqWzpumZ2Bhyxm_1INMXEH_G_6tr1eO-eeolpvUS5HYwBH4lGwgGym8K37liBSAa8YsLkWJKHTPVAA" />
+        </config-file>
+
         <preference name="android-minSdkVersion" value="24" />
         <preference name="android-targetSdkVersion" value="35" />
         <preference name="android-compileSdkVersion" value="36" />

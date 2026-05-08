@@ -14,7 +14,7 @@ The SDK uses **motion-detection** APIs (accelerometer, gyroscope, magnetometer) 
 - **Stationary** — location services turn off automatically to conserve battery
 
 > [!IMPORTANT]
-> This is **`v5`**. For the previous version see [`v4.x`](https://github.com/transistorsoft/cordova-background-geolocation-lt/tree/4.18.2). **`v4.x`** license keys do **not** work with **`v5`** — log in to the [Customer Dashboard](https://transistorsoft.com) to generate a **`v5`** key.
+> This is **`v5`**. For the previous version see [`v4.x`](https://github.com/transistorsoft/cordova-background-geolocation-lt/tree/4.18.2). **`v4.x`** license keys do **not** work with **`v5`** — log in to the [Customer Dashboard](https://transistorsoft.com) to generate a **`v5`** key. See the [Migration Guide](help/MIGRATION-GUIDE-v5.md) for details.
 
 ---
 
