@@ -1,0 +1,61 @@
+{
+  "prepare_queue": {
+    "installed": [],
+    "uninstalled": []
+  },
+  "config_munge": {
+    "files": {
+      "res/xml/config.xml": {
+        "parents": {
+          "/*": [
+            {
+              "xml": "<feature name=\"BackgroundGeolocation\"><param name=\"android-package\" value=\"com.transistorsoft.cordova.bggeo.CDVBackgroundGeolocation\" /></feature>",
+              "count": 1
+            }
+          ]
+        }
+      }
+    }
+  },
+  "installed_plugins": {
+    "cordova-background-geolocation-lt": {
+      "GOOGLE_API_VERSION": "21.3.0",
+      "EVENTBUS_VERSION": "3.3.1",
+      "PACKAGE_NAME": "com.transistorsoft.cordova.helloworld"
+    }
+  },
+  "dependent_plugins": {},
+  "modules": [
+    {
+      "id": "cordova-background-geolocation-lt.BackgroundGeolocation",
+      "file": "plugins/cordova-background-geolocation-lt/www/BackgroundGeolocation.js",
+      "pluginId": "cordova-background-geolocation-lt",
+      "clobbers": [
+        "window.BackgroundGeolocation"
+      ]
+    },
+    {
+      "id": "cordova-background-geolocation-lt.API",
+      "file": "plugins/cordova-background-geolocation-lt/www/API.js",
+      "pluginId": "cordova-background-geolocation-lt"
+    },
+    {
+      "id": "cordova-background-geolocation-lt.DeviceSettings",
+      "file": "plugins/cordova-background-geolocation-lt/www/DeviceSettings.js",
+      "pluginId": "cordova-background-geolocation-lt"
+    },
+    {
+      "id": "cordova-background-geolocation-lt.Logger",
+      "file": "plugins/cordova-background-geolocation-lt/www/Logger.js",
+      "pluginId": "cordova-background-geolocation-lt"
+    },
+    {
+      "id": "cordova-background-geolocation-lt.TransistorAuthorizationToken",
+      "file": "plugins/cordova-background-geolocation-lt/www/TransistorAuthorizationToken.js",
+      "pluginId": "cordova-background-geolocation-lt"
+    }
+  ],
+  "plugin_metadata": {
+    "cordova-background-geolocation-lt": "5.0.0"
+  }
+}

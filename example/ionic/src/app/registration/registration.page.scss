@@ -1,0 +1,41 @@
+.registration-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-height: 100%;
+}
+
+.header {
+  text-align: center;
+  margin-bottom: 32px;
+
+  h1 {
+    font-size: 28px;
+    font-weight: 700;
+    margin-bottom: 4px;
+  }
+  p {
+    font-size: 18px;
+    color: var(--ion-color-medium);
+  }
+}
+
+.info-card {
+  margin-bottom: 24px;
+
+  .tracker-url {
+    margin-top: 8px;
+    font-weight: 700;
+    color: var(--ion-color-primary);
+  }
+}
+
+.form {
+  margin-bottom: 24px;
+
+  ion-item {
+    --background: var(--ion-card-background);
+    --border-radius: 10px;
+    margin-bottom: 12px;
+  }
+}

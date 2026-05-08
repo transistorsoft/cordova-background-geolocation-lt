@@ -1,0 +1,17 @@
+{
+  "prepare_queue": {
+    "installed": [],
+    "uninstalled": []
+  },
+  "config_munge": {
+    "files": {}
+  },
+  "installed_plugins": {
+    "cordova-background-geolocation-lt": {
+      "GOOGLE_API_VERSION": "21.3.0",
+      "EVENTBUS_VERSION": "3.3.1",
+      "PACKAGE_NAME": "com.transistorsoft.cordova.helloworld"
+    }
+  },
+  "dependent_plugins": {}
+}

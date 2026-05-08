@@ -1,0 +1,17 @@
+<?xml version='1.0' encoding='utf-8'?>
+<widget id="com.transistorsoft.cordova.helloworld" version="1.0.0" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+    <feature name="BackgroundGeolocation">
+        <param name="android-package" value="com.transistorsoft.cordova.bggeo.CDVBackgroundGeolocation" />
+    </feature>
+    <name>BGGeo Hello World</name>
+    <description>Background Geolocation Hello World Example</description>
+    <author email="chris@transistorsoft.com" href="https://transistorsoft.com">Transistor Software</author>
+    <content src="index.html" />
+    <preference name="loglevel" value="DEBUG" />
+    <preference name="StatusBarOverlaysWebView" value="false" />
+    <preference name="StatusBarBackgroundColor" value="#2196F3" />
+    <preference name="StatusBarStyle" value="lightcontent" />
+    <preference name="android-minSdkVersion" value="24" />
+    <preference name="android-targetSdkVersion" value="35" />
+    <preference name="android-compileSdkVersion" value="36" />
+</widget>

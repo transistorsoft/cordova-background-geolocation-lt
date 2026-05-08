@@ -1,0 +1,28 @@
+<?xml version='1.0' encoding='utf-8'?>
+<widget id="com.transistorsoft.cordova.ionic" version="1.0.0" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+    <name>BGGeo Ionic</name>
+    <description>Background Geolocation Ionic/Angular Example</description>
+    <author email="chris@transistorsoft.com" href="https://transistorsoft.com">Transistor Software</author>
+    <content src="index.html" />
+    <preference name="StatusBarOverlaysWebView" value="false" />
+    <preference name="StatusBarBackgroundColor" value="#3880ff" />
+    <preference name="StatusBarStyle" value="lightcontent" />
+    <platform name="ios">
+        <preference name="WKWebViewOnly" value="true" />
+        <preference name="deployment-target" value="13.0" />
+        <edit-config file="*-Info.plist" mode="merge" target="NSLocationAlwaysAndWhenInUseUsageDescription">
+            <string>Always allow access to device location so the app can track your position in the background.</string>
+        </edit-config>
+        <edit-config file="*-Info.plist" mode="merge" target="NSLocationWhenInUseUsageDescription">
+            <string>Allow access to device location so the app can track your position.</string>
+        </edit-config>
+        <edit-config file="*-Info.plist" mode="merge" target="NSMotionUsageDescription">
+            <string>Motion activity is used to determine when you are walking, running, or driving.</string>
+        </edit-config>
+    </platform>
+    <platform name="android">
+        <preference name="android-minSdkVersion" value="24" />
+        <preference name="android-targetSdkVersion" value="35" />
+        <preference name="android-compileSdkVersion" value="36" />
+    </platform>
+</widget>

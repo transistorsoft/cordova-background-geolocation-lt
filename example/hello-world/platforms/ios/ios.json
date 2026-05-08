@@ -1,0 +1,94 @@
+{
+  "prepare_queue": {
+    "installed": [],
+    "uninstalled": []
+  },
+  "config_munge": {
+    "files": {
+      "*-Info.plist": {
+        "parents": {
+          "NSLocationAlwaysAndWhenInUseUsageDescription": [
+            {
+              "xml": "<string>Always allow access to device location so the app can track your position in the background.</string>",
+              "count": 1,
+              "mode": "merge",
+              "id": "config.xml"
+            }
+          ],
+          "NSLocationWhenInUseUsageDescription": [
+            {
+              "xml": "<string>Allow access to device location so the app can track your position.</string>",
+              "count": 1,
+              "mode": "merge",
+              "id": "config.xml"
+            }
+          ],
+          "NSMotionUsageDescription": [
+            {
+              "xml": "<string>Motion activity is used to determine when you are walking, running, or driving.</string>",
+              "count": 1,
+              "mode": "merge",
+              "id": "config.xml"
+            }
+          ],
+          "UIBackgroundModes": [
+            {
+              "xml": "<array>\n                <string>location</string>\n            </array>",
+              "count": 1
+            }
+          ]
+        }
+      },
+      "config.xml": {
+        "parents": {
+          "/*": [
+            {
+              "xml": "<feature name=\"BackgroundGeolocation\"><param name=\"ios-package\" value=\"CDVBackgroundGeolocation\" /></feature>",
+              "count": 1
+            }
+          ]
+        }
+      }
+    }
+  },
+  "installed_plugins": {
+    "cordova-background-geolocation-lt": {
+      "BACKGROUND_MODE_LOCATION": "<string>location</string>",
+      "PACKAGE_NAME": "com.transistorsoft.cordova.helloworld"
+    }
+  },
+  "dependent_plugins": {},
+  "modules": [
+    {
+      "id": "cordova-background-geolocation-lt.BackgroundGeolocation",
+      "file": "plugins/cordova-background-geolocation-lt/www/BackgroundGeolocation.js",
+      "pluginId": "cordova-background-geolocation-lt",
+      "clobbers": [
+        "window.BackgroundGeolocation"
+      ]
+    },
+    {
+      "id": "cordova-background-geolocation-lt.API",
+      "file": "plugins/cordova-background-geolocation-lt/www/API.js",
+      "pluginId": "cordova-background-geolocation-lt"
+    },
+    {
+      "id": "cordova-background-geolocation-lt.DeviceSettings",
+      "file": "plugins/cordova-background-geolocation-lt/www/DeviceSettings.js",
+      "pluginId": "cordova-background-geolocation-lt"
+    },
+    {
+      "id": "cordova-background-geolocation-lt.Logger",
+      "file": "plugins/cordova-background-geolocation-lt/www/Logger.js",
+      "pluginId": "cordova-background-geolocation-lt"
+    },
+    {
+      "id": "cordova-background-geolocation-lt.TransistorAuthorizationToken",
+      "file": "plugins/cordova-background-geolocation-lt/www/TransistorAuthorizationToken.js",
+      "pluginId": "cordova-background-geolocation-lt"
+    }
+  ],
+  "plugin_metadata": {
+    "cordova-background-geolocation-lt": "5.0.0"
+  }
+}
