@@ -1,0 +1,71 @@
+{
+  "prepare_queue": {
+    "installed": [],
+    "uninstalled": []
+  },
+  "config_munge": {
+    "files": {
+      "res/xml/config.xml": {
+        "parents": {
+          "/*": [
+            {
+              "xml": "<feature name=\"BackgroundGeolocation\"><param name=\"android-package\" value=\"com.transistorsoft.cordova.bggeo.CDVBackgroundGeolocation\" /></feature>",
+              "count": 1
+            }
+          ]
+        }
+      },
+      "app/src/main/AndroidManifest.xml": {
+        "parents": {
+          "/manifest/application": [
+            {
+              "xml": "<meta-data android:name=\"com.transistorsoft.locationmanager.license\" android:value=\"eyJhbGciOiJFZERTQSIsImtpZCI6ImVkMjU1MTktbWFpbi12MSJ9.eyJvcyI6ImFuZHJvaWQiLCJhcHBfaWQiOiJjb20udHJhbnNpc3RvcnNvZnQuY29yZG92YS5oZWxsb3dvcmxkIiwib3JkZXJfbnVtYmVyIjoxMDAyMywicmVuZXdhbF91cmwiOiJodHRwczovL3Nob3AudHJhbnNpc3RvcnNvZnQuY29tL2NhcnQvMTA4NjMwNzM4NTc6MT9ub3RlPTEwNzUzIiwiY3VzdG9tZXJfaWQiOjY0NjYsInByb2R1Y3QiOiJjb3Jkb3ZhLWJhY2tncm91bmQtZ2VvbG9jYXRpb24iLCJrZXlfdmVyc2lvbiI6MSwiYWxsb3dlZF9zdWZmaXhlcyI6WyIuZGV2IiwiLmRldmVsb3BtZW50IiwiLnN0YWdpbmciLCIuc3RhZ2UiLCIucWEiLCIudWF0IiwiLnRlc3QiLCIuZGVidWciXSwibWF4X2J1aWxkX3N0YW1wIjoyMDQ3MDYwOCwiZ3JhY2VfYnVpbGRzIjowLCJlbnRpdGxlbWVudHMiOlsiY29yZSIsInBvbHlnb24tZ2VvZmVuY2luZyJdLCJpYXQiOjE3NzgyNTM5MTV9.mgu0KEscXqWzpumZ2Bhyxm_1INMXEH_G_6tr1eO-eeolpvUS5HYwBH4lGwgGym8K37liBSAa8YsLkWJKHTPVAA\" />",
+              "count": 7
+            }
+          ]
+        }
+      }
+    }
+  },
+  "installed_plugins": {
+    "cordova-background-geolocation-lt": {
+      "GOOGLE_API_VERSION": "21.3.0",
+      "EVENTBUS_VERSION": "3.3.1",
+      "PACKAGE_NAME": "com.transistorsoft.cordova.helloworld"
+    }
+  },
+  "dependent_plugins": {},
+  "modules": [
+    {
+      "id": "cordova-background-geolocation-lt.BackgroundGeolocation",
+      "file": "plugins/cordova-background-geolocation-lt/www/BackgroundGeolocation.js",
+      "pluginId": "cordova-background-geolocation-lt",
+      "clobbers": [
+        "window.BackgroundGeolocation"
+      ]
+    },
+    {
+      "id": "cordova-background-geolocation-lt.API",
+      "file": "plugins/cordova-background-geolocation-lt/www/API.js",
+      "pluginId": "cordova-background-geolocation-lt"
+    },
+    {
+      "id": "cordova-background-geolocation-lt.DeviceSettings",
+      "file": "plugins/cordova-background-geolocation-lt/www/DeviceSettings.js",
+      "pluginId": "cordova-background-geolocation-lt"
+    },
+    {
+      "id": "cordova-background-geolocation-lt.Logger",
+      "file": "plugins/cordova-background-geolocation-lt/www/Logger.js",
+      "pluginId": "cordova-background-geolocation-lt"
+    },
+    {
+      "id": "cordova-background-geolocation-lt.TransistorAuthorizationToken",
+      "file": "plugins/cordova-background-geolocation-lt/www/TransistorAuthorizationToken.js",
+      "pluginId": "cordova-background-geolocation-lt"
+    }
+  ],
+  "plugin_metadata": {
+    "cordova-background-geolocation-lt": "5.0.0"
+  }
+}

@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>UIApplicationSceneManifest</key>
+	<dict>
+		<key>UIApplicationSupportsMultipleScenes</key>
+		<false/>
+		<key>UISceneConfigurations</key>
+		<dict>
+			<key>UIWindowSceneSessionRoleApplication</key>
+			<array>
+				<dict>
+					<key>UISceneConfigurationName</key>
+					<string>Default Configuration</string>
+					<key>UISceneDelegateClassName</key>
+					<string>$(PRODUCT_MODULE_NAME).SceneDelegate</string>
+					<key>UISceneStoryboardFile</key>
+					<string>Main</string>
+				</dict>
+			</array>
+		</dict>
+	</dict>
+	<key>UIBackgroundModes</key>
+	<array>
+		<string>location</string>
+		<string>fetch</string>
+		<string>processing</string>
+		<string>audio</string>
+	</array>
+	<key>UTImportedTypeDeclarations</key>
+	<array>
+		<dict>
+			<key>UTTypeConformsTo</key>
+			<array>
+				<string>public.data</string>
+			</array>
+			<key>UTTypeDescription</key>
+			<string>WebAssembly</string>
+			<key>UTTypeIdentifier</key>
+			<string>$(PRODUCT_BUNDLE_IDENTIFIER)</string>
+			<key>UTTypeTagSpecification</key>
+			<dict>
+				<key>public.filename-extension</key>
+				<string>wasm</string>
+				<key>public.mime-type</key>
+				<string>application/wasm</string>
+			</dict>
+		</dict>
+	</array>
+	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+	<string>Always allow access to device location so the app can track your position in the background.</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>Allow access to device location so the app can track your position.</string>
+	<key>NSMotionUsageDescription</key>
+	<string>Motion activity is used to determine when you are walking, running, or driving.</string>
+	<key>TSLocationManagerLicense</key>
+	<string>eyJhbGciOiJFZERTQSIsImtpZCI6ImVkMjU1MTktbWFpbi12MSJ9.eyJvcyI6ImlvcyIsImFwcF9pZCI6ImNvbS50cmFuc2lzdG9yc29mdC5jb3Jkb3ZhLmhlbGxvd29ybGQiLCJvcmRlcl9udW1iZXIiOjEwMDIzLCJyZW5ld2FsX3VybCI6Imh0dHBzOi8vc2hvcC50cmFuc2lzdG9yc29mdC5jb20vY2FydC8xMDg2MzA3Mzg1NzoxP25vdGU9MTA3NTMiLCJjdXN0b21lcl9pZCI6NjQ2NiwicHJvZHVjdCI6ImNvcmRvdmEtYmFja2dyb3VuZC1nZW9sb2NhdGlvbiIsImtleV92ZXJzaW9uIjoxLCJhbGxvd2VkX3N1ZmZpeGVzIjpbIi5kZXYiLCIuZGV2ZWxvcG1lbnQiLCIuc3RhZ2luZyIsIi5zdGFnZSIsIi5xYSIsIi51YXQiLCIudGVzdCIsIi5kZWJ1ZyJdLCJtYXhfYnVpbGRfc3RhbXAiOjIwNDcwNjA4LCJncmFjZV9idWlsZHMiOjAsImVudGl0bGVtZW50cyI6WyJjb3JlIiwicG9seWdvbi1nZW9mZW5jaW5nIl0sImlhdCI6MTc3ODI1MzkxNH0.EqhmjkZEU-oTXsxH0CUuM6GuNkhBhE6H7k_QzN1l0s2ATDjH8hVTfLbrMwaPWxxjkEchVN2llUGdBp6118BqDg</string>
+</dict>
+</plist>

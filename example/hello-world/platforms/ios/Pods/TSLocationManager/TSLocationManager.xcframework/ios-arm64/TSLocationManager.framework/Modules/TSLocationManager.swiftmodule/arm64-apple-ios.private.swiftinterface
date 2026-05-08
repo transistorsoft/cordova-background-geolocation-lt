@@ -1,0 +1,18 @@
+// swift-interface-format-version: 1.0
+// swift-compiler-version: Apple Swift version 6.3 effective-5.10 (swiftlang-6.3.0.123.5 clang-2100.0.123.102)
+// swift-module-flags: -target arm64-apple-ios13.0 -enable-objc-interop -enable-library-evolution -swift-version 5 -O -enable-experimental-feature DebugDescriptionMacro -enable-bare-slash-regex -module-name TSLocationManager
+// swift-module-flags-ignorable: -no-verify-emitted-module-interface -formal-cxx-interoperability-mode=off -interface-compiler-version 6.3
+import CryptoKit
+import Foundation
+import Swift
+@_exported import TSLocationManager
+import _Concurrency
+import _StringProcessing
+import _SwiftConcurrencyShims
+@_cdecl("TSLMSwiftPing")
+public func TSLMSwiftPing()
+@_inheritsConvenienceInitializers @objc(TSLMSwiftVerifier) final public class TSEd25519VerifierSwift : ObjectiveC.NSObject {
+  @objc(verifyWithMessage:signature:publicKey:) public static func verify(withMessage message: Foundation.NSData, signature sig: Foundation.NSData, publicKey pub: Foundation.NSData) -> Swift.Bool
+  @objc override dynamic public init()
+  @objc deinit
+}

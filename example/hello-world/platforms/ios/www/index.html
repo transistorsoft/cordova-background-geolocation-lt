@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="viewport-fit=cover, width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <meta name="color-scheme" content="light dark">
+  <title>BGGeo Hello World</title>
+  <link rel="stylesheet" href="css/app.css">
+</head>
+<body>
+
+  <!-- Header -->
+  <header id="header">
+    <div class="header-content">
+      <div>
+        <h1>Background Geolocation</h1>
+        <p class="subtitle">Hello World</p>
+      </div>
+      <button id="btn-menu" class="icon-btn" aria-label="Menu">&#8942;</button>
+    </div>
+  </header>
+
+  <main id="main">
+    <!-- Status Cards -->
+    <div class="card-row">
+      <div class="card status-card">
+        <div class="status-label">GPS Provider</div>
+        <div class="status-value">
+          <span id="provider-indicator" class="indicator off"></span>
+          <span id="provider-status">Unknown</span>
+        </div>
+      </div>
+      <div class="card status-card">
+        <div class="status-label">Activity</div>
+        <div class="status-value">
+          <span id="activity-icon">&#128706;</span>
+          <span id="activity-name">still</span>
+        </div>
+      </div>
+      <div class="card status-card">
+        <div class="status-label">Odometer</div>
+        <div class="status-value" id="odometer-value">0.00 km</div>
+      </div>
+    </div>
+
+    <!-- Controls -->
+    <div class="card controls-card">
+      <div class="tracking-row">
+        <div>
+          <div class="control-label">Enable Tracking</div>
+          <div class="control-sublabel" id="tracking-sublabel">Location updates paused</div>
+        </div>
+        <label class="switch">
+          <input type="checkbox" id="toggle-tracking">
+          <span class="slider"></span>
+        </label>
+      </div>
+      <div class="divider"></div>
+      <div class="motion-row">
+        <button id="btn-pace" class="pace-btn stationary" aria-label="Toggle motion state">
+          <span class="pace-icon" id="pace-icon">&#9654;</span>
+        </button>
+        <div class="motion-label" id="motion-label">Stationary</div>
+      </div>
+    </div>
+
+    <!-- Last Location -->
+    <div class="card location-card" id="location-card" style="display:none">
+      <div class="card-title">Last Location</div>
+      <div class="location-grid">
+        <div class="location-field">
+          <span class="field-label">Latitude</span>
+          <span class="field-value" id="loc-lat">—</span>
+        </div>
+        <div class="location-field">
+          <span class="field-label">Longitude</span>
+          <span class="field-value" id="loc-lng">—</span>
+        </div>
+        <div class="location-field">
+          <span class="field-label">Speed</span>
+          <span class="field-value" id="loc-speed">—</span>
+        </div>
+        <div class="location-field">
+          <span class="field-label">Accuracy</span>
+          <span class="field-value" id="loc-accuracy">—</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Get Current Position -->
+    <button id="btn-current-position" class="action-btn">
+      &#128205; Get Current Position
+    </button>
+  </main>
+
+  <!-- Menu Modal -->
+  <div id="menu-overlay" class="overlay hidden" role="dialog" aria-label="Menu">
+    <div class="menu-sheet">
+      <div class="menu-header">
+        <h2>Menu</h2>
+        <button id="btn-menu-close" class="icon-btn" aria-label="Close">&times;</button>
+      </div>
+      <div class="menu-items">
+        <button class="menu-item" data-action="requestPermission">&#128274; Request Permission</button>
+        <button class="menu-item" data-action="resetOdometer">&#128260; Reset Odometer</button>
+        <button class="menu-item" data-action="sync">&#9729; Sync</button>
+        <button class="menu-item" data-action="getState">&#128202; Get State</button>
+        <button class="menu-item" data-action="emailLog">&#128231; Email Log</button>
+        <button class="menu-item" data-action="destroyLog">&#128465; Destroy Log</button>
+        <button class="menu-item" data-action="destroyLocations">&#9888; Destroy Locations</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Alert/State Modal -->
+  <div id="alert-overlay" class="overlay hidden" role="dialog" aria-label="Alert">
+    <div class="alert-sheet">
+      <div class="alert-header">
+        <h2 id="alert-title">Alert</h2>
+      </div>
+      <pre id="alert-body" class="alert-body"></pre>
+      <button id="btn-alert-close" class="alert-close-btn">OK</button>
+    </div>
+  </div>
+
+  <!-- Email Prompt Modal -->
+  <div id="email-overlay" class="overlay hidden" role="dialog" aria-label="Email">
+    <div class="alert-sheet">
+      <div class="alert-header">
+        <h2>Email Log</h2>
+      </div>
+      <input type="email" id="email-input" class="email-input" placeholder="you@example.com">
+      <div class="email-actions">
+        <button id="btn-email-cancel" class="alert-close-btn secondary">Cancel</button>
+        <button id="btn-email-send" class="alert-close-btn">Send</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="cordova.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>

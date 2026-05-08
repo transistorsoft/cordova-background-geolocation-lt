@@ -1,117 +1,32 @@
 import groovy.json.JsonSlurper
 
 def TAG = "[cordova-background-geolocation] "
-def CORDOVA_BACKGROUND_GEOLOCATION_LT = "cordova-background-geolocation-lt"
-def CORDOVA_BACKGROUND_GEOLOCATION    = "cordova-background-geolocation"
 
-def pluginName = ""
-def useAndroidX = (project.hasProperty("android.useAndroidX")) ? project.property("android.useAndroidX") : false
-
-def DEFAULT_PLAY_SERVICES_LOCATION_VERSION = "20.+"
-def DEFAULT_HMS_LOCATION_VERSION = "6.9.0.300"
-
-def playServicesLocationVersion = DEFAULT_PLAY_SERVICES_LOCATION_VERSION
-def hmsLocationVersion = DEFAULT_HMS_LOCATION_VERSION
+def DEFAULT_PLAY_SERVICES_LOCATION_VERSION = "21.3.0"
+def DEFAULT_TSLOCATIONMANAGER_VERSION = "4.1.+"
 
 def safeExtGet(prop, fallback) {
     rootProject.ext.has(prop) ? rootProject.ext.get(prop) : fallback
 }
 
-if (!useAndroidX) {
-  println("******************************************************")
-  println("* ERROR: cordova-background-geolocation requires AndroidX")
-  println("* In your config.xml, you must enable <preference name=\"AndroidXEnabled\" value=\"true\" /> ")
-  println("******************************************************")
-}
+// Resolution order: rootProject.ext (gradle) → package.json --variable → default.
+def playServicesLocationVersion = safeExtGet("playServicesLocationVersion", DEFAULT_PLAY_SERVICES_LOCATION_VERSION)
+def tslocationmanagerVersion = safeExtGet("tslocationmanagerVersion", DEFAULT_TSLOCATIONMANAGER_VERSION)
 
-// Default libDir for Cordova/Ionic app.
-def libDir = "${projectDir}/libs"
-
-File capacitorConfig = new File("${projectDir}/../../capacitor.config.json")
-
-if (!capacitorConfig.exists()) {
-  // Capacitor V3?
-  capacitorConfig = new File("${projectDir}/../../capacitor.config.ts")
-}
-if (!capacitorConfig.exists()) {
-  capacitorConfig = new File("${projectDir}/../../capacitor.config.js")
-}
-
-// Is this a Capacitor app?
-if (capacitorConfig.exists()) {
-  playServicesLocationVersion = safeExtGet('playServicesLocationVersion', DEFAULT_PLAY_SERVICES_LOCATION_VERSION)
-  hmsLocationVersion = safeExtGet('hmsLocationVersion', DEFAULT_HMS_LOCATION_VERSION)
-
-  // Capacitor app
-  def nodeModulesDir = (project.hasProperty("nodeModulesDirectory")) ? project.property("nodeModulesDirectory") : "../../node_modules"
-  libDir = "${projectDir}/${nodeModulesDir}"
-
-  println("${TAG} Capacitor detected")
-
-  // Determine which version of background-geolocation (public or private) by stat folder
-  File pluginFolder = new File("${libDir}/${CORDOVA_BACKGROUND_GEOLOCATION}")
-
-  if (pluginFolder.exists() && pluginFolder.isDirectory()) {
-    pluginName = CORDOVA_BACKGROUND_GEOLOCATION
-  } else {
-    pluginFolder = new File("${libDir}/${CORDOVA_BACKGROUND_GEOLOCATION_LT}")
-    if (pluginFolder.exists() && pluginFolder.isDirectory()) {
-      pluginName = CORDOVA_BACKGROUND_GEOLOCATION_LT
-    } else {
-      println("$TAG Gradle error: Failed to locate plugin directory")
+File packageJson = new File("${projectDir}/../../../package.json")
+if (packageJson.exists()) {
+    def config = (new JsonSlurper()).parseText(packageJson.text)
+    def plugins = config["cordova"]["plugins"]
+    def pluginConfig = plugins["cordova-background-geolocation-lt"] ?: plugins["cordova-background-geolocation"]
+    if (pluginConfig != null) {
+        if (!rootProject.ext.has("playServicesLocationVersion") && pluginConfig["GOOGLE_API_VERSION"]) {
+            playServicesLocationVersion = pluginConfig["GOOGLE_API_VERSION"]
+        }
+        if (!rootProject.ext.has("tslocationmanagerVersion") && pluginConfig["TSLOCATIONMANAGER_VERSION"]) {
+            tslocationmanagerVersion = pluginConfig["TSLOCATIONMANAGER_VERSION"]
+        }
     }
-  }
-
-  // Now we know which version of plugin.
-  libDir = "${libDir}/${pluginName}/src/android/libs"
-
-} else {
-
-  File packageJson = new File("${projectDir}/../../../package.json")
-  def config = (new JsonSlurper()).parseText(packageJson.text)
-  def plugins = config["cordova"]["plugins"]
-  def pluginConfig = null
-  if (plugins[CORDOVA_BACKGROUND_GEOLOCATION]) {
-    pluginName = CORDOVA_BACKGROUND_GEOLOCATION
-    pluginConfig = plugins[CORDOVA_BACKGROUND_GEOLOCATION]
-  } else if (plugins[CORDOVA_BACKGROUND_GEOLOCATION_LT]) {
-    pluginName = CORDOVA_BACKGROUND_GEOLOCATION_LT
-    pluginConfig = plugins[CORDOVA_BACKGROUND_GEOLOCATION_LT]
-  }
-  if (pluginConfig != null) {
-    playServicesLocationVersion = pluginConfig["GOOGLE_API_VERSION"]
-    if (pluginConfig["HMS_LOCATION_VERSION"]) {
-      hmsLocationVersion = pluginConfig["HMS_LOCATION_VERSION"]
-    }
-    if (!playServicesLocationVersion) {
-      playServicesLocationVersion = DEFAULT_PLAY_SERVICES_LOCATION_VERSION
-    }
-
-  } else {
-    println("* ERROR: cordova-background-geolocation failed to find plugin config from package.json")
-
-  }
-
-  // Capacitor does not have the scope here to use android.applicationVariants.
-  // Capacitor users must manually include app.gradle in their app's gradle file.
-  cdvPluginPostBuildExtras.add({
-    android {
-      purgeBackgroundGeolocationDebugResources(applicationVariants)
-    }
-  })
 }
-
-
-println("${TAG} libDir: ${libDir}")
-
-// Add custom maven url tslocationmanager.aar
-repositories {
-  maven {
-    url libDir
-  }
-}
-
-println("$TAG playServicesLocationVersion: ${playServicesLocationVersion}")
 
 rootProject.allprojects {
     repositories {
@@ -120,44 +35,16 @@ rootProject.allprojects {
     }
 }
 
+println("$TAG playServicesLocationVersion: ${playServicesLocationVersion}")
+println("$TAG tslocationmanagerVersion: ${tslocationmanagerVersion}")
+
 dependencies {
-  // Load tslocationmanager.aar
-
-  def locationMajorVersion = playServicesLocationVersion.split('\\.')[0] as int
-  if (locationMajorVersion >= 21) {
-    api(group: 'com.transistorsoft', name:'tslocationmanager-v21', version: '3.+')
-  } else {
-    api(group: 'com.transistorsoft', name:'tslocationmanager', version: '3.+')
-  }
-
-  implementation "com.google.android.gms:play-services-location:$playServicesLocationVersion"
-
-  implementation "androidx.localbroadcastmanager:localbroadcastmanager:1.0.+"
-  def work_version = "2.8.1"
-  implementation "androidx.work:work-runtime:$work_version"
-  implementation "androidx.concurrent:concurrent-futures:1.1.0"
-
-}
-
-/**
-* Background Geolocation's aar includes about 1.5M of mp3 sound-files for its debugging sound FX.
-* This method strips those mp3s out in RELEASE builds.
-*/
-
-def purgeBackgroundGeolocationDebugResources(applicationVariants) {
-    if ((ext.has("removeBackgroundGeolocationDebugSoundsInRelease")) && (ext.removeBackgroundGeolocationDebugSoundsInRelease == false)) return
-
-    applicationVariants.all { variant ->
-        // Only Gradle v3.3.0 has this method.  Bail out for older versions of Cordova.
-        if (!variant.hasProperty('mergeResourcesProvider')) return
-
-        if (variant.buildType.name == "release") {
-            println("[cordova-background-geolocation] Purging debug resources in release build")
-            variant.mergeResourcesProvider.configure {
-                doLast {
-                    delete(fileTree(dir: outputDir, includes: ["raw_tslocationmanager*"]))
-                }
-            }
-        }
+    def locationMajorVersion = playServicesLocationVersion.split('\\.')[0] as int
+    if (locationMajorVersion >= 21) {
+        api "com.transistorsoft:tslocationmanager:${tslocationmanagerVersion}"
+    } else {
+        api "com.transistorsoft:tslocationmanager-gms20:${tslocationmanagerVersion}"
     }
+    implementation "com.google.android.gms:play-services-location:$playServicesLocationVersion"
+    implementation "androidx.work:work-runtime:2.10.0"
 }

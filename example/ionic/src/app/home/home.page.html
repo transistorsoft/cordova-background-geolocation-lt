@@ -1,0 +1,118 @@
+<ion-header [translucent]="true">
+  <ion-toolbar color="primary">
+    <ion-title>BGGeo Ionic</ion-title>
+    <ion-buttons slot="end">
+      <ion-button id="menu-trigger">
+        <ion-icon slot="icon-only" name="ellipsis-vertical"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-popover trigger="menu-trigger" [dismissOnSelect]="true">
+  <ng-template>
+    <ion-list>
+      <ion-item button (click)="onTransistorAuth()">
+        <ion-icon slot="start" name="person-circle-outline"></ion-icon>
+        <ion-label>TransistorAuth</ion-label>
+      </ion-item>
+      <ion-item button (click)="onRequestPermission()">
+        <ion-icon slot="start" name="shield-checkmark-outline"></ion-icon>
+        <ion-label>Request Permission</ion-label>
+      </ion-item>
+      <ion-item button (click)="onResetOdometer()">
+        <ion-icon slot="start" name="speedometer-outline"></ion-icon>
+        <ion-label>Reset Odometer</ion-label>
+      </ion-item>
+      <ion-item button (click)="onSync()">
+        <ion-icon slot="start" name="cloud-upload-outline"></ion-icon>
+        <ion-label>Sync</ion-label>
+      </ion-item>
+      <ion-item button (click)="onGetState()">
+        <ion-icon slot="start" name="information-circle-outline"></ion-icon>
+        <ion-label>Get State</ion-label>
+      </ion-item>
+      <ion-item button (click)="onEmailLog()">
+        <ion-icon slot="start" name="mail-outline"></ion-icon>
+        <ion-label>Email Log</ion-label>
+      </ion-item>
+      <ion-item button (click)="onDestroyLog()">
+        <ion-icon slot="start" name="trash-outline"></ion-icon>
+        <ion-label>Destroy Log</ion-label>
+      </ion-item>
+      <ion-item button (click)="onDestroyLocations()">
+        <ion-icon slot="start" name="close-circle-outline"></ion-icon>
+        <ion-label>Destroy Locations</ion-label>
+      </ion-item>
+    </ion-list>
+  </ng-template>
+</ion-popover>
+
+<ion-content [fullscreen]="true">
+  <!-- Status Cards -->
+  <div class="status-row">
+    <div class="status-card">
+      <div class="status-label">GPS Provider</div>
+      <div class="status-dot" [class.on]="providerEnabled" [class.off]="!providerEnabled"></div>
+      <div class="status-value">{{ providerEnabled ? 'Enabled' : 'Disabled' }}</div>
+    </div>
+    <div class="status-card">
+      <div class="status-label">Activity</div>
+      <ion-icon [name]="activityIcon || 'help-outline'" class="activity-icon"></ion-icon>
+      <div class="status-value">{{ activityName }}</div>
+    </div>
+    <div class="status-card">
+      <div class="status-label">Odometer</div>
+      <div class="odometer-value">{{ odometer }}</div>
+      <div class="status-value">km</div>
+    </div>
+  </div>
+
+  <!-- Controls Card -->
+  <div class="controls-card">
+    <div class="switch-row">
+      <div>
+        <div class="switch-label">Tracking</div>
+        <div class="switch-desc">{{ enabled ? 'Location updates active' : 'Location updates paused' }}</div>
+      </div>
+      <ion-toggle [(ngModel)]="enabled" (ionChange)="onToggleTracking()"></ion-toggle>
+    </div>
+    <div class="pace-container">
+      <div class="pace-label">Motion State</div>
+      <button class="pace-button"
+        [class.moving]="isMoving"
+        [class.stationary]="!isMoving"
+        [disabled]="!enabled"
+        (click)="onTogglePace()">
+        {{ isMoving ? '❚❚' : '▶' }}
+      </button>
+      <div class="pace-status">{{ isMoving ? 'Moving' : 'Stationary' }}</div>
+    </div>
+  </div>
+
+  <!-- Location Card -->
+  <div class="location-card" *ngIf="location">
+    <div class="card-title">Last Location</div>
+    <div class="location-row">
+      <span class="location-label">Latitude:</span>
+      <span class="location-value">{{ location.coords.latitude.toFixed(6) }}</span>
+    </div>
+    <div class="location-row">
+      <span class="location-label">Longitude:</span>
+      <span class="location-value">{{ location.coords.longitude.toFixed(6) }}</span>
+    </div>
+    <div class="location-row">
+      <span class="location-label">Speed:</span>
+      <span class="location-value">{{ (location.coords.speed || 0).toFixed(1) }} m/s</span>
+    </div>
+    <div class="location-row">
+      <span class="location-label">Accuracy:</span>
+      <span class="location-value">{{ (location.coords.accuracy || 0).toFixed(0) }}m</span>
+    </div>
+  </div>
+
+  <!-- Get Current Position Button -->
+  <button class="action-button" (click)="onGetCurrentPosition()">
+    Get Current Position
+  </button>
+</ion-content>

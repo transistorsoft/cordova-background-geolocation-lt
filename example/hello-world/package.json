@@ -1,0 +1,30 @@
+{
+  "name": "cordova-bggeo-hello-world",
+  "displayName": "BGGeo Hello World",
+  "version": "1.0.0",
+  "description": "Background Geolocation Hello World Example for Cordova",
+  "main": "index.js",
+  "scripts": {
+    "setup": "bash ../../scripts/setup-example.sh",
+    "ios": "cordova run ios",
+    "android": "cordova run android",
+    "prepare": "cordova prepare"
+  },
+  "dependencies": {
+    "cordova": "^12.0.0",
+    "cordova-ios": "^8.0.1"
+  },
+  "cordova": {
+    "platforms": [
+      "ios",
+      "android"
+    ],
+    "plugins": {
+      "cordova-background-geolocation-lt": {}
+    }
+  },
+  "devDependencies": {
+    "cordova-android": "^15.0.0",
+    "cordova-background-geolocation-lt": "file:../.."
+  }
+}

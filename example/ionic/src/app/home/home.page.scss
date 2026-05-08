@@ -1,0 +1,166 @@
+// Status Cards Row
+.status-row {
+  display: flex;
+  padding: 20px 16px;
+  gap: 8px;
+}
+
+.status-card {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 16px 8px;
+  border-radius: 12px;
+  background: var(--ion-card-background, #fff);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.status-label {
+  font-size: 12px;
+  color: var(--ion-color-medium);
+  margin-bottom: 8px;
+}
+
+.status-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  margin-bottom: 8px;
+
+  &.on { background-color: #4CAF50; }
+  &.off { background-color: #FF5252; }
+}
+
+.status-value {
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.activity-icon {
+  font-size: 24px;
+  margin-bottom: 8px;
+  color: var(--ion-color-primary);
+}
+
+.odometer-value {
+  font-size: 24px;
+  font-weight: bold;
+  color: var(--ion-color-primary);
+  margin-bottom: 4px;
+}
+
+// Controls Card
+.controls-card {
+  margin: 0 20px 20px;
+  padding: 20px;
+  border-radius: 12px;
+  background: var(--ion-card-background, #fff);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.switch-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: 20px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.switch-label {
+  font-size: 18px;
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+.switch-desc {
+  font-size: 14px;
+  color: var(--ion-color-medium);
+}
+
+.pace-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-top: 20px;
+}
+
+.pace-label {
+  font-size: 14px;
+  color: var(--ion-color-medium);
+  margin-bottom: 12px;
+}
+
+.pace-button {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  border: none;
+  color: #fff;
+  font-size: 28px;
+  font-weight: bold;
+  margin-bottom: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  &.stationary { background-color: #4CAF50; }
+  &.moving { background-color: #FF5722; }
+  &:disabled { background-color: #9E9E9E; }
+}
+
+.pace-status {
+  font-size: 16px;
+  font-weight: 600;
+}
+
+// Location Card
+.location-card {
+  margin: 0 20px 20px;
+  padding: 20px;
+  border-radius: 12px;
+  background: var(--ion-card-background, #fff);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.card-title {
+  font-size: 18px;
+  font-weight: 600;
+  margin-bottom: 16px;
+}
+
+.location-row {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+
+.location-label {
+  font-size: 14px;
+  color: var(--ion-color-medium);
+}
+
+.location-value {
+  font-size: 14px;
+  font-weight: 500;
+  font-variant-numeric: tabular-nums;
+}
+
+// Action Button
+.action-button {
+  display: block;
+  width: calc(100% - 40px);
+  margin: 0 20px 20px;
+  padding: 16px;
+  border-radius: 12px;
+  border: none;
+  background-color: var(--ion-color-primary);
+  color: #fff;
+  font-size: 16px;
+  font-weight: 600;
+  text-align: center;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  cursor: pointer;
+}

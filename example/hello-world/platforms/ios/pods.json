@@ -1,0 +1,21 @@
+{
+    "declarations": {
+        "use_frameworks!": {
+            "declaration": "use_frameworks!",
+            "count": 1
+        }
+    },
+    "sources": {
+        "https://cdn.cocoapods.org/": {
+            "source": "https://cdn.cocoapods.org/",
+            "count": 1
+        }
+    },
+    "libraries": {
+        "TSLocationManager": {
+            "name": "TSLocationManager",
+            "spec": "~> 4.1.0",
+            "count": 1
+        }
+    }
+}

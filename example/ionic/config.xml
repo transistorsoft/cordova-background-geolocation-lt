@@ -1,0 +1,34 @@
+<?xml version='1.0' encoding='utf-8'?>
+<widget id="com.transistorsoft.cordova.ionic" version="1.0.0" xmlns="http://www.w3.org/ns/widgets" xmlns:android="http://schemas.android.com/apk/res/android" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+    <name>BGGeo Ionic</name>
+    <description>Background Geolocation Ionic/Angular Example</description>
+    <author email="chris@transistorsoft.com" href="https://transistorsoft.com">Transistor Software</author>
+    <content src="index.html" />
+    <preference name="StatusBarOverlaysWebView" value="false" />
+    <preference name="StatusBarBackgroundColor" value="#3880ff" />
+    <preference name="StatusBarStyle" value="lightcontent" />
+    <platform name="ios">
+        <config-file parent="TSLocationManagerLicense" target="*-Info.plist">
+            <string>eyJhbGciOiJFZERTQSIsImtpZCI6ImVkMjU1MTktbWFpbi12MSJ9.eyJvcyI6ImlvcyIsImFwcF9pZCI6ImNvbS50cmFuc2lzdG9yc29mdC5jb3Jkb3ZhLmlvbmljIiwib3JkZXJfbnVtYmVyIjoxMDAyMywicmVuZXdhbF91cmwiOiJodHRwczovL3Nob3AudHJhbnNpc3RvcnNvZnQuY29tL2NhcnQvMTA4NjMwNzM4NTc6MT9ub3RlPTEwNzUzIiwiY3VzdG9tZXJfaWQiOjY0NjYsInByb2R1Y3QiOiJjb3Jkb3ZhLWJhY2tncm91bmQtZ2VvbG9jYXRpb24iLCJrZXlfdmVyc2lvbiI6MSwiYWxsb3dlZF9zdWZmaXhlcyI6WyIuZGV2IiwiLmRldmVsb3BtZW50IiwiLnN0YWdpbmciLCIuc3RhZ2UiLCIucWEiLCIudWF0IiwiLnRlc3QiLCIuZGVidWciXSwibWF4X2J1aWxkX3N0YW1wIjoyMDQ3MDYwOCwiZ3JhY2VfYnVpbGRzIjowLCJlbnRpdGxlbWVudHMiOlsiY29yZSIsInBvbHlnb24tZ2VvZmVuY2luZyJdLCJpYXQiOjE3NzgyNTM4NzR9.IUooLvafMtoGNoto2zGLnNpBmoN3neVWU0q-tiQlA98nGnpgFvLtwzpi2Mf_gHPAhoM1ryOeR3AkWcTpBtXhCw</string>
+        </config-file>
+        <preference name="WKWebViewOnly" value="true" />
+        <preference name="deployment-target" value="13.0" />
+        <edit-config file="*-Info.plist" mode="merge" target="NSLocationAlwaysAndWhenInUseUsageDescription">
+            <string>Always allow access to device location so the app can track your position in the background.</string>
+        </edit-config>
+        <edit-config file="*-Info.plist" mode="merge" target="NSLocationWhenInUseUsageDescription">
+            <string>Allow access to device location so the app can track your position.</string>
+        </edit-config>
+        <edit-config file="*-Info.plist" mode="merge" target="NSMotionUsageDescription">
+            <string>Motion activity is used to determine when you are walking, running, or driving.</string>
+        </edit-config>
+    </platform>
+    <platform name="android">
+        <config-file parent="/manifest/application" target="app/src/main/AndroidManifest.xml">
+            <meta-data android:name="com.transistorsoft.locationmanager.license" android:value="eyJhbGciOiJFZERTQSIsImtpZCI6ImVkMjU1MTktbWFpbi12MSJ9.eyJvcyI6ImFuZHJvaWQiLCJhcHBfaWQiOiJjb20udHJhbnNpc3RvcnNvZnQuY29yZG92YS5pb25pYyIsIm9yZGVyX251bWJlciI6MTAwMjMsInJlbmV3YWxfdXJsIjoiaHR0cHM6Ly9zaG9wLnRyYW5zaXN0b3Jzb2Z0LmNvbS9jYXJ0LzEwODYzMDczODU3OjE_bm90ZT0xMDc1MyIsImN1c3RvbWVyX2lkIjo2NDY2LCJwcm9kdWN0IjoiY29yZG92YS1iYWNrZ3JvdW5kLWdlb2xvY2F0aW9uIiwia2V5X3ZlcnNpb24iOjEsImFsbG93ZWRfc3VmZml4ZXMiOlsiLmRldiIsIi5kZXZlbG9wbWVudCIsIi5zdGFnaW5nIiwiLnN0YWdlIiwiLnFhIiwiLnVhdCIsIi50ZXN0IiwiLmRlYnVnIl0sIm1heF9idWlsZF9zdGFtcCI6MjA0NzA2MDgsImdyYWNlX2J1aWxkcyI6MCwiZW50aXRsZW1lbnRzIjpbImNvcmUiLCJwb2x5Z29uLWdlb2ZlbmNpbmciXSwiaWF0IjoxNzc4MjUzODc0fQ.QTsh-uPcthmUg_0k5qaspqal0LV-t4wRRfJBrpvJtd3FbP4s9__FXhLNgX3U7NSeJ7zEnprYoTTz63-KZKEPAA" />
+        </config-file>
+        <preference name="android-minSdkVersion" value="24" />
+        <preference name="android-targetSdkVersion" value="35" />
+        <preference name="android-compileSdkVersion" value="36" />
+    </platform>
+</widget>

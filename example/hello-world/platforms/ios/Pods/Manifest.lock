@@ -1,0 +1,20 @@
+PODS:
+  - TSBackgroundFetch (4.1.1)
+  - TSLocationManager (4.1.6):
+    - TSBackgroundFetch (~> 4.1.0)
+
+DEPENDENCIES:
+  - TSLocationManager (~> 4.1.0)
+
+SPEC REPOS:
+  trunk:
+    - TSBackgroundFetch
+    - TSLocationManager
+
+SPEC CHECKSUMS:
+  TSBackgroundFetch: 18918b6449a1e3f01eb0f5b44d6d79ce6160a5a5
+  TSLocationManager: 7dd12e7e98191abc74327a017560c4eced17a83d
+
+PODFILE CHECKSUM: fed896416eef408abc2985d44600c0098b551e7e
+
+COCOAPODS: 1.16.2

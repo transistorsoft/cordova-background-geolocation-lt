@@ -1,0 +1,47 @@
+<ion-content class="ion-padding">
+  <div class="registration-container">
+    <div class="header">
+      <h1>Background Geolocation</h1>
+      <p>Demo Registration</p>
+    </div>
+
+    <ion-card class="info-card">
+      <ion-card-content>
+        <p>This demo app posts data to Transistor Software's demo server so you can view live tracking results:</p>
+        <p class="tracker-url">{{ trackerUrl }}</p>
+      </ion-card-content>
+    </ion-card>
+
+    <div class="form">
+      <ion-item>
+        <ion-input
+          label="Organization"
+          labelPlacement="stacked"
+          placeholder="Enter organization name"
+          [(ngModel)]="organization"
+          autocapitalize="words"
+          [autocorrect]="'off'">
+        </ion-input>
+      </ion-item>
+
+      <ion-item>
+        <ion-input
+          label="Username"
+          labelPlacement="stacked"
+          placeholder="Enter username"
+          [(ngModel)]="username"
+          autocapitalize="off"
+          [autocorrect]="'off'">
+        </ion-input>
+      </ion-item>
+    </div>
+
+    <ion-button
+      expand="block"
+      size="large"
+      [disabled]="!canRegister"
+      (click)="onRegister()">
+      {{ loading ? 'Registering...' : 'Register' }}
+    </ion-button>
+  </div>
+</ion-content>

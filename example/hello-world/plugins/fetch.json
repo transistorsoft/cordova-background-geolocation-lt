@@ -1,0 +1,10 @@
+{
+  "cordova-background-geolocation-lt": {
+    "source": {
+      "type": "local",
+      "path": "node_modules/cordova-background-geolocation-lt"
+    },
+    "is_top_level": true,
+    "variables": {}
+  }
+}
