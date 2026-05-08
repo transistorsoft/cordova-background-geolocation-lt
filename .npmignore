@@ -8,8 +8,8 @@ help
 scripts
 ISSUE_TEMPLATE.md
 
-src/ionic/index.ts
-src/ionic/tsconfig.json
+src/ionic
+example
 
 *.tgz
 

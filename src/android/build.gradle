@@ -3,20 +3,28 @@ import groovy.json.JsonSlurper
 def TAG = "[cordova-background-geolocation] "
 
 def DEFAULT_PLAY_SERVICES_LOCATION_VERSION = "21.3.0"
-
-def playServicesLocationVersion = DEFAULT_PLAY_SERVICES_LOCATION_VERSION
+def DEFAULT_TSLOCATIONMANAGER_VERSION = "4.1.+"
 
 def safeExtGet(prop, fallback) {
     rootProject.ext.has(prop) ? rootProject.ext.get(prop) : fallback
 }
+
+// Resolution order: rootProject.ext (gradle) → package.json --variable → default.
+def playServicesLocationVersion = safeExtGet("playServicesLocationVersion", DEFAULT_PLAY_SERVICES_LOCATION_VERSION)
+def tslocationmanagerVersion = safeExtGet("tslocationmanagerVersion", DEFAULT_TSLOCATIONMANAGER_VERSION)
 
 File packageJson = new File("${projectDir}/../../../package.json")
 if (packageJson.exists()) {
     def config = (new JsonSlurper()).parseText(packageJson.text)
     def plugins = config["cordova"]["plugins"]
     def pluginConfig = plugins["cordova-background-geolocation-lt"] ?: plugins["cordova-background-geolocation"]
-    if (pluginConfig != null && pluginConfig["GOOGLE_API_VERSION"]) {
-        playServicesLocationVersion = pluginConfig["GOOGLE_API_VERSION"]
+    if (pluginConfig != null) {
+        if (!rootProject.ext.has("playServicesLocationVersion") && pluginConfig["GOOGLE_API_VERSION"]) {
+            playServicesLocationVersion = pluginConfig["GOOGLE_API_VERSION"]
+        }
+        if (!rootProject.ext.has("tslocationmanagerVersion") && pluginConfig["TSLOCATIONMANAGER_VERSION"]) {
+            tslocationmanagerVersion = pluginConfig["TSLOCATIONMANAGER_VERSION"]
+        }
     }
 }
 
@@ -28,13 +36,15 @@ rootProject.allprojects {
 }
 
 println("$TAG playServicesLocationVersion: ${playServicesLocationVersion}")
+println("$TAG tslocationmanagerVersion: ${tslocationmanagerVersion}")
 
 dependencies {
     def locationMajorVersion = playServicesLocationVersion.split('\\.')[0] as int
     if (locationMajorVersion >= 21) {
-        api 'com.transistorsoft:tslocationmanager:4.1.+'
+        api "com.transistorsoft:tslocationmanager:${tslocationmanagerVersion}"
     } else {
-        api 'com.transistorsoft:tslocationmanager-gms20:4.1.+'
+        api "com.transistorsoft:tslocationmanager-gms20:${tslocationmanagerVersion}"
     }
     implementation "com.google.android.gms:play-services-location:$playServicesLocationVersion"
+    implementation "androidx.work:work-runtime:2.10.0"
 }

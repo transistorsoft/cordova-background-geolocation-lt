@@ -16,8 +16,6 @@
         <engine name="cordova-ios" version=">=4.5.0"/>
     </engines>
 
-    <dependency id="cordova-plugin-background-fetch" version="~7.3.1" />
-
     <js-module src="www/BackgroundGeolocation.js" name="BackgroundGeolocation">
         <clobbers target="window.BackgroundGeolocation" />
     </js-module>
@@ -58,6 +56,7 @@
      <!-- android -->
     <platform name="android">
         <preference name="GOOGLE_API_VERSION" default="21.3.0" />
+        <preference name="TSLOCATIONMANAGER_VERSION" default="4.1.+" />
         <preference name="EVENTBUS_VERSION" default="3.3.1" />
         <framework src="org.greenrobot:eventbus:$EVENTBUS_VERSION"/>
 

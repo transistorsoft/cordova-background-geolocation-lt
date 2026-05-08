@@ -9,6 +9,7 @@
     BOOL ready;
     NSMutableDictionary *callbacks;
     NSMutableArray *watchPositionCallbacks;
+    TSLocationWatchId watchId;
 }
 
 - (void)pluginInitialize
@@ -120,8 +121,7 @@
     [self.commandDelegate runInBackground:^{
         TSLocationManager *bgGeo = [TSLocationManager sharedInstance];
         [bgGeo start];
-        TSConfig *config = [TSConfig sharedInstance];
-        NSDictionary *state = [config toDictionary];
+        NSDictionary *state = [bgGeo getState];
         dispatch_sync(dispatch_get_main_queue(), ^{
             CDVPluginResult *result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:state];
             [commandDelegate sendPluginResult:result callbackId:command.callbackId];
@@ -133,8 +133,7 @@
 {
     TSLocationManager *bgGeo = [TSLocationManager sharedInstance];
     [bgGeo stop];
-    TSConfig *config = [TSConfig sharedInstance];
-    CDVPluginResult* result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:[config toDictionary]];
+    CDVPluginResult* result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:[bgGeo getState]];
     [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
 }
 
@@ -167,8 +166,8 @@
 
 - (void) getOdometer:(CDVInvokedUrlCommand*)command
 {
-    TSConfig *config = [TSConfig sharedInstance];
-    CDVPluginResult* result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDouble: config.odometer];
+    TSLocationManager *bgGeo = [TSLocationManager sharedInstance];
+    CDVPluginResult* result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDouble:[bgGeo getOdometer]];
     [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
 }
 
@@ -177,7 +176,7 @@
     __typeof(self.commandDelegate) __weak commandDelegate = self.commandDelegate;
     double value  = [[command.arguments objectAtIndex:0] doubleValue];
 
-    TSCurrentPositionRequest *request = [TSCurrentPositionRequest requestWithType:TSLocationTypeOdometer
+    TSCurrentPositionRequest *request = [TSCurrentPositionRequest requestWithType:TSLocationTypeCurrent
         success:^(TSLocationEvent *event) {
             CDVPluginResult *result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:[event toDictionary]];
             [commandDelegate sendPluginResult:result callbackId:command.callbackId];
@@ -682,13 +681,13 @@
         request.timeout = [options[@"timeout"] doubleValue];
     }
     TSLocationManager *bgGeo = [TSLocationManager sharedInstance];
-    [bgGeo watchPosition:request];
+    watchId = [bgGeo watchPosition:request];
 }
 - (void) stopWatchPosition:(CDVInvokedUrlCommand*)command
 {
     [self.commandDelegate runInBackground:^{
         TSLocationManager *bgGeo = [TSLocationManager sharedInstance];
-        [bgGeo stopWatchPosition];
+        [bgGeo stopWatchPosition:watchId];
     }];
     if (!watchPositionCallbacks) {
         watchPositionCallbacks = [NSMutableArray new];
