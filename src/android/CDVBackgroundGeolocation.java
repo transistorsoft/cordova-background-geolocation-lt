@@ -17,6 +17,7 @@ import com.transistorsoft.locationmanager.event.ConnectivityChangeEvent;
 import com.transistorsoft.locationmanager.event.GeofenceEvent;
 import com.transistorsoft.locationmanager.event.GeofencesChangeEvent;
 import com.transistorsoft.locationmanager.event.HeartbeatEvent;
+import com.transistorsoft.locationmanager.event.LocationFilterEvent;
 import com.transistorsoft.locationmanager.event.LocationProviderChangeEvent;
 import com.transistorsoft.locationmanager.event.TerminateEvent;
 import com.transistorsoft.locationmanager.geofence.TSGeofence;
@@ -79,6 +80,7 @@ public class CDVBackgroundGeolocation extends CordovaPlugin {
     // Cordova listener-registration actions
     private static final String ACTION_ADD_LOCATION_LISTENER = "addLocationListener";
     private static final String ACTION_ADD_MOTION_CHANGE_LISTENER = "addMotionChangeListener";
+    private static final String ACTION_ADD_LOCATIONFILTER_LISTENER = "addLocationFilterListener";
     private static final String ACTION_ADD_HEARTBEAT_LISTENER = "addHeartbeatListener";
     private static final String ACTION_ADD_ACTIVITY_CHANGE_LISTENER = "addActivityChangeListener";
     private static final String ACTION_ADD_PROVIDER_CHANGE_LISTENER = "addProviderChangeListener";
@@ -192,6 +194,9 @@ public class CDVBackgroundGeolocation extends CordovaPlugin {
         } else if (ACTION_ADD_MOTION_CHANGE_LISTENER.equalsIgnoreCase(action)) {
             result = true;
             this.addMotionChangeListener(callbackContext);
+        } else if (ACTION_ADD_LOCATIONFILTER_LISTENER.equalsIgnoreCase(action)) {
+            result = true;
+            this.addLocationFilterListener(callbackContext);
         } else if (Actions.GET_LOCATIONS.equalsIgnoreCase(action)) {
             result = true;
             getLocations(callbackContext);
@@ -915,6 +920,19 @@ public class CDVBackgroundGeolocation extends CordovaPlugin {
         };
         registerCallback(callbackContext, callback);
         getAdapter().onMotionChange(callback);
+    }
+
+    private void addLocationFilterListener(final CallbackContext callbackContext) {
+        TSLocationFilterCallback callback = new TSLocationFilterCallback() {
+            @Override
+            public void onLocationFilter(LocationFilterEvent event) {
+                PluginResult result = new PluginResult(PluginResult.Status.OK, event.toJson());
+                result.setKeepCallback(true);
+                callbackContext.sendPluginResult(result);
+            }
+        };
+        registerCallback(callbackContext, callback);
+        getAdapter().onLocationFilter(callback);
     }
 
     private void addHttpListener(final CallbackContext callbackContext) {

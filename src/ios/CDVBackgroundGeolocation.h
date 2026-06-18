@@ -26,6 +26,7 @@
 - (void) addLocationListener:(CDVInvokedUrlCommand *)command;
 - (void) addHttpListener:(CDVInvokedUrlCommand *)command;
 - (void) addMotionChangeListener:(CDVInvokedUrlCommand*)command;
+- (void) addLocationFilterListener:(CDVInvokedUrlCommand*)command;
 - (void) addActivityChangeListener:(CDVInvokedUrlCommand*)command;
 - (void) addScheduleListener:(CDVInvokedUrlCommand *)command;
 - (void) addProviderChangeListener:(CDVInvokedUrlCommand*)command;

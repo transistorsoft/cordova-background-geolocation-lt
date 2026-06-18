@@ -115,6 +115,10 @@ module.exports = {
         return this.on('motionchange', callback);
     },
 
+    onLocationFilter: function(callback) {
+        return this.on('locationfilter', callback);
+    },
+
     onHttp: function(callback) {
         return this.on('http', callback);
     },

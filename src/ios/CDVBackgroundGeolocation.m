@@ -327,6 +327,19 @@
     [bgGeo onMotionChange:callback];
 }
 
+- (void) addLocationFilterListener:(CDVInvokedUrlCommand*)command
+{
+    __typeof(self.commandDelegate) __weak commandDelegate = self.commandDelegate;
+    void(^callback)(TSLocationFilterEvent*) = ^void(TSLocationFilterEvent* event) {
+        CDVPluginResult *result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:[event toDictionary]];
+        [result setKeepCallbackAsBool:YES];
+        [commandDelegate sendPluginResult:result callbackId:command.callbackId];
+    };
+    [self registerCallback:command.callbackId callback:callback];
+    TSLocationManager *bgGeo = [TSLocationManager sharedInstance];
+    [bgGeo onLocationFilter:callback];
+}
+
 - (void) addHeartbeatListener:(CDVInvokedUrlCommand*)command
 {
     __typeof(self.commandDelegate) __weak commandDelegate = self.commandDelegate;

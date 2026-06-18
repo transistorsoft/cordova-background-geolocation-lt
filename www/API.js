@@ -23,6 +23,7 @@ var Events = {
     LOCATION: 'location',
     HTTP: 'http',
     MOTIONCHANGE: 'motionchange',
+    LOCATIONFILTER: 'locationfilter',
     PROVIDERCHANGE: 'providerchange',
     HEARTBEAT: 'heartbeat',
     ACTIVITYCHANGE: 'activitychange',
@@ -245,6 +246,9 @@ module.exports = {
             case Events.MOTIONCHANGE:
                 this.onMotionChange(success, fail);
                 break;
+            case Events.LOCATIONFILTER:
+                this.onLocationFilter(success, fail);
+                break;
             case Events.HEARTBEAT:
                 this.onHeartbeat(success, fail);
                 break;
@@ -332,6 +336,17 @@ module.exports = {
             success(params);
         };
         exec(mySuccess, failure, MODULE_NAME, 'addMotionChangeListener', []);
+        return registerCordovaCallback(success, mySuccess);
+    },
+    onLocationFilter: function(success, failure) {
+        var mySuccess = function(params) {
+            // Transform timestamp to Date instance.
+            if (params.location.timestamp) {
+                params.location.timestamp = new Date(params.location.timestamp);
+            }
+            success(params);
+        };
+        exec(mySuccess, failure, MODULE_NAME, 'addLocationFilterListener', []);
         return registerCordovaCallback(success, mySuccess);
     },
     onActivityChange: function(success) {
