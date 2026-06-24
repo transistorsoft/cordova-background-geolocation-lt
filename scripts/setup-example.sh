@@ -25,6 +25,9 @@ TMPDIR=$(mktemp -d)
 tar xzf "$TARBALL" -C "$TMPDIR"
 rm -f "$TARBALL"
 
+echo "▸ Removing any previously-installed plugin (forces a clean re-install of the packed build)..."
+cordova plugin rm cordova-background-geolocation-lt --nosave 2>/dev/null || true
+
 echo "▸ Adding Cordova plugin..."
 cordova plugin add "$TMPDIR/package"
 
