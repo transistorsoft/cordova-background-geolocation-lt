@@ -20,7 +20,12 @@
       "android"
     ],
     "plugins": {
-      "cordova-background-geolocation-lt": {}
+      "cordova-background-geolocation-lt": {
+        "GOOGLE_API_VERSION": "21.3.0",
+        "TSLOCATIONMANAGER_VERSION": "4.2.+",
+        "EVENTBUS_VERSION": "3.3.1",
+        "BACKGROUND_MODE_LOCATION": "<string>location</string>"
+      }
     }
   },
   "devDependencies": {

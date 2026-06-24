@@ -1,5 +1,22 @@
 # CHANGELOG
 
+## 5.1.0 &mdash; 2026-06-22
+* [Added] New event `onLocationFilter` — fires when the tracking location-filter **rejects** a location (eg: horizontal accuracy worse than `LocationFilter.trackingAccuracyThreshold`, or a GPS spike under the `Conservative` policy: implausible implied-speed / statistical outlier). Rejected locations are **not** delivered to `onLocation`, so this is the only way to observe and adapt to them. The event provides the rejected `location`, a normalized `reason` (`"low-accuracy"` | `"implied-speed"` | `"outlier-capped"`), `accuracy`, and `trackingAccuracyThreshold`.
+* [iOS] Pin `TSLocationManager ~> 4.2.0`
+* [Android] Pin `tslocationmanager 4.2.+`
+
+## 5.0.0
+
+### 🚀 Native SDK via CocoaPods / Maven Central
+
+Migrated to the native `TSLocationManager` SDK v4.x via package managers — matching the React Native, Flutter, and Capacitor SDKs — replacing the ~40 MB of embedded native binaries.
+
+* [iOS] `TSLocationManager` now installed via CocoaPods (`~> 4.1.0`); removed the vendored `.xcframework`; iOS bridge updated for the v4.x API.
+* [Android] `tslocationmanager` now installed via Maven Central (`4.1.+`); removed the local `libs/`; added `androidx.work:work-runtime`; Android bridge updated for the v4.x API.
+* [Changed] Type declarations are now provided by `@transistorsoft/background-geolocation-types` (removed the embedded `src/ionic/` declarations).
+* [Changed] Adopt the native SDK's `Actions.*` constants; add the `TSLOCATIONMANAGER_VERSION` plugin variable to pin/override the native SDK version.
+* See the v5 Migration Guide and the refreshed example app.
+
 ## 4.18.3 &mdash; 2026-01-14
 * [Android] Implement spurious stationary geofence exit detection..  Google Play Services seems to have a bug where
  geofence exit events fire even while the device is still inside the geofence, causing the SDK to constantly enter the *m
