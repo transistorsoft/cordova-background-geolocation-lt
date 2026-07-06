@@ -200,9 +200,13 @@
 
 - (void) getLocations:(CDVInvokedUrlCommand *)command
 {
+    id options = (command.arguments.count > 0) ? [command.arguments objectAtIndex:0] : nil;
+    NSDictionary *params = [options isKindOfClass:[NSDictionary class]] ? options : nil;
+    LocationQuery *query = [[LocationQuery alloc] initWithDictionary:params];
+
     __typeof(self.commandDelegate) __weak commandDelegate = self.commandDelegate;
     TSLocationManager *bgGeo = [TSLocationManager sharedInstance];
-    [bgGeo getLocations:^(NSArray* locations) {
+    [bgGeo getLocations:query success:^(NSArray* locations) {
         NSDictionary *params = @{@"locations": locations};
         CDVPluginResult *result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:params];
         [commandDelegate sendPluginResult:result callbackId:command.callbackId];

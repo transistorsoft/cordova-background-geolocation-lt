@@ -8,6 +8,7 @@ import com.transistorsoft.locationmanager.config.edit.Editor;
 import com.transistorsoft.locationmanager.http.TransistorAuthorizationToken;
 import com.transistorsoft.locationmanager.http.TSAuthorization;
 import com.transistorsoft.locationmanager.data.LocationModel;
+import com.transistorsoft.locationmanager.data.LocationQuery;
 import com.transistorsoft.locationmanager.data.SQLQuery;
 import com.transistorsoft.locationmanager.device.DeviceSettingsRequest;
 import com.transistorsoft.locationmanager.device.DeviceInfo;
@@ -199,7 +200,7 @@ public class CDVBackgroundGeolocation extends CordovaPlugin {
             this.addLocationFilterListener(callbackContext);
         } else if (Actions.GET_LOCATIONS.equalsIgnoreCase(action)) {
             result = true;
-            getLocations(callbackContext);
+            getLocations(data.optJSONObject(0), callbackContext);
         } else if (Actions.SYNC.equalsIgnoreCase(action)) {
             result = true;
             sync(callbackContext);
@@ -476,8 +477,9 @@ public class CDVBackgroundGeolocation extends CordovaPlugin {
         });
     }
 
-    private void getLocations(final CallbackContext callbackContext) {
-        getAdapter().getLocations(new TSGetLocationsCallback() {
+    private void getLocations(JSONObject params, final CallbackContext callbackContext) {
+        LocationQuery query = LocationQuery.fromJson(params);
+        getAdapter().getLocations(query, new TSGetLocationsCallback() {
             @Override public void onSuccess(List<LocationModel> locations) {
                 try {
                     JSONArray data = new JSONArray();

@@ -474,13 +474,13 @@ module.exports = {
             exec(success, failure, MODULE_NAME, 'setConfig', [validateConfig(config)]);
         });
     },
-    getLocations: function() {
+    getLocations: function(query) {
         return new Promise(function(resolve, reject) {
             var success = function(params) {
                 resolve(setTimestamp(params.locations));
             }
             var failure = function(error) { reject(error); }
-            exec(success, failure, MODULE_NAME, 'getLocations', []);
+            exec(success, failure, MODULE_NAME, 'getLocations', [query]);
         });
     },
     getCount: function(success, failure) {

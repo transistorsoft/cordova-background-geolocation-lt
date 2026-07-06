@@ -267,12 +267,15 @@ module.exports = {
             API.setConfig(config).then(success).catch(failure);
         }
     },
-    getLocations: function(success, failure) {
-        if (!arguments.length) {
-            return API.getLocations();
-        } else {
-            API.getLocations().then(success).catch(failure);
+    getLocations: function(query, success, failure) {
+        // Legacy callback form getLocations(success, failure): first arg is a function.
+        if (typeof query === 'function') {
+            failure = success;
+            success = query;
+            query = undefined;
         }
+        var promise = API.getLocations(query);
+        return (typeof success === 'function') ? promise.then(success).catch(failure) : promise;
     },
     getCount: function(success, failure) {
         if (!arguments.length) {
