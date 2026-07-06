@@ -56,7 +56,7 @@
      <!-- android -->
     <platform name="android">
         <preference name="GOOGLE_API_VERSION" default="21.3.0" />
-        <preference name="TSLOCATIONMANAGER_VERSION" default="4.2.+" />
+        <preference name="TSLOCATIONMANAGER_VERSION" default="4.3.+" />
         <preference name="EVENTBUS_VERSION" default="3.3.1" />
         <framework src="org.greenrobot:eventbus:$EVENTBUS_VERSION"/>
 
