@@ -474,13 +474,13 @@ module.exports = {
             exec(success, failure, MODULE_NAME, 'setConfig', [validateConfig(config)]);
         });
     },
-    getLocations: function() {
+    getLocations: function(query) {
         return new Promise(function(resolve, reject) {
             var success = function(params) {
                 resolve(setTimestamp(params.locations));
             }
             var failure = function(error) { reject(error); }
-            exec(success, failure, MODULE_NAME, 'getLocations', []);
+            exec(success, failure, MODULE_NAME, 'getLocations', [query]);
         });
     },
     getCount: function(success, failure) {
@@ -512,7 +512,7 @@ module.exports = {
         return new Promise(function(resolve, reject) {
             location = location || {};
             var coords = location.coords || {};
-            if (!coords.latitude && !coords.longitude) {
+            if (coords.latitude == null || coords.longitude == null) {
                 return reject("BackgroundGeolocation#insertLocation location must contain coords.latitude & coords.longitude");
             }
             var success = function(location) { resolve(location) }

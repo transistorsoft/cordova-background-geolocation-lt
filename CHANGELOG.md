@@ -1,5 +1,24 @@
 # CHANGELOG
 
+## 5.2.0 &mdash; 2026-07-24
+
+* [Fixed] `insertLocation()` now works — the supplied record is inserted as-given (import-as-is) and the returned Promise resolves with the inserted record's `uuid`. It was previously unimplemented on iOS (the call never resolved) and on Android stored a record with an empty `uuid` (so `destroyLocation()` couldn't remove it) and an unvalidated timestamp. Timestamps are now normalized (ISO-8601 or epoch), and a `uuid` is generated when you don't provide one.
+* [Fixed][iOS] A location arriving with a future timestamp (device clock skew) could poison the internal last-location comparator, causing every subsequent location to be rejected until the app was restarted (stalled odometer, no location updates). Future-stamped fixes are now tolerated and the comparator self-heals. Android is unaffected.
+
+### 🛡️ Reduced Foreground-Service Usage (Android)
+
+Geofencing and activity recognition (motion detection) no longer require a foreground service. These modes now run without a persistent notification — ahead of Google Play's **August 2026** policy that removes geofencing as an approved foreground-service `location` use-case.
+
+- **Run without foreground-service permissions.** You can remove `FOREGROUND_SERVICE` / `FOREGROUND_SERVICE_LOCATION` from your manifest. When absent, continuous location degrades gracefully to the OS significant-changes path (best-effort) instead of failing to start.
+- **Quieter by default.** Geofence-only and motion-only apps no longer show an ongoing notification.
+- **Opt back in via config** for apps that still need classic foreground-service delivery.
+
+Continuous high-frequency tracking (`trackingMode: LOCATION`) still uses a foreground service where permitted.
+
+* [Added] `getLocations(query)` — paged, queryable reads of the location database. Pass a `LocationQuery` (`{ limit, offset, page, order }`) to fetch a bounded slice instead of loading the entire table; the no-argument `getLocations()` is unchanged. Fixes out-of-memory / `TransactionTooLargeException` crashes when reading a database holding several thousand records. Pair with `getCount()` to drive paging.
+* [iOS] Pin `TSLocationManager ~> 4.3.0`
+* [Android] Pin `tslocationmanager 4.3.+`
+
 ## 5.1.0 &mdash; 2026-06-22
 * [Added] New event `onLocationFilter` — fires when the tracking location-filter **rejects** a location (eg: horizontal accuracy worse than `LocationFilter.trackingAccuracyThreshold`, or a GPS spike under the `Conservative` policy: implausible implied-speed / statistical outlier). Rejected locations are **not** delivered to `onLocation`, so this is the only way to observe and adapt to them. The event provides the rejected `location`, a normalized `reason` (`"low-accuracy"` | `"implied-speed"` | `"outlier-capped"`), `accuracy`, and `trackingAccuracyThreshold`.
 * [iOS] Pin `TSLocationManager ~> 4.2.0`

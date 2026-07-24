@@ -3,10 +3,42 @@ import groovy.json.JsonSlurper
 def TAG = "[cordova-background-geolocation] "
 
 def DEFAULT_PLAY_SERVICES_LOCATION_VERSION = "21.3.0"
-def DEFAULT_TSLOCATIONMANAGER_VERSION = "4.2.+"
+def DEFAULT_TSLOCATIONMANAGER_VERSION = "4.4.+"
 
 def safeExtGet(prop, fallback) {
     rootProject.ext.has(prop) ? rootProject.ext.get(prop) : fallback
+}
+
+// Guards against the missing-symbol crash that occurs when an app pins an `ext.tslocationmanagerVersion`
+// older than the SDK this plugin's bridge adapter was built against. Returns `minVersion` (with a
+// warning) when the pinned version's entire range is below it; otherwise returns the pin unchanged.
+// Dynamic pins are handled by comparing the pin's ceiling to the minimum's floor, so "4.2.+" is
+// overridden while "4.+"/"+" are respected. Drop-in identical across the four plugin SDKs.
+def ensureTSLocationManagerVersion(String configured, String minVersion) {
+    def parse = { String v, boolean asCeiling ->
+        def parts = (v ?: "").trim().tokenize(".")
+        def out = [0, 0, 0]
+        boolean wild = false
+        for (int i = 0; i < 3; i++) {
+            if (wild) { out[i] = asCeiling ? Integer.MAX_VALUE : 0; continue }
+            def p = (i < parts.size()) ? parts[i] : null
+            if (p != null && p.isInteger()) {
+                out[i] = p as int
+            } else if (p != null) {          // "+" wildcard or qualifier
+                wild = true
+                out[i] = asCeiling ? Integer.MAX_VALUE : 0
+            }                                // missing trailing component stays 0
+        }
+        return out
+    }
+    def c = parse(configured, true)          // ceiling of the app's pin
+    def f = parse(minVersion, false)         // floor of the required minimum
+    def cmp = (c[0] <=> f[0]) ?: (c[1] <=> f[1]) ?: (c[2] <=> f[2])
+    if (cmp < 0) {
+        println("[tslocationmanager] ⚠️  ext.tslocationmanagerVersion '${configured}' is older than the '${minVersion}' required by this plugin release and has been overridden to '${minVersion}'. The native bridge adapter references symbols added in '${minVersion}'; an older SDK causes missing-symbol build failures / runtime crashes. Update or remove ext.tslocationmanagerVersion in your root build.gradle to silence this warning.")
+        return minVersion
+    }
+    return configured
 }
 
 // Resolution order: rootProject.ext (gradle) → package.json --variable → default.
@@ -27,6 +59,8 @@ if (packageJson.exists()) {
         }
     }
 }
+
+tslocationmanagerVersion = ensureTSLocationManagerVersion(tslocationmanagerVersion, DEFAULT_TSLOCATIONMANAGER_VERSION)
 
 rootProject.allprojects {
     repositories {
