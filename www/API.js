@@ -512,7 +512,7 @@ module.exports = {
         return new Promise(function(resolve, reject) {
             location = location || {};
             var coords = location.coords || {};
-            if (!coords.latitude && !coords.longitude) {
+            if (coords.latitude == null || coords.longitude == null) {
                 return reject("BackgroundGeolocation#insertLocation location must contain coords.latitude & coords.longitude");
             }
             var success = function(location) { resolve(location) }
