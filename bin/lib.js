@@ -1,4 +1,4 @@
-const { exec, spawn} = require('child_process');
+const { execFile } = require('child_process');
 const chalk = require('chalk');
 
 class CLIError extends Error {};
@@ -23,7 +23,8 @@ function _spawn(cmd, args=[]) {
 
 	return new Promise(function(resolve, reject) {
 
-    const child = spawn(cmd, args, {shell: true, stdio: 'inherit'});
+    const child = execFile(cmd, args);
+    child.stdio = 'inherit';
     child.on('error', (chunk) => {
       console.log('error: ', chunk);
     });
