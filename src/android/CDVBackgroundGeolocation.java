@@ -26,6 +26,7 @@ import com.transistorsoft.locationmanager.http.HttpResponse;
 import com.transistorsoft.locationmanager.http.HttpService;
 import com.transistorsoft.locationmanager.event.LocationEvent;
 import com.transistorsoft.locationmanager.location.TSCurrentPositionRequest;
+import com.transistorsoft.locationmanager.location.TSLocationManager;
 import com.transistorsoft.locationmanager.location.TSWatchPositionRequest;
 import com.transistorsoft.locationmanager.logger.TSLog;
 import com.transistorsoft.locationmanager.scheduler.ScheduleEvent;
@@ -350,8 +351,7 @@ public class CDVBackgroundGeolocation extends CordovaPlugin {
 
     private void reset(JSONObject params, CallbackContext callbackContext) throws JSONException {
         TSConfig config = TSConfig.getInstance(cordova.getActivity().getApplicationContext());
-        config.reset();
-        config.updateWithJSONObject(setHeadlessJobService(params));
+        config.reset(setHeadlessJobService(params));
         callbackContext.success(config.toJson(false));
     }
     private void ready(final JSONObject params, final CallbackContext callbackContext) throws JSONException {
@@ -379,8 +379,9 @@ public class CDVBackgroundGeolocation extends CordovaPlugin {
             config.updateWithJSONObject(setHeadlessJobService(params));
         } else {
             if (reset) {
-                config.reset();
-                config.updateWithJSONObject(setHeadlessJobService(params));
+                // One commit: a separate reset() exposed config listeners to the defaults while the SDK is still
+                // configured (a recreated Activity's reloaded page calls ready() again): permission dialogs, SLC churn.
+                config.reset(setHeadlessJobService(params));
             } else if (params.has(TSAuthorization.NAME)) {
                 JSONObject options = params.getJSONObject(TSAuthorization.NAME);
                 Editor ed = config.edit();
@@ -399,8 +400,7 @@ public class CDVBackgroundGeolocation extends CordovaPlugin {
     }
     private void configure(final JSONObject params, final CallbackContext callbackContext) throws JSONException {
         final TSConfig config = TSConfig.getInstance(cordova.getActivity().getApplicationContext());
-        config.reset();
-        config.updateWithJSONObject(setHeadlessJobService(params));
+        config.reset(setHeadlessJobService(params));
 
         getAdapter().ready(new TSCallback() {
             @Override public void onSuccess() {
@@ -1275,6 +1275,24 @@ public class CDVBackgroundGeolocation extends CordovaPlugin {
 
     public void onDestroy() {
         Log.i(TAG, "CDVBackgroundGeolocation#onDestoy");
+        Activity activity = cordova.getActivity();
+        if (activity != null && activity.isChangingConfigurations()) {
+            // Recreated for a configuration change (e.g. Bold text or font size, which the default Cordova
+            // android:configChanges omit): the app is NOT terminating.  Running onActivityDestroy() here stopped
+            // tracking (stopOnTerminate) while the app stayed on screen.  The new Activity builds a new WebView and
+            // PluginManager and reloads the page, whose first exec() creates a new plugin instance that hands the
+            // replacement Activity to the SDK (the native LifecycleManager also adopts it on start, as a fallback).
+            // What belonged to this dying WebView must go, because nothing else removes it:
+            // - its watchPosition, whose callback is this instance.  Stopped synchronously, as onActivityDestroy()
+            //   does, so it cannot land after the reloaded page starts a new watch;
+            // - its event listeners, which onActivityDestroy() cleared and pluginInitialize() does not.  Left
+            //   registered they deliver every event into the destroyed WebView, one more set per recreation.
+            Context context = activity.getApplicationContext();
+            TSLocationManager.getInstance(context).stopWatchPosition();
+            getAdapter().removeListeners();
+            super.onDestroy();
+            return;
+        }
         getAdapter().onActivityDestroy();
         super.onDestroy();
     }
