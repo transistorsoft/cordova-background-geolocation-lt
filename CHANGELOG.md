@@ -9,6 +9,17 @@
   `authorization`, …) are all carried over. The import is a strict no-op when v5 state already
   exists, and the original v4 archive is preserved for rollback. On iOS, a license-locked App Store
   build backs the archive up but does not import it. (WO-001)
+* [Fixed] `subscription.remove()` could remove nothing at all, leaving the listener registered — and
+  in one case still firing. Three cases, both platforms: after `removeListeners()`, adding the same
+  handler function again produced a subscription `remove()` did not know about; a `removeListeners()`
+  whose Promise was not awaited destroyed a listener added immediately after it, so that listener
+  never fired and could not be removed; and one handler function used for two subscriptions of the
+  same event left the second one un-removable. Each subscription is now tracked in its own right, so
+  `remove()` removes exactly the subscription it came from. The deprecated
+  `removeListener(event, callback)` now prefers the listener registered for that event, and
+  `addListener` accepts an event name in any case (eg: `on('Location', callback)`, which previously
+  registered nothing). `removeListeners()` also detaches your handlers immediately rather than when
+  the native call returns, so a handler can no longer fire after you have called it.
 
 ### iOS
 
@@ -47,6 +58,10 @@
   your app's last-known odometer a full leg behind. (WO-012)
 * [Fixed][iOS] A small memory leak: the plugin kept a reference to every event-listener callback ever
   added, even after `remove()` or `removeListeners()`.
+* [Fixed][iOS] `removeListeners()` unregistered the native listeners on a background thread while
+  already reporting success, so a listener added immediately afterwards could be swept away by that
+  removal landing late, leaving a subscription that never fired. The listeners are now unregistered
+  before the call returns.
 
 ### Android
 

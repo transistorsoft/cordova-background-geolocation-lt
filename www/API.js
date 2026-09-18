@@ -66,17 +66,19 @@ var validateConfig = function(config) {
 };
 
 /**
-* Register a single Cordova Callback
+* Find which Cordova callbackId the exec() we just issued was given, and track it.
+* Ids already tracked are skipped: two subscriptions to the same event can share one handler
+* function, and the older registration is still in window.cordova.callbacks (keepCallback).
 */
-function registerCordovaCallback(userSuccess, mySuccess) {
+function registerCordovaCallback(event, userSuccess, mySuccess) {
     var callbacks = window.cordova.callbacks;
-    var re = new RegExp(MODULE_NAME);
     for (var callbackId in callbacks) {
         if (CALLBACK_REGEXP.test(callbackId)) {
             var callback = callbacks[callbackId];
-            if (callback.success === mySuccess) {
+            if ((callback.success === mySuccess) && !isRegistered(callbackId)) {
                 cordovaCallbacks.push({
                     callbackId: callbackId,
+                    event: event,
                     success: userSuccess
                 });
                 return callbackId;
@@ -84,53 +86,88 @@ function registerCordovaCallback(userSuccess, mySuccess) {
         }
     }
 }
-/**
-* Remove a single plugin CordovaCallback
-*/
-function removeCordovaCallback(callback) {
+
+function isRegistered(callbackId) {
     for (var n=0,len=cordovaCallbacks.length;n<len;n++) {
-        var cordovaCallback = cordovaCallbacks[n];
-        if (cordovaCallback.success === callback) {
-            var callbackId = cordovaCallback.callbackId;
-            if (typeof(window.cordova.callbacks[callbackId]) === 'object') {
-                // Destroy Cordova callback.
-                delete window.cordova.callbacks[callbackId];
-                // Destroy internal reference
-                cordovaCallbacks.splice(n, 1);
-                return callbackId;
-            } else {
-                return null;
-            }
-            break;
+        if (cordovaCallbacks[n].callbackId === callbackId) {
+            return true;
         }
     }
+    return false;
 }
 
 /**
-* Remove all plugin Cordova callbacks
+* Remove one plugin CordovaCallback by its callbackId.  Returns true when it was still registered.
 */
-function removeCordovaCallbacks() {
-    var callbacks = window.cordova.callbacks;
-
-    for (var n=0,len=cordovaCallbacks.length;n<len;n++) {
-        var cordovaCallback = cordovaCallbacks[n];
-        var callbackId = cordovaCallback.callbackId;
-        if (typeof(callbacks[callbackId]) === 'object') {
-            // Destroy Cordova callback.
-            delete callbacks[callbackId];
+function removeCordovaCallbackById(callbackId) {
+    var found = false;
+    for (var n=cordovaCallbacks.length-1;n>=0;n--) {
+        if (cordovaCallbacks[n].callbackId === callbackId) {
+            cordovaCallbacks.splice(n, 1);
+            found = true;
         }
     }
+    if (found) {
+        // Destroy Cordova callback.
+        delete window.cordova.callbacks[callbackId];
+    }
+    return found;
+}
+
+/**
+* Remove a single plugin CordovaCallback by handler, for the deprecated #removeListener.
+* Prefers the given event, since the same handler can be registered for several events.
+* Returns the removed registration, whose own event must be the one sent to the native side:
+* iOS looks its listener up by event-name and the caller's spelling of it can differ.
+*/
+function removeCordovaCallback(event, handler) {
+    var registration = findRegistration(event, handler);
+    if (!registration) {
+        // Fall back to the first registration of this handler, whatever its event.
+        registration = findRegistration(null, handler);
+    }
+    if (!registration) {
+        return null;
+    }
+    removeCordovaCallbackById(registration.callbackId);
+    return registration;
+}
+
+function findRegistration(event, handler) {
+    for (var n=0,len=cordovaCallbacks.length;n<len;n++) {
+        var cordovaCallback = cordovaCallbacks[n];
+        if (cordovaCallback.success !== handler) continue;
+        if (event && (cordovaCallback.event !== event)) continue;
+        return cordovaCallback;
+    }
+    return null;
+}
+
+/**
+* The canonical name of an event, eg: "Location" -> "location".  Unknown events are returned as-given.
+*/
+function canonicalEvent(event) {
+    return Events[String(event).toUpperCase()] || event;
 }
 
 /**
  * Object returned from BackgroundGeolocation.addListener for removing an event-listener.
  */
-function createSubscription(event, handler) {
+function createSubscription(event, callbackId, handler) {
     return {
         remove: function() {
-            var callbackId = removeCordovaCallback(handler);
+            // Remove exactly this subscription.  Matching by handler cannot do that: one function can
+            // be the handler of several subscriptions.
             if (callbackId) {
-                exec(emptyFn, emptyFn, MODULE_NAME, 'removeListener', [event, callbackId]);
+                if (removeCordovaCallbackById(callbackId)) {
+                    exec(emptyFn, emptyFn, MODULE_NAME, 'removeListener', [event, callbackId]);
+                }
+                return;
+            }
+            // The registration was never tracked (see #registerCordovaCallback).  Fall back to the handler.
+            var registration = removeCordovaCallback(event, handler);
+            if (registration) {
+                exec(emptyFn, emptyFn, MODULE_NAME, 'removeListener', [registration.event, registration.callbackId]);
             }
         }
     }
@@ -231,56 +268,59 @@ module.exports = {
         if (!Events[event.toUpperCase()]) {
             throw MODULE_NAME + ".addListener:  Unknown event: " + event;
         }
+        // The event is validated case-insensitively; dispatch on the canonical name, so that eg "Location" works.
+        event = canonicalEvent(event);
         fail = fail || emptyFn;
 
+        var callbackId;
         switch (event) {
             case Events.LOCATION:
-                this.onLocation(success, fail);
+                callbackId = this.onLocation(success, fail);
                 break;
             case Events.HTTP:
-                this.onHttp(success, fail);
+                callbackId = this.onHttp(success, fail);
                 break;
             case Events.GEOFENCE:
-                this.onGeofence(success, fail);
+                callbackId = this.onGeofence(success, fail);
                 break;
             case Events.MOTIONCHANGE:
-                this.onMotionChange(success, fail);
+                callbackId = this.onMotionChange(success, fail);
                 break;
             case Events.LOCATIONFILTER:
-                this.onLocationFilter(success, fail);
+                callbackId = this.onLocationFilter(success, fail);
                 break;
             case Events.HEARTBEAT:
-                this.onHeartbeat(success, fail);
+                callbackId = this.onHeartbeat(success, fail);
                 break;
             case Events.SCHEDULE:
-                this.onSchedule(success, fail);
+                callbackId = this.onSchedule(success, fail);
                 break;
             case Events.ACTIVITYCHANGE:
-                this.onActivityChange(success, fail);
+                callbackId = this.onActivityChange(success, fail);
                 break;
             case Events.PROVIDERCHANGE:
-                this.onProviderChange(success, fail);
+                callbackId = this.onProviderChange(success, fail);
                 break;
             case Events.GEOFENCESCHANGE:
-                this.onGeofencesChange(success, fail);
+                callbackId = this.onGeofencesChange(success, fail);
                 break;
             case Events.POWERSAVECHANGE:
-                this.onPowerSaveChange(success, fail);
+                callbackId = this.onPowerSaveChange(success, fail);
                 break;
             case Events.CONNECTIVITYCHANGE:
-                this.onConnectivityChange(success, fail);
+                callbackId = this.onConnectivityChange(success, fail);
                 break;
             case Events.ENABLEDCHANGE:
-                this.onEnabledChange(success, fail);
+                callbackId = this.onEnabledChange(success, fail);
                 break;
             case Events.NOTIFICATIONACTION:
-                this.onNotificationAction(success, fail);
+                callbackId = this.onNotificationAction(success, fail);
                 break;
             case Events.AUTHORIZATION:
-                this.onAuthorization(success, fail);
+                callbackId = this.onAuthorization(success, fail);
                 break;
         }
-        return createSubscription(event, success);
+        return createSubscription(event, callbackId, success);
     },
 
     /**
@@ -289,12 +329,13 @@ module.exports = {
     removeListener: function(event, handler) {
         console.warn('BackgroundGeolocation.removeListener is deprecated.  Event-listener methods (eg: onLocation) now return a subscription instance.  Call subscription.remove() on the returned subscription instead.  Eg:\nconst subscription = BackgroundGeolocation.onLocation(myLocationHandler)\n...\nsubscription.remove()');
         // Compose remove-listener method name, eg:  "removeLocationListener"
+        var registration = removeCordovaCallback(canonicalEvent(event), handler);
         return new Promise(function(resolve, reject) {
-            var callbackId = removeCordovaCallback(handler);
-            if (callbackId) {
+            if (registration) {
                 var success = function()        { resolve() }
                 var failure = function(error)   { reject(error) }
-                exec(success, failure, MODULE_NAME, 'removeListener', [event, callbackId]);
+                // The registration's own event, not the caller's: iOS removes by event-name.
+                exec(success, failure, MODULE_NAME, 'removeListener', [registration.event, registration.callbackId]);
             } else {
                 resolve();
             }
@@ -304,11 +345,15 @@ module.exports = {
     * Remove all event-listeners
     */
     removeListeners: function() {
+        // Detach the current registrations synchronously.  Doing it when the native call comes back would
+        // also destroy listeners added in the meantime -- they belong to the caller, not to this removal.
+        var registrations = cordovaCallbacks.splice(0);
+        for (var n=0,len=registrations.length;n<len;n++) {
+            // Destroy Cordova callback.
+            delete window.cordova.callbacks[registrations[n].callbackId];
+        }
         return new Promise(function(resolve, reject) {
-            var success = function(response) {
-                removeCordovaCallbacks();
-                resolve();
-            }
+            var success = function(response) { resolve() }
             var failure = function(error)   { reject(error) };
             exec(success, failure, MODULE_NAME, 'removeListeners', []);
         });
@@ -325,7 +370,7 @@ module.exports = {
             success(location);
         }
         exec(mySuccess, failure, MODULE_NAME, 'addLocationListener', []);
-        return registerCordovaCallback(success, mySuccess);
+        return registerCordovaCallback(Events.LOCATION, success, mySuccess);
     },
     onMotionChange: function(success, failure) {
         var mySuccess = function(params) {
@@ -336,7 +381,7 @@ module.exports = {
             success(params);
         };
         exec(mySuccess, failure, MODULE_NAME, 'addMotionChangeListener', []);
-        return registerCordovaCallback(success, mySuccess);
+        return registerCordovaCallback(Events.MOTIONCHANGE, success, mySuccess);
     },
     onLocationFilter: function(success, failure) {
         var mySuccess = function(params) {
@@ -347,55 +392,55 @@ module.exports = {
             success(params);
         };
         exec(mySuccess, failure, MODULE_NAME, 'addLocationFilterListener', []);
-        return registerCordovaCallback(success, mySuccess);
+        return registerCordovaCallback(Events.LOCATIONFILTER, success, mySuccess);
     },
     onActivityChange: function(success) {
         exec(success, emptyFn, MODULE_NAME, 'addActivityChangeListener', []);
-        return registerCordovaCallback(success, success);
+        return registerCordovaCallback(Events.ACTIVITYCHANGE, success, success);
     },
     onProviderChange: function(success) {
         exec(success, emptyFn, MODULE_NAME, 'addProviderChangeListener', []);
-        return registerCordovaCallback(success, success);
+        return registerCordovaCallback(Events.PROVIDERCHANGE, success, success);
     },
     onGeofence: function(success, failure) {
         exec(success, failure || emptyFn, MODULE_NAME, 'addGeofenceListener', []);
-        return registerCordovaCallback(success, success);
+        return registerCordovaCallback(Events.GEOFENCE, success, success);
     },
     onGeofencesChange: function(success, failure) {
         exec(success, failure, MODULE_NAME, 'addGeofencesChangeListener', []);
-        return registerCordovaCallback(success, success);
+        return registerCordovaCallback(Events.GEOFENCESCHANGE, success, success);
     },
     onHttp: function(success, failure) {
         exec(success, failure, MODULE_NAME, 'addHttpListener', []);
-        return registerCordovaCallback(success, success);
+        return registerCordovaCallback(Events.HTTP, success, success);
     },
     onPowerSaveChange: function(success, failure) {
         exec(success, failure, MODULE_NAME, 'addPowerSaveChangeListener', []);
-        return registerCordovaCallback(success, success);
+        return registerCordovaCallback(Events.POWERSAVECHANGE, success, success);
     },
     onConnectivityChange: function(success, failure) {
         exec(success, failure, MODULE_NAME, 'addConnectivityChangeListener', []);
-        return registerCordovaCallback(success, success);
+        return registerCordovaCallback(Events.CONNECTIVITYCHANGE, success, success);
     },
     onEnabledChange: function(success, failure) {
         exec(success, failure, MODULE_NAME, 'addEnabledChangeListener', []);
-        return registerCordovaCallback(success, success);
+        return registerCordovaCallback(Events.ENABLEDCHANGE, success, success);
     },
     onHeartbeat: function(success, failure) {
         exec(success, failure, MODULE_NAME, 'addHeartbeatListener', []);
-        return registerCordovaCallback(success, success);
+        return registerCordovaCallback(Events.HEARTBEAT, success, success);
     },
     onSchedule: function(success, failure) {
         exec(success, failure, MODULE_NAME, 'addScheduleListener', []);
-        return registerCordovaCallback(success, success);
+        return registerCordovaCallback(Events.SCHEDULE, success, success);
     },
     onNotificationAction: function(success, failure) {
         exec(success, failure, MODULE_NAME, 'addNotificationActionListener', []);
-        return registerCordovaCallback(success, success);
+        return registerCordovaCallback(Events.NOTIFICATIONACTION, success, success);
     },
     onAuthorization: function(success, failure) {
         exec(success, failure, MODULE_NAME, 'addAuthorizationListener', []);
-        return registerCordovaCallback(success, success);
+        return registerCordovaCallback(Events.AUTHORIZATION, success, success);
     },
     getState: function() {
         return new Promise(function(resolve, reject) {

@@ -85,10 +85,10 @@
 
 - (void) removeListeners:(CDVInvokedUrlCommand*) command
 {
-    [self.commandDelegate runInBackground:^{
-        TSLocationManager *bgGeo = [TSLocationManager sharedInstance];
-        [bgGeo removeListeners];
-    }];
+    // Synchronously: removing in the background raced the next command, so a listener added right after
+    // removeListeners() could be wiped by this removal landing late.  It is only two dictionary clears.
+    TSLocationManager *bgGeo = [TSLocationManager sharedInstance];
+    [bgGeo removeListeners];
     @synchronized(callbacks) {
         [callbacks removeAllObjects];
     }
