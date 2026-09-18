@@ -17,6 +17,9 @@
 
 * [Fixed][iOS] A small memory leak: the plugin kept a reference to every event-listener callback ever
   added, even after `remove()` or `removeListeners()`.
+* [Fixed][iOS] `removeListeners()` unregistered the native listeners on a background thread while already
+  reporting success, so a listener added immediately afterwards could be swept away by that removal landing
+  late, leaving a subscription that never fired. The listeners are now unregistered before the call returns.
 
 ### Android
 
