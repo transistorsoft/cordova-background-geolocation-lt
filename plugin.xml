@@ -45,7 +45,7 @@
                 <source url="https://cdn.cocoapods.org/"/>
             </config>
             <pods use-frameworks="true">
-                <pod name="TSLocationManager" spec="~> 4.5.0"/>
+                <pod name="TSLocationManager" spec="~> 4.6.0"/>
             </pods>
         </podspec>
 
