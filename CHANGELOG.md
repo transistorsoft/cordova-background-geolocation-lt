@@ -1,5 +1,17 @@
 # CHANGELOG
 
+## Unreleased
+
+### Android
+
+* [Fixed][Android] Calling `remove()` on an event-listener subscription (or the deprecated
+  `removeListener(event, callback)`) did not unregister the listener inside the native SDK, a
+  regression in 5.0.0. Your callback stopped being called, but the native listener stayed registered
+  until `removeListeners()` was called or the app's Activity was destroyed, and kept serialising every
+  event for a JavaScript callback that no longer existed. Each add/remove cycle added another: after a
+  listener had been added and removed 50 times, every location was serialised and sent to the WebView
+  50 extra times. `remove()` now unregisters the native listener; `removeListeners()` already did.
+
 ## 5.3.0 &mdash; 2026-08-30
 
 ### iOS

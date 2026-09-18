@@ -731,6 +731,12 @@ public class CDVBackgroundGeolocation extends CordovaPlugin {
             CordovaCallback cordovaCallback = iterator.next();
             if (cordovaCallback.callbackId.equalsIgnoreCase(callbackId)) {
                 iterator.remove();
+                // Unregister the native listener too, or it keeps sending results to a callbackId JS has already deleted.
+                try {
+                    cordovaCallback.subscription.close();
+                } catch (Exception e) {
+                    TSLog.logger.warn(TSLog.warn("Failed to remove native listener for event: " + event + ": " + e.getMessage()));
+                }
                 callbackContext.success();
                 return;
             }
@@ -753,8 +759,7 @@ public class CDVBackgroundGeolocation extends CordovaPlugin {
                 callbackContext.sendPluginResult(result);
             }
         };
-        registerCallback(callbackContext, callback);
-        getAdapter().onGeofence(callback);
+        registerCallback(callbackContext, getAdapter().onGeofence(callback));
     }
 
     private void addGeofencesChangeListener(final CallbackContext callbackContext) {
@@ -766,8 +771,7 @@ public class CDVBackgroundGeolocation extends CordovaPlugin {
                 callbackContext.sendPluginResult(result);
             }
         };
-        registerCallback(callbackContext, callback);
-        getAdapter().onGeofencesChange(callback);
+        registerCallback(callbackContext, getAdapter().onGeofencesChange(callback));
     }
 
     private void addPowerSaveChangeListener(final CallbackContext callbackContext) {
@@ -779,8 +783,7 @@ public class CDVBackgroundGeolocation extends CordovaPlugin {
                 callbackContext.sendPluginResult(result);
             }
         };
-        registerCallback(callbackContext, callback);
-        getAdapter().onPowerSaveChange(callback);
+        registerCallback(callbackContext, getAdapter().onPowerSaveChange(callback));
     }
 
     private void addConnectivityChangeListener(final CallbackContext callbackContext) {
@@ -798,8 +801,7 @@ public class CDVBackgroundGeolocation extends CordovaPlugin {
                 }
             }
         };
-        registerCallback(callbackContext, callback);
-        getAdapter().onConnectivityChange(callback);
+        registerCallback(callbackContext, getAdapter().onConnectivityChange(callback));
     }
 
     private void addEnabledChangeListener(final CallbackContext callbackContext) {
@@ -810,8 +812,7 @@ public class CDVBackgroundGeolocation extends CordovaPlugin {
                 callbackContext.sendPluginResult(result);
             }
         };
-        registerCallback(callbackContext, callback);
-        getAdapter().onEnabledChange(callback);
+        registerCallback(callbackContext, getAdapter().onEnabledChange(callback));
     }
 
     private void addNotificationActionListener(final CallbackContext callbackContext) {
@@ -822,8 +823,7 @@ public class CDVBackgroundGeolocation extends CordovaPlugin {
                 callbackContext.sendPluginResult(result);
             }
         };
-        registerCallback(callbackContext, callback);
-        getAdapter().onNotificationAction(callback);
+        registerCallback(callbackContext, getAdapter().onNotificationAction(callback));
     }
 
     private void addHeartbeatListener(final CallbackContext callbackContext) {
@@ -835,8 +835,7 @@ public class CDVBackgroundGeolocation extends CordovaPlugin {
                 callbackContext.sendPluginResult(result);
             }
         };
-        registerCallback(callbackContext, callback);
-        getAdapter().onHeartbeat(callback);
+        registerCallback(callbackContext, getAdapter().onHeartbeat(callback));
     }
 
     private void addActivityChangeListener(final CallbackContext callbackContext) {
@@ -849,8 +848,7 @@ public class CDVBackgroundGeolocation extends CordovaPlugin {
                 callbackContext.sendPluginResult(result);
             }
         };
-        registerCallback(callbackContext, callback);
-        getAdapter().onActivityChange(callback);
+        registerCallback(callbackContext, getAdapter().onActivityChange(callback));
     }
 
     private void addProviderChangeListener(final CallbackContext callbackContext) {
@@ -861,8 +859,7 @@ public class CDVBackgroundGeolocation extends CordovaPlugin {
                 callbackContext.sendPluginResult(result);
             }
         };
-        registerCallback(callbackContext, callback);
-        getAdapter().onLocationProviderChange(callback);
+        registerCallback(callbackContext, getAdapter().onLocationProviderChange(callback));
     }
     private void addScheduleListener(final CallbackContext callbackContext) {
         TSScheduleCallback callback = new TSScheduleCallback() {
@@ -872,8 +869,7 @@ public class CDVBackgroundGeolocation extends CordovaPlugin {
                 callbackContext.sendPluginResult(result);
             }
         };
-        registerCallback(callbackContext, callback);
-        getAdapter().onSchedule(callback);
+        registerCallback(callbackContext, getAdapter().onSchedule(callback));
 
     }
 
@@ -894,12 +890,11 @@ public class CDVBackgroundGeolocation extends CordovaPlugin {
                 callbackContext.sendPluginResult(result);
             }
         };
-        registerCallback(callbackContext, callback);
-        getAdapter().onLocation(callback);
+        registerCallback(callbackContext, getAdapter().onLocation(callback));
     }
 
-    private void registerCallback(CallbackContext cordovaCallback, Object tsCallback) {
-        cordovaCallbacks.add(new CordovaCallback(cordovaCallback.getCallbackId(), tsCallback));
+    private void registerCallback(CallbackContext cordovaCallback, AutoCloseable subscription) {
+        cordovaCallbacks.add(new CordovaCallback(cordovaCallback.getCallbackId(), subscription));
     }
 
     private void addMotionChangeListener(final CallbackContext callbackContext) {
@@ -920,8 +915,7 @@ public class CDVBackgroundGeolocation extends CordovaPlugin {
                 callbackContext.error(error);
             }
         };
-        registerCallback(callbackContext, callback);
-        getAdapter().onMotionChange(callback);
+        registerCallback(callbackContext, getAdapter().onMotionChange(callback));
     }
 
     private void addLocationFilterListener(final CallbackContext callbackContext) {
@@ -933,8 +927,7 @@ public class CDVBackgroundGeolocation extends CordovaPlugin {
                 callbackContext.sendPluginResult(result);
             }
         };
-        registerCallback(callbackContext, callback);
-        getAdapter().onLocationFilter(callback);
+        registerCallback(callbackContext, getAdapter().onLocationFilter(callback));
     }
 
     private void addHttpListener(final CallbackContext callbackContext) {
@@ -945,8 +938,7 @@ public class CDVBackgroundGeolocation extends CordovaPlugin {
                 callbackContext.sendPluginResult(result);
             }
         };
-        registerCallback(callbackContext, callback);
-        getAdapter().onHttp(callback);
+        registerCallback(callbackContext, getAdapter().onHttp(callback));
 
     }
 
@@ -960,8 +952,7 @@ public class CDVBackgroundGeolocation extends CordovaPlugin {
             }
         };
 
-        registerCallback(callbackContext, callback);
-        HttpService.getInstance(context).onAuthorization(callback);
+        registerCallback(callbackContext, HttpService.getInstance(context).onAuthorization(callback));
     }
 
     private void removeGeofence(String identifier, final CallbackContext callbackContext) {
@@ -1315,11 +1306,11 @@ public class CDVBackgroundGeolocation extends CordovaPlugin {
 
     private class CordovaCallback {
         public String callbackId;
-        public Object callback;
+        public AutoCloseable subscription;
 
-        public CordovaCallback(String _callbackId, Object _callback) {
-            callbackId  = _callbackId;
-            callback    = _callback;
+        public CordovaCallback(String _callbackId, AutoCloseable _subscription) {
+            callbackId      = _callbackId;
+            subscription    = _subscription;
         }
     }
 }
