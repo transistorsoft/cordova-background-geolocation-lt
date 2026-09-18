@@ -89,6 +89,9 @@
         TSLocationManager *bgGeo = [TSLocationManager sharedInstance];
         [bgGeo removeListeners];
     }];
+    @synchronized(callbacks) {
+        [callbacks removeAllObjects];
+    }
     CDVPluginResult* result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK];
     [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
 }
@@ -275,6 +278,7 @@
         id callback = [callbacks objectForKey:callbackId];
         TSLocationManager *bgGeo = [TSLocationManager sharedInstance];
         [bgGeo removeListener:event callback:callback];
+        [callbacks removeObjectForKey:callbackId];
 
         CDVPluginResult* result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK];
         [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];

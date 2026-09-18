@@ -2,6 +2,11 @@
 
 ## Unreleased
 
+### iOS
+
+* [Fixed][iOS] A small memory leak: the plugin kept a reference to every event-listener callback ever
+  added, even after `remove()` or `removeListeners()`.
+
 ### Android
 
 * [Fixed][Android] Calling `remove()` on an event-listener subscription (or the deprecated
