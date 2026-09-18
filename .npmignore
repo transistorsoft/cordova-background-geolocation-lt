@@ -6,6 +6,7 @@ bin
 docs
 help
 scripts
+test
 ISSUE_TEMPLATE.md
 
 src/ionic
