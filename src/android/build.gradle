@@ -3,7 +3,7 @@ import groovy.json.JsonSlurper
 def TAG = "[cordova-background-geolocation] "
 
 def DEFAULT_PLAY_SERVICES_LOCATION_VERSION = "21.3.0"
-def DEFAULT_TSLOCATIONMANAGER_VERSION = "4.5.+"
+def DEFAULT_TSLOCATIONMANAGER_VERSION = "4.6.+"
 
 def safeExtGet(prop, fallback) {
     rootProject.ext.has(prop) ? rootProject.ext.get(prop) : fallback

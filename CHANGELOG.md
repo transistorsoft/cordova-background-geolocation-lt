@@ -77,11 +77,30 @@
   backgrounded, an incoming call — orphaned the flow waiting on it, so `requestPermission()` never
   settled. The flow now always completes. Unlike pressing Cancel, an accidental dismissal does not
   suppress the rationale for later attempts. (WO-008)
+* [Fixed][Android] Recreating the app's Activity for a configuration change is no longer treated as
+  app termination. The default Cordova `android:configChanges` omit `fontWeightAdjustment` and
+  `fontScale`, so toggling Bold text or changing the system font size destroys and recreates
+  `MainActivity` and reloads the WebView. The SDK treated that as termination: with
+  `stopOnTerminate: true` (the default) tracking turned off while the app stayed on screen, the
+  reloaded app's `ready()` reported `enabled: false`, and events went to the headless task until the
+  app next came back to the foreground. A recreation now only stops an active `watchPosition` and
+  removes the event listeners of the WebView that is gone; a real destroy still terminates as
+  before. Requires `tslocationmanager` 4.6.0, which carries the matching native fixes.
+* [Fixed][Android] Calling `reset(config)` (or the deprecated `configure(config)`) while the SDK was
+  configured briefly applied the default configuration before your values, and the SDK acted on
+  those defaults: a `WhenInUse` app could get the "Allow all the time" background-location dialog,
+  an app with `disableMotionActivityUpdates: true` the motion-permission dialog, and an app using
+  `useSignificantChangesOnly` switched out of that mode and back. `reset()`, `configure()` and
+  `ready()` now apply the configuration as one change. Requires `tslocationmanager` 4.6.0.
+* [Fixed][Android] `ready()` on a later launch no longer switches a running scheduler off. Resetting
+  the configuration briefly applied the empty default `schedule`, which stopped the scheduler and
+  could start tracking outside the schedule window until your app called `startSchedule()` again.
+  The scheduler now stays on, as on iOS.
 
 ### Native SDK versions
 
 * [iOS] Pin `TSLocationManager ~> 4.6.0`
-* [Android] Pin `tslocationmanager 4.5.+`
+* [Android] Pin `tslocationmanager 4.6.+`
 
 ## 5.3.0 &mdash; 2026-08-30
 
