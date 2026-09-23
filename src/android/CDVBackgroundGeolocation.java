@@ -470,8 +470,11 @@ public class CDVBackgroundGeolocation extends CordovaPlugin {
 
     private void changePace(final CallbackContext callbackContext, JSONArray data) throws JSONException {
         getAdapter().changePace(data.getBoolean(0), new TSCallback() {
+            // (WO-033) The State the types declare, resolved once the adapter reports success —
+            // the same JSON start() sends at :419.  A bare success() sent the STRING "OK", which
+            // is Cordova's default status message, not a return value at all.
             @Override public void onSuccess() {
-                callbackContext.success();
+                callbackContext.success(getState());
             }
             @Override public void onFailure(String error) { callbackContext.error(error); }
         });
