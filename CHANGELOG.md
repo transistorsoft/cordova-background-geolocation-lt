@@ -2,6 +2,19 @@
 
 ## Unreleased
 
+* [Breaking] `watchPosition` now takes its **options first**, matching the signature this plugin
+  has always published in its TypeScript definitions and the one every other Background Geolocation
+  SDK implements:
+
+      // before
+      BackgroundGeolocation.watchPosition(onLocation, onError, {interval: 1000});
+      // now
+      BackgroundGeolocation.watchPosition({interval: 1000}, onLocation, onError);
+
+  The old order is refused with an error naming the change, rather than failing somewhere deeper.
+  `watchPosition` also returns the `Subscription` its declaration promises; `subscription.remove()`
+  stops watching — note that it stops **every** watch, as `stopWatchPosition()` always has. (WO-034)
+
 * [Fixed] Upgrading the plugin from 4.x to 5.x silently discarded the persisted v4-era
   configuration, so a device updated over-the-air came back unconfigured and stopped tracking. The
   v4 config is now imported on the first launch after the upgrade — `enabled`, `trackingMode`,

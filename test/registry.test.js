@@ -31,6 +31,11 @@ var ACTION_EVENTS = {
     addAuthorizationListener: 'authorization'
 };
 
+// Actions whose callback the native side KEEPS without being a listener registration:
+// watchPosition delivers until stopWatchPosition, so the mock must not answer it once and
+// release it the way it does a one-shot call (WO-034).
+var KEEP_CALLBACK = {watchPosition: true};
+
 function createBridge() {
     var bridge = {
         callbacks: {},        // window.cordova.callbacks
@@ -48,6 +53,9 @@ function createBridge() {
             // Listener registrations keep their callback (keepCallback) and register natively.
             bridge.native.set(callbackId, ACTION_EVENTS[action]);
             return callbackId;
+        }
+        if (KEEP_CALLBACK[action]) {
+            return callbackId;          // retained; a test delivers with bridge.emit()
         }
         if (action === 'removeListener') {
             var event = args[0], target = args[1];
@@ -123,11 +131,67 @@ function assert(condition, message) {
 function assertEqual(actual, expected, message) {
     if (actual !== expected) throw new Error(message + ': expected ' + JSON.stringify(expected) + ', got ' + JSON.stringify(actual));
 }
+// The plugin runs in its own vm realm, so `instanceof Error` is false even for a real Error —
+// check the shape, and that it is not the bare string this code used to throw (WO-034).
+function assertIsError(value, message) {
+    assert(value !== null && typeof value === 'object' && typeof value.message === 'string'
+           && value.name === 'Error', message + ' (got ' + typeof value + ': ' + value + ')');
+}
+
 function assertNoNativeLeak(bridge) {
     assertEqual(bridge.native.size, 0, 'native listeners left registered (' + JSON.stringify([...bridge.native]) + ')');
 }
 
 // ---- the tests ---------------------------------------------------------------------------------------------
+
+// ---------------------------------------------------------------- watchPosition (WO-034)
+test('(WO-034) watchPosition takes its options FIRST and wires the location callback',
+async function(bridge, BG) {
+    var seen = [];
+    var subscription = BG.watchPosition({interval: 1000, persist: false}, function(location) {
+        seen.push(location);
+    });
+    var execs = bridge.execsOf('watchPosition');
+    assertEqual(execs.length, 1, 'one watchPosition exec');
+    assertEqual(execs[0].args[0].interval, 1000, 'the options cross the wire, as args[0]');
+    assertEqual(execs[0].args[0].persist, false, 'every option, not just the first');
+    assert(subscription && typeof subscription.remove === 'function',
+           'watchPosition returns a Subscription, as the types declare');
+    // The watch delivers many times; one delivery is enough to prove the callback is the one the
+    // CALLER passed (the timestamp's own shape is WO-029's question, not asserted here).
+    bridge.emit(execs[0].callbackId, {uuid: 'u1', timestamp: '2026-09-22T20:00:00.000Z'});
+    assertEqual(seen.length, 1, 'the location reached the callback the caller passed');
+    assertEqual(seen[0].uuid, 'u1', 'and it is the location the native side sent');
+});
+test('(WO-034) the pre-6.0 argument order is refused, with a message that names the fix',
+async function(bridge, BG) {
+    var threw = null;
+    try {
+        BG.watchPosition(function() {}, function() {}, {interval: 1000});
+    } catch (error) {
+        threw = error;
+    }
+    assertIsError(threw, 'a real Error, not the thrown string this used to raise');
+    assert(/options FIRST/.test(threw.message), 'the message names the new order: ' + (threw && threw.message));
+    assertEqual(bridge.execsOf('watchPosition').length, 0, 'nothing reached the native side');
+});
+test('(WO-034) watchPosition without a location callback is refused, not silently started',
+async function(bridge, BG) {
+    var threw = null;
+    try {
+        BG.watchPosition({interval: 1000});
+    } catch (error) {
+        threw = error;
+    }
+    assertIsError(threw, 'a real Error');
+    assertEqual(bridge.execsOf('watchPosition').length, 0, 'nothing reached the native side');
+});
+test('(WO-034) the Subscription stops watching', async function(bridge, BG) {
+    var subscription = BG.watchPosition({interval: 1000}, function() {});
+    subscription.remove();
+    assertEqual(bridge.execsOf('stopWatchPosition').length, 1,
+                'remove() sends stopWatchPosition (which stops EVERY watch — see the work order)');
+});
 
 test('remove() unregisters the subscription it came from', async function(bridge, BG) {
     var subscription = BG.onLocation(function() {});
