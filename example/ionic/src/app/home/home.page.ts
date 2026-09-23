@@ -52,16 +52,24 @@ export class HomePage implements OnInit, OnDestroy {
 
     this.bg.ready({
       transistorAuthorizationToken: token,
-      desiredAccuracy: this.bg.DESIRED_ACCURACY_HIGH,
-      distanceFilter: 10,
-      stopTimeout: 5,
-      debug: true,
-      logLevel: this.bg.LOG_LEVEL_VERBOSE,
-      stopOnTerminate: false,
-      startOnBoot: true,
-      enableHeadless: true,
-      heartbeatInterval: 60,
-      autoSync: true
+      geolocation: {
+        desiredAccuracy: this.bg.DesiredAccuracy.High,
+        distanceFilter: 10,
+        stopTimeout: 5
+      },
+      logger: {
+        debug: true,
+        logLevel: this.bg.LogLevel.Verbose
+      },
+      app: {
+        stopOnTerminate: false,
+        startOnBoot: true,
+        enableHeadless: true,
+        heartbeatInterval: 60
+      },
+      http: {
+        autoSync: true
+      }
     }).then((state: State) => {
       console.log('[ready] state:', state);
       this.zone.run(() => {
@@ -165,7 +173,7 @@ export class HomePage implements OnInit, OnDestroy {
         alert('Database is empty.');
         return;
       }
-      this.bg.sync().then((records: Location[]) => {
+      this.bg.sync().then((records: Object[]) => {
         alert('Synced ' + records.length + ' locations.');
       });
     });

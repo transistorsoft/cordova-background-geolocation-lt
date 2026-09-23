@@ -1,6 +1,6 @@
 # CHANGELOG
 
-## Unreleased
+## 5.4.0 &mdash; 2026-09-23
 
 * [Fixed][Android] `startSchedule()` and `stopSchedule()` now resolve the `State`, as they always
   have on iOS and as the TypeScript definitions now declare. Android resolved the string `"OK"` —
@@ -143,14 +143,20 @@
   listener had been added and removed 50 times, every location was serialised and sent to the WebView
   50 extra times. `remove()` now unregisters the native listener; `removeListeners()` already did.
 
-### Native SDK versions
-
-* [iOS] Pin `TSLocationManager ~> 4.6.0`
-* [Android] Pin `tslocationmanager 4.6.+`
 * [Fixed] `destroyLocations()`, `destroyLocation()`, `addGeofence()`, `addGeofences()`,
   `removeGeofence()` and `removeGeofences()` resolve `true`, as their TypeScript definitions
   declare and as React Native and Flutter always have; they resolved `undefined`. Nothing needs
   changing in your code. (WO-028)
+* [Types] Requires `@transistorsoft/background-geolocation-types` 5.3.3, whose declarations
+  catch up with what every SDK already resolves: `setOdometer()`/`resetOdometer()` are
+  `Promise<Location>`, `startSchedule()`/`stopSchedule()` `Promise<State>`,
+  `destroyLocations()`/`destroyLocation()` `Promise<boolean>`, and `reset()`'s `Config` is
+  optional. (WO-028, WO-035, WO-036)
+
+### Native SDK versions
+
+* [iOS] Pin `TSLocationManager ~> 4.7.0`
+* [Android] Pin `tslocationmanager 4.6.+`
 
 ## 5.3.0 &mdash; 2026-08-30
 
