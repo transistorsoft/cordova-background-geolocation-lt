@@ -541,14 +541,14 @@ module.exports = {
     },
     destroyLocations: function(success, failure) {
         return new Promise(function(resolve, reject) {
-            var success = function() { resolve(); }
+            var success = function() { resolve(true); }   // (WO-028) every mutator resolves true, like React Native and Flutter
             var failure = function(error) { reject(error) }
             exec(success, failure, MODULE_NAME, 'destroyLocations', []);
         });
     },
     destroyLocation: function(uuid) {
         return new Promise(function(resolve, reject) {
-            var success = function() { resolve(); }
+            var success = function() { resolve(true); }   // (WO-028)
             var failure = function(error) { reject(error) }
             exec(success, failure, MODULE_NAME, 'destroyLocation', [uuid]);
         });
@@ -601,7 +601,7 @@ module.exports = {
     addGeofence: function(config) {
         return new Promise(function(resolve, reject) {
             config = config || {};
-            var success = function() { resolve() }
+            var success = function() { resolve(true) }   // (WO-028)
             var failure = function(error) { reject(error) }
             exec(success, failure, MODULE_NAME, 'addGeofence', [config]);
         });
@@ -615,7 +615,7 @@ module.exports = {
             if (!geofences.length) {
                 return reject('No geofences provided')
             }
-            var success = function() { resolve() }
+            var success = function() { resolve(true) }   // (WO-028)
             var failure = function(error) { reject(error) }
             exec(success, failure, MODULE_NAME, 'addGeofences', [geofences]);
         });
@@ -626,7 +626,7 @@ module.exports = {
     removeGeofences: function(identifiers) {
         identifiers = identifiers || [];
         return new Promise(function(resolve, reject) {
-            var success = function() { resolve() }
+            var success = function() { resolve(true) }   // (WO-028)
             var failure = function(error) { reject(error) }
             exec(success, failure, MODULE_NAME, 'removeGeofences', [identifiers]);
         });
@@ -640,7 +640,7 @@ module.exports = {
             if (!identifier) {
                 return reject("#removeGeofence requires an 'identifier'");
             }
-            var success = function() { resolve() }
+            var success = function() { resolve(true) }   // (WO-028)
             var failure = function(error) { reject(error) }
             exec(success, failure, MODULE_NAME, 'removeGeofence', [identifier]);
         });

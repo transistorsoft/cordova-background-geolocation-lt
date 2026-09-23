@@ -143,6 +143,10 @@
 
 * [iOS] Pin `TSLocationManager ~> 4.6.0`
 * [Android] Pin `tslocationmanager 4.6.+`
+* [Fixed] `destroyLocations()`, `destroyLocation()`, `addGeofence()`, `addGeofences()`,
+  `removeGeofence()` and `removeGeofences()` resolve `true`, as their TypeScript definitions
+  declare and as React Native and Flutter always have; they resolved `undefined`. Nothing needs
+  changing in your code. (WO-028)
 
 ## 5.3.0 &mdash; 2026-08-30
 
