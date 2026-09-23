@@ -783,7 +783,9 @@
     BOOL moving = [[command.arguments objectAtIndex: 0] boolValue];
     TSLocationManager *bgGeo = [TSLocationManager sharedInstance];
     [bgGeo changePace:moving];
-    CDVPluginResult* result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsBool: moving];
+    // (WO-033) The State the types declare, read after the void core call — the same dictionary
+    // start() sends at :127.  This echoed the caller's own boolean until now.
+    CDVPluginResult* result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:[bgGeo getState]];
     [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
 }
 
