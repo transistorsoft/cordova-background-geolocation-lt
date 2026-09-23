@@ -426,7 +426,9 @@ public class CDVBackgroundGeolocation extends CordovaPlugin {
 
     private void startSchedule(CallbackContext callbackContext) {
         if (getAdapter().startSchedule()) {
-            callbackContext.success();
+            // (WO-036) The State the types declare and iOS has always sent — a bare success()
+            // sent the STRING "OK", Cordova's default status message, as changePace's did.
+            callbackContext.success(getState());
         } else {
             callbackContext.error("Failed to start schedule.  Did you configure a #schedule?");
         }
@@ -434,7 +436,7 @@ public class CDVBackgroundGeolocation extends CordovaPlugin {
 
     private void stopSchedule(CallbackContext callback) {
         getAdapter().stopSchedule();
-        callback.success();
+        callback.success(getState());   // (WO-036) as startSchedule
     }
 
     private class StartGeofencesCallback implements TSCallback {
