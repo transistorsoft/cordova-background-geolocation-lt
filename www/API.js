@@ -705,7 +705,9 @@ module.exports = {
         });
     },
 
-    watchPosition: function(success, failure, options) {
+    watchPosition: function(options, success, failure) {
+        // (WO-034) Options first, matching the declared signature.
+        var self = this;
         var mySuccess = function(location) {
             // Transform timestamp to Date instance.
             if (location.timestamp) {
@@ -716,6 +718,12 @@ module.exports = {
         failure = failure || emptyFn;
         options = options || {};
         exec(mySuccess, failure, MODULE_NAME, 'watchPosition', [options]);
+        // (WO-034) The Subscription the types declare.  #stopWatchPosition takes no watch id and
+        // stops EVERY watch, so remove() means "stop watching", not "stop this watch" — the only
+        // honest shape available here; per-watch teardown is a native change (cf. WO-021).
+        return {
+            remove: function() { return self.stopWatchPosition(); }
+        };
     },
     stopWatchPosition: function() {
         return new Promise(function(resolve, reject) {

@@ -406,12 +406,19 @@ module.exports = {
             return API.getCurrentPosition.apply(API, arguments);
         }
     },
-    watchPosition: function(success, failure, options) {
-        if (typeof(success) === 'function') {
-            API.watchPosition.apply(API, arguments);
-        } else {
-            throw "BackgroundGeolocation#watchPosition does not support Promise API, since Promises cannot resolve multiple times.  The #watchPosition callback *will* be run multiple times.  Use the #watchPosition(success, failure, options) API.";
+    watchPosition: function(options, success, failure) {
+        // (WO-034) Options FIRST, callbacks after — the signature the types package declares and
+        // every other bridge implements.  This plugin alone used to take (success, failure,
+        // options), against the .d.ts it publishes: a TypeScript caller who followed those types
+        // got a thrown STRING instead of a watch.  The message names no version on purpose —
+        // the CHANGELOG carries that, and a number baked in here would outlive its accuracy.
+        if (typeof(options) === 'function') {
+            throw new Error("BackgroundGeolocation#watchPosition now takes its options FIRST: watchPosition(options, locationCallback, errorCallback).  The old (success, failure, options) order has been removed — swap your arguments.");
         }
+        if (typeof(success) !== 'function') {
+            throw new Error("BackgroundGeolocation#watchPosition requires a location callback: watchPosition(options, locationCallback, errorCallback).  It cannot return a Promise, since a Promise resolves once and the watch callback runs many times.");
+        }
+        return API.watchPosition.apply(API, arguments);
     },
     stopWatchPosition: function(success, failure) {
         if (!arguments.length) {
