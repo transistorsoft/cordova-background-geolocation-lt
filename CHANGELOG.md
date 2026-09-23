@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+* [Fixed][Android] `startSchedule()` and `stopSchedule()` now resolve the `State`, as they always
+  have on iOS and as the TypeScript definitions now declare. Android resolved the string `"OK"` —
+  Cordova's default status message, not a return value. Nothing needs changing unless your code
+  reads the resolved value. (WO-036)
 * [Changed] `changePace()` now resolves the `State` its TypeScript definitions have always
   promised. It previously resolved the boolean you passed in on iOS, and on Android the string
   `"OK"` — Cordova's default status message, not a return value at all. Nothing needs changing
