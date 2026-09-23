@@ -2,6 +2,11 @@
 
 ## Unreleased
 
+* [Changed] `changePace()` now resolves the `State` its TypeScript definitions have always
+  promised. It previously resolved the boolean you passed in on iOS, and on Android the string
+  `"OK"` — Cordova's default status message, not a return value at all. Nothing needs changing
+  unless your code reads the resolved value; `state.isMoving` is what the old boolean meant.
+  (WO-033)
 * [Breaking] `watchPosition` now takes its **options first**, matching the signature this plugin
   has always published in its TypeScript definitions and the one every other Background Geolocation
   SDK implements:
