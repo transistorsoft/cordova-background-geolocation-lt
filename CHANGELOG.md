@@ -1,6 +1,6 @@
 # CHANGELOG
 
-## Unreleased
+## 5.4.1 &mdash; 2026-09-24
 
 * [Fixed][iOS] `ready()` and `reset(config)` now apply your configuration as one change. The
   configuration was reset silently and yours re-applied against the defaults. That had two effects.
@@ -8,8 +8,8 @@
   `schedule` a second time on another thread. A setting your new configuration left out went back to
   its default without the SDK being told: remove `schedule` from your config and the scheduler stayed
   flagged as enabled, then resumed by itself when a later version added a schedule back. The SDK now
-  hears only real changes, including a return to the default. Requires the TSLocationManager release
-  that carries WO-039. (WO-039)
+  hears only real changes, including a return to the default. Requires TSLocationManager 4.7.1.
+  (WO-039)
 * [Fixed][iOS] `reset()` with no configuration now notifies the SDK of the defaults it restores.
   They were applied silently, so the SDK went on acting on your previous settings until the next launch. (WO-039)
 * [Fixed] The enum objects the TypeScript definitions declare now exist at runtime:
@@ -21,12 +21,22 @@
   `LOG_LEVEL_*`-style constants are unchanged.
 * [Fixed][Android] With R8 minification enabled, your `BackgroundGeolocationHeadlessTask` is no longer
   removed from the app. Nothing references the class (the plugin loads it by name), so R8 stripped it and
-  every headless event was dropped with `HeadlessTask failed to find`. Requires the TSLocationManager
-  release whose consumer rules keep the class.
+  every headless event was dropped with `HeadlessTask failed to find`. Requires tslocationmanager
+  4.6.1, whose consumer rules keep the class.
 * [Removed][Android] `src/android/BackgroundGeolocationHeadlessTask.java`, a sample that did not compile
   against the native SDK any 5.x release uses. The plugin never installed it; copy the sample from the
   [Android Headless Mode](https://github.com/transistorsoft/cordova-background-geolocation-lt/wiki/Android-Headless-Mode)
   wiki page instead.
+* [Types] Requires `@transistorsoft/background-geolocation-types` 5.3.4, which adds
+  `Event.NotificationAction`.
+
+### Native SDK versions
+
+* [iOS] Pin `TSLocationManager ~> 4.7.1` — `ready()` and `reset(config)` call
+  `-[TSConfig resetWithDictionary:]`, which is new in 4.7.1; this release does not build against
+  4.7.0. (WO-039)
+* [Android] Pin `tslocationmanager 4.6.+`, which resolves 4.6.1: its consumer rules keep your
+  `BackgroundGeolocationHeadlessTask` under R8.
 
 ## 5.4.0 &mdash; 2026-09-23
 
