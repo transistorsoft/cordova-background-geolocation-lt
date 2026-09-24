@@ -16,7 +16,9 @@
   `BackgroundGeolocation.LogLevel`, `DesiredAccuracy`, `PersistMode`, `Event` and the rest. They
   type-checked but were `undefined`, so `BackgroundGeolocation.LogLevel.Verbose` threw a `TypeError`, and
   a named import such as `import { LogLevel } from 'cordova-background-geolocation-lt'` was `undefined`
-  too. The `LOG_LEVEL_*`-style constants are unchanged.
+  too. They include `Event.NotificationAction` (types 5.3.4), so
+  `BackgroundGeolocation.on(BackgroundGeolocation.Event.NotificationAction, …)` works. The
+  `LOG_LEVEL_*`-style constants are unchanged.
 * [Fixed][Android] With R8 minification enabled, your `BackgroundGeolocationHeadlessTask` is no longer
   removed from the app. Nothing references the class (the plugin loads it by name), so R8 stripped it and
   every headless event was dropped with `HeadlessTask failed to find`. Requires the TSLocationManager
