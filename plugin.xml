@@ -23,6 +23,7 @@
     <js-module src="www/DeviceSettings.js" name="DeviceSettings"></js-module>
     <js-module src="www/Logger.js" name="Logger"></js-module>
     <js-module src="www/TransistorAuthorizationToken.js" name="TransistorAuthorizationToken"></js-module>
+    <js-module src="www/Enums.js" name="Enums"></js-module>
 
     <platform name="ios">
         <preference name="BACKGROUND_MODE_LOCATION" default="&lt;string&gt;location&lt;/string&gt;" />

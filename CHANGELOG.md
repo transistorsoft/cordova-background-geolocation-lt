@@ -12,6 +12,19 @@
   that carries WO-039. (WO-039)
 * [Fixed][iOS] `reset()` with no configuration now notifies the SDK of the defaults it restores.
   They were applied silently, so the SDK went on acting on your previous settings until the next launch. (WO-039)
+* [Fixed] The enum objects the TypeScript definitions declare now exist at runtime:
+  `BackgroundGeolocation.LogLevel`, `DesiredAccuracy`, `PersistMode`, `Event` and the rest. They
+  type-checked but were `undefined`, so `BackgroundGeolocation.LogLevel.Verbose` threw a `TypeError`, and
+  a named import such as `import { LogLevel } from 'cordova-background-geolocation-lt'` was `undefined`
+  too. The `LOG_LEVEL_*`-style constants are unchanged.
+* [Fixed][Android] With R8 minification enabled, your `BackgroundGeolocationHeadlessTask` is no longer
+  removed from the app. Nothing references the class (the plugin loads it by name), so R8 stripped it and
+  every headless event was dropped with `HeadlessTask failed to find`. Requires the TSLocationManager
+  release whose consumer rules keep the class.
+* [Removed][Android] `src/android/BackgroundGeolocationHeadlessTask.java`, a sample that did not compile
+  against the native SDK any 5.x release uses. The plugin never installed it; copy the sample from the
+  [Android Headless Mode](https://github.com/transistorsoft/cordova-background-geolocation-lt/wiki/Android-Headless-Mode)
+  wiki page instead.
 
 ## 5.4.0 &mdash; 2026-09-23
 
