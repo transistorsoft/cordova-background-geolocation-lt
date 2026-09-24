@@ -17,6 +17,14 @@
   type-checked but were `undefined`, so `BackgroundGeolocation.LogLevel.Verbose` threw a `TypeError`, and
   a named import such as `import { LogLevel } from 'cordova-background-geolocation-lt'` was `undefined`
   too. The `LOG_LEVEL_*`-style constants are unchanged.
+* [Fixed][Android] With R8 minification enabled, your `BackgroundGeolocationHeadlessTask` is no longer
+  removed from the app. Nothing references the class (the plugin loads it by name), so R8 stripped it and
+  every headless event was dropped with `HeadlessTask failed to find`. Requires the TSLocationManager
+  release whose consumer rules keep the class.
+* [Removed][Android] `src/android/BackgroundGeolocationHeadlessTask.java`, a sample that did not compile
+  against the native SDK any 5.x release uses. The plugin never installed it; copy the sample from the
+  [Android Headless Mode](https://github.com/transistorsoft/cordova-background-geolocation-lt/wiki/Android-Headless-Mode)
+  wiki page instead.
 
 ## 5.4.0 &mdash; 2026-09-23
 
