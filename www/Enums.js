@@ -40,6 +40,7 @@ module.exports = {
         ProviderChange: 'providerchange',
         Schedule: 'schedule',
         Notification: 'notification',
+        NotificationAction: 'notificationaction',
         Authorization: 'authorization',
         ConnectivityChange: 'connectivitychange',
         EnabledChange: 'enabledchange',
