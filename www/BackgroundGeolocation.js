@@ -11,6 +11,7 @@ var API = require('./API');
 var DeviceSettings = require('./DeviceSettings');
 var Logger = require('./Logger');
 var TransistorAuthorizationToken = require('./TransistorAuthorizationToken');
+var Enums = require('./Enums');
 
 var emptyFn = function() {};
 
@@ -522,6 +523,11 @@ module.exports = {
         test(this, delay);
     }
 };
+
+// The enum objects the TypeScript definitions declare, eg: BackgroundGeolocation.LogLevel.Verbose.
+Object.keys(Enums).forEach(function(name) {
+    module.exports[name] = Enums[name];
+});
 
 var test = function(bgGeo, delay) {
     delay = delay || 250;

@@ -12,6 +12,11 @@
   that carries WO-039. (WO-039)
 * [Fixed][iOS] `reset()` with no configuration now notifies the SDK of the defaults it restores.
   They were applied silently, so the SDK went on acting on your previous settings until the next launch. (WO-039)
+* [Fixed] The enum objects the TypeScript definitions declare now exist at runtime:
+  `BackgroundGeolocation.LogLevel`, `DesiredAccuracy`, `PersistMode`, `Event` and the rest. They
+  type-checked but were `undefined`, so `BackgroundGeolocation.LogLevel.Verbose` threw a `TypeError`, and
+  a named import such as `import { LogLevel } from 'cordova-background-geolocation-lt'` was `undefined`
+  too. The `LOG_LEVEL_*`-style constants are unchanged.
 
 ## 5.4.0 &mdash; 2026-09-23
 

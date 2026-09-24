@@ -16,7 +16,7 @@
     "url": "git+https://github.com/transistorsoft/cordova-background-geolocation-lt"
   },
   "scripts": {
-    "test": "node test/registry.test.js"
+    "test": "node test/registry.test.js && node test/enums.test.js"
   },
   "keywords": [
     "gps",
