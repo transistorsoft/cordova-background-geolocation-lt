@@ -55,8 +55,9 @@
         [config updateWithDictionary:params];
     } else {
         if (reset) {
-            [config resetConfig:YES];
-            [config updateWithDictionary:params];
+            // (WO-039) ONE commit: -resetConfig:YES then -updateWithDictionary: diffed against the defaults —
+            // unchanged keys re-fired every launch, omitted keys reverted with no event.
+            [config resetWithDictionary:params];
         } else if ([params objectForKey:@"authorization"]) {
             [config batchUpdate:^(TSConfig *cfg) {
                 [cfg.authorization updateWithDictionary:[params objectForKey:@"authorization"]];
@@ -72,9 +73,10 @@
 {
     TSConfig *config = [TSConfig sharedInstance];
     if ([command.arguments count]) {
+        // (WO-039) One commit.  JavaScript's bare reset() lands here too — www/API.js sends [{}] — and an empty
+        // dictionary makes this a plain reset whose listeners hear old -> default, which -resetConfig:YES never emitted.
         NSDictionary *params = [command.arguments objectAtIndex:0];
-        [config resetConfig:YES];
-        [config updateWithDictionary:params];
+        [config resetWithDictionary:params];
     } else {
         [config reset];
     }
