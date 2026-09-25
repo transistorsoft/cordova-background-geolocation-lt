@@ -1,6 +1,6 @@
 # CHANGELOG
 
-## 5.4.2 &mdash; 2026-09-25
+## 5.4.1 &mdash; 2026-09-25
 
 * [Fixed][Android] `transistorAuthorizationToken` now wins over an `http.url` passed with it, as it
   already did on iOS. The token's URL was sent as the deprecated flat `url`, and on Android a nested
@@ -12,8 +12,6 @@
   are inputs no SDK reports back, and `Location.geofence` is a `GeofenceTrigger`
   (`{identifier, action, timestamp, extras?}`), the summary every SDK sends. TypeScript code that set
   either key under `geolocation`, or read `location.geofence.location`, no longer compiles.
-
-## 5.4.1 &mdash; 2026-09-24
 
 * [Fixed][iOS] `ready()` and `reset(config)` now apply your configuration as one change. The
   configuration was reset silently and yours re-applied against the defaults. That had two effects.
