@@ -36,7 +36,8 @@ var ACTION_EVENTS = {
 // release it the way it does a one-shot call (WO-034).
 var KEEP_CALLBACK = {watchPosition: true};
 
-// One-shot actions whose native side answers WITH a payload;  every other action answers with none.
+// One-shot actions whose native side answers with a fixed payload;  stopWatchPosition's is computed in
+// bridge.exec, and every other action answers with none.
 var REPLY = {requestPermission: 3};     // AuthorizationStatus.Always (WO-052)
 
 function createBridge() {
@@ -44,6 +45,7 @@ function createBridge() {
         callbacks: {},        // window.cordova.callbacks
         native: new Map(),    // callbackId -> event, the listeners the native side holds
         execs: [],            // {action, args, callbackId}
+        watches: [],          // callbackIds of the watchPosition calls the native side holds
         counter: 0
     };
 
@@ -58,8 +60,10 @@ function createBridge() {
             return callbackId;
         }
         if (KEEP_CALLBACK[action]) {
+            if (action === 'watchPosition') bridge.watches.push(callbackId);
             return callbackId;          // retained; a test delivers with bridge.emit()
         }
+        var reply = REPLY[action];
         if (action === 'removeListener') {
             var event = args[0], target = args[1];
             if (bridge.native.get(target) === event) {
@@ -67,10 +71,14 @@ function createBridge() {
             }
         } else if (action === 'removeListeners') {
             bridge.native.clear();
+        } else if (action === 'stopWatchPosition') {
+            // Both natives answer with the callbackId of every watch they held, and forget them:  www/API.js
+            // releases those callbacks.  With no payload it throws, and the rejection goes unhandled (WO-034).
+            reply = bridge.watches.splice(0);
         }
         // Everything else answers once and releases its callback, as the bridge does for keepCallback: false.
         delete bridge.callbacks[callbackId];
-        if (success) Promise.resolve().then(function() { success(REPLY[action]); });
+        if (success) Promise.resolve().then(function() { success(reply); });
         return callbackId;
     };
 
@@ -145,10 +153,10 @@ function assertNoNativeLeak(bridge) {
     assertEqual(bridge.native.size, 0, 'native listeners left registered (' + JSON.stringify([...bridge.native]) + ')');
 }
 
-// The mock answers in microtasks, so a few turns let a callback-form call be answered, or show it never will be.
-// Not setTimeout:  yielding to the event loop reports the rejection stopWatchPosition's payload-less answer leaves.
-async function settle() {
-    for (var n = 0; n < 10; n++) await Promise.resolve();
+// Let every pending answer run:  a callback-form call is then answered, or never will be.  A real turn of the
+// event loop, so Node also reports any rejection a mocked answer left unhandled.
+function settle() {
+    return new Promise(function(resolve) { setTimeout(resolve, 0); });
 }
 function assertIsPromise(value, message) {
     assert(value !== null && typeof value === 'object' && typeof value.then === 'function',
@@ -201,9 +209,11 @@ async function(bridge, BG) {
 });
 test('(WO-034) the Subscription stops watching', async function(bridge, BG) {
     var subscription = BG.watchPosition({interval: 1000}, function() {});
-    subscription.remove();
+    var watch = bridge.execsOf('watchPosition')[0].callbackId;
+    await subscription.remove();
     assertEqual(bridge.execsOf('stopWatchPosition').length, 1,
                 'remove() sends stopWatchPosition (which stops EVERY watch — see the work order)');
+    assertEqual(bridge.callbacks[watch], undefined, 'and releases the watch\'s callback');
 });
 
 // ---------------------------------------------------------------- requestPermission (WO-052)
