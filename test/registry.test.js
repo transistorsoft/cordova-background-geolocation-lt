@@ -36,6 +36,9 @@ var ACTION_EVENTS = {
 // release it the way it does a one-shot call (WO-034).
 var KEEP_CALLBACK = {watchPosition: true};
 
+// One-shot actions whose native side answers WITH a payload;  every other action answers with none.
+var REPLY = {requestPermission: 3};     // AuthorizationStatus.Always (WO-052)
+
 function createBridge() {
     var bridge = {
         callbacks: {},        // window.cordova.callbacks
@@ -67,7 +70,7 @@ function createBridge() {
         }
         // Everything else answers once and releases its callback, as the bridge does for keepCallback: false.
         delete bridge.callbacks[callbackId];
-        if (success) Promise.resolve().then(success);
+        if (success) Promise.resolve().then(function() { success(REPLY[action]); });
         return callbackId;
     };
 
@@ -142,6 +145,16 @@ function assertNoNativeLeak(bridge) {
     assertEqual(bridge.native.size, 0, 'native listeners left registered (' + JSON.stringify([...bridge.native]) + ')');
 }
 
+// The mock answers in microtasks, so a few turns let a callback-form call be answered, or show it never will be.
+// Not setTimeout:  yielding to the event loop reports the rejection stopWatchPosition's payload-less answer leaves.
+async function settle() {
+    for (var n = 0; n < 10; n++) await Promise.resolve();
+}
+function assertIsPromise(value, message) {
+    assert(value !== null && typeof value === 'object' && typeof value.then === 'function',
+           message + ' (got ' + typeof value + ')');
+}
+
 // ---- the tests ---------------------------------------------------------------------------------------------
 
 // ---------------------------------------------------------------- watchPosition (WO-034)
@@ -191,6 +204,58 @@ test('(WO-034) the Subscription stops watching', async function(bridge, BG) {
     subscription.remove();
     assertEqual(bridge.execsOf('stopWatchPosition').length, 1,
                 'remove() sends stopWatchPosition (which stops EVERY watch — see the work order)');
+});
+
+// ---------------------------------------------------------------- requestPermission (WO-052)
+test('(WO-052) requestPermission(Permission.Motion) sends the permission and resolves its status',
+async function(bridge, BG) {
+    var result = BG.requestPermission(BG.Permission.Motion);
+    assertIsPromise(result, 'returns the Promise the types declare');
+    assertEqual(await result, 3, 'resolves the AuthorizationStatus the native side sent');
+    var execs = bridge.execsOf('requestPermission');
+    assertEqual(execs.length, 1, 'one requestPermission exec');
+    assertEqual(JSON.stringify(execs[0].args), '["motion"]', 'the permission crosses the wire as args[0]');
+});
+test('(WO-052) requestPermission(undefined) and (null) are the Promise form, and request everything',
+async function(bridge, BG) {
+    var fromUndefined = BG.requestPermission(undefined);
+    var fromNull = BG.requestPermission(null);
+    assertIsPromise(fromUndefined, 'requestPermission(undefined) returns the Promise (permission?: Permission)');
+    assertIsPromise(fromNull, 'requestPermission(null) returns the Promise');
+    assertEqual(await fromUndefined, 3, 'and it resolves the status');
+    assertEqual(await fromNull, 3, 'and it resolves the status');
+    bridge.execsOf('requestPermission').forEach(function(exec) {
+        assertEqual(JSON.stringify(exec.args), '[]', 'no permission crosses the wire:  [] = everything');
+    });
+});
+test('(WO-052) requestPermission() is unchanged:  the Promise form, requesting everything',
+async function(bridge, BG) {
+    var result = BG.requestPermission();
+    assertIsPromise(result, 'returns the Promise');
+    assertEqual(await result, 3, 'resolves the status');
+    assertEqual(JSON.stringify(bridge.execsOf('requestPermission')[0].args), '[]', 'execs []');
+});
+test('(WO-052) the legacy requestPermission(success, failure) form is unchanged',
+async function(bridge, BG) {
+    var seen = [];
+    var returned = BG.requestPermission(function(status) { seen.push(status); },
+                                        function(status) { seen.push('failure:' + status); });
+    await settle();
+    assertEqual(returned, undefined, 'the callback form returns nothing, as it always has');
+    assertEqual(JSON.stringify(seen), '[3]', 'success received the status');
+    assertEqual(JSON.stringify(bridge.execsOf('requestPermission')[0].args), '[]', 'execs []');
+});
+test('(WO-052) requestPermission(Permission.Location, success, failure) sends the permission and calls back',
+async function(bridge, BG) {
+    var seen = [];
+    var returned = BG.requestPermission(BG.Permission.Location,
+                                        function(status) { seen.push(status); },
+                                        function(status) { seen.push('failure:' + status); });
+    await settle();
+    assertEqual(returned, undefined, 'the callback form returns nothing');
+    assertEqual(JSON.stringify(seen), '[3]', 'success received the status');
+    assertEqual(JSON.stringify(bridge.execsOf('requestPermission')[0].args), '["location"]',
+                'the permission crosses the wire as args[0]');
 });
 
 test('remove() unregisters the subscription it came from', async function(bridge, BG) {

@@ -91,11 +91,18 @@ module.exports = {
             return API.reset(config);
         }
     },
-    requestPermission: function(success, failure) {
-        if (!arguments.length) {
-            return API.requestPermission();
+    requestPermission: function(permission, success, failure) {
+        // (WO-052) Pick the form by argument type, never arguments.length:  requestPermission(undefined)
+        // is the Promise form (permission?: Permission), and requestPermission(success, failure) the legacy one.
+        if ((typeof(permission) === 'function') || (typeof(success) === 'function')) {
+            if (typeof(permission) === 'function') {
+                failure = success;
+                success = permission;
+                permission = undefined;
+            }
+            API.requestPermission(permission).then(success).catch(failure);
         } else {
-            API.requestPermission().then(success).catch(failure);
+            return API.requestPermission(permission);
         }
     },
     requestTemporaryFullAccuracy: function(purpose) {
