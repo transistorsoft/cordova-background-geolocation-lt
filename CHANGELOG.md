@@ -1,5 +1,12 @@
 # CHANGELOG
 
+## Unreleased
+
+* [Fixed][Android] `transistorAuthorizationToken` now wins over an `http.url` passed with it, as it
+  already did on iOS. The token's URL was sent as the deprecated flat `url`, and on Android a nested
+  `http.url` beats its flat alias, so the token's `authorization` was applied but locations went to
+  your own URL. The token's URL is now sent as `http.url`, as on React Native. (WO-048)
+
 ## 5.4.1 &mdash; 2026-09-24
 
 * [Fixed][iOS] `ready()` and `reset(config)` now apply your configuration as one change. The

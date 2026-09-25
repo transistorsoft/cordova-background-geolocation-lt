@@ -52,7 +52,10 @@ module.exports = {
 	  	var token = config.transistorAuthorizationToken;
 	  	delete config.transistorAuthorizationToken;
 
-	  	config.url = token.url + LOCATIONS_PATH;
+	  	// (WO-048) http.url, not the flat url:  on Android a caller's http.url beats its flat alias, and the token must win.
+	  	config.http = config.http || {};
+	  	config.http.url = token.url + LOCATIONS_PATH;
+	  	delete config.url;
 	  	config.authorization = {
 	  		strategy: 'JWT',
 	  		accessToken: token.accessToken,
