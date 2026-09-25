@@ -962,7 +962,10 @@
 
 - (void) requestPermission:(CDVInvokedUrlCommand *) command {
     TSLocationManager *bgGeo = [TSLocationManager sharedInstance];
-    [bgGeo requestPermission:^(NSNumber *status) {
+    // (WO-052) Never objectAtIndex:0:  it raises on the empty [] of a no-argument call, and hands a JS null over as
+    // NSNull, which the core messages with caseInsensitiveCompare:.  This returns nil (= everything) for both.
+    NSString *permission = [command argumentAtIndex:0 withDefault:nil andClass:[NSString class]];
+    [bgGeo requestPermission:permission success:^(NSNumber *status) {
         CDVPluginResult* result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsInt: [status intValue]];
         [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
     } failure:^(NSNumber *status) {

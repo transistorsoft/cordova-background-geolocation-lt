@@ -230,11 +230,14 @@ module.exports = {
             exec(success, failure, MODULE_NAME, 'reset', args);
         });
     },
-    requestPermission: function() {
+    requestPermission: function(permission) {
         return new Promise(function(resolve, reject) {
             var success = function(status) { resolve(status) }
             var failure = function(status) { reject(status) }
-            exec(success, failure, MODULE_NAME, 'requestPermission', []);
+            // (WO-052) 'location' | 'motion' requests that one permission.  [] is the historical no-argument
+            // form (location, then motion):  the cores own the permission names, so nothing is translated here.
+            var args = (typeof(permission) === 'string') ? [permission] : [];
+            exec(success, failure, MODULE_NAME, 'requestPermission', args);
         });
     },
     requestTemporaryFullAccuracy: function(purpose) {

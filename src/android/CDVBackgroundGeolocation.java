@@ -335,7 +335,9 @@ public class CDVBackgroundGeolocation extends CordovaPlugin {
             getProviderState(callbackContext);
         } else if (Actions.REQUEST_PERMISSION.equalsIgnoreCase(action)) {
             result = true;
-            requestPermission(callbackContext);
+            // (WO-052) isNull(0), never getString/optString:  both turn a JSON null into the string "null",
+            // which the adapter would request as a raw permission name.  isNull(0) is also true for [].
+            requestPermission(data.isNull(0) ? null : data.getString(0), callbackContext);
         } else if (ACTION_REQUEST_TEMPORARY_FULL_ACCURACY.equalsIgnoreCase(action)) {
             result = true;
             requestTemporaryFullAccuracy(data.getString(0), callbackContext);
@@ -1154,8 +1156,8 @@ public class CDVBackgroundGeolocation extends CordovaPlugin {
         }
     }
 
-    private void requestPermission(final CallbackContext callbackContext) {
-        getAdapter().requestPermission(new TSRequestPermissionCallback() {
+    private void requestPermission(String permission, final CallbackContext callbackContext) {
+        TSRequestPermissionCallback callback = new TSRequestPermissionCallback() {
             @Override public void onSuccess(int status) {
                 callbackContext.success(status);
             }
@@ -1163,7 +1165,14 @@ public class CDVBackgroundGeolocation extends CordovaPlugin {
                 PluginResult result = new PluginResult(PluginResult.Status.ERROR, status);
                 callbackContext.sendPluginResult(result);
             }
-        });
+        };
+        // (WO-052) null = everything (location, then motion):  route it to the no-argument overload, as React
+        // Native and Capacitor do, so an app pinned to an older tslocationmanager never hands the String overload a null.
+        if (permission == null) {
+            getAdapter().requestPermission(callback);
+        } else {
+            getAdapter().requestPermission(permission, callback);
+        }
     }
 
     // [iOS 14+ only] -- No Android implementation.  Just return CLAccuracyAuthorizationFull (0)
