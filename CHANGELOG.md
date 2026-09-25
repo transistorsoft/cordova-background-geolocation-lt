@@ -1,6 +1,6 @@
 # CHANGELOG
 
-## Unreleased
+## 5.4.2 &mdash; 2026-09-25
 
 * [Fixed][Android] `transistorAuthorizationToken` now wins over an `http.url` passed with it, as it
   already did on iOS. The token's URL was sent as the deprecated flat `url`, and on Android a nested
