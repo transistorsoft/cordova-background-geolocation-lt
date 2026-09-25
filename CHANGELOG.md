@@ -6,6 +6,12 @@
   already did on iOS. The token's URL was sent as the deprecated flat `url`, and on Android a nested
   `http.url` beats its flat alias, so the token's `authorization` was applied but locations went to
   your own URL. The token's URL is now sent as `http.url`, as on React Native. (WO-048)
+* [Types] Requires `@transistorsoft/background-geolocation-types` 5.3.5. `GeoConfig` no longer
+  declares `stopOnStationary` or `disableStopDetection`: no SDK ever read them under `geolocation`, so
+  set them under `activity`. `State` no longer declares `reset` or `transistorAuthorizationToken`, which
+  are inputs no SDK reports back, and `Location.geofence` is a `GeofenceTrigger`
+  (`{identifier, action, timestamp, extras?}`), the summary every SDK sends. TypeScript code that set
+  either key under `geolocation`, or read `location.geofence.location`, no longer compiles.
 
 ## 5.4.1 &mdash; 2026-09-24
 
