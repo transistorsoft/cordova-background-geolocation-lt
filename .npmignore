@@ -14,3 +14,9 @@ example
 
 *.tgz
 
+
+# Repository tooling, not the plugin
+.github
+RELEASING.md
+# A local Android build's caches (5.4.0 shipped nine of them)
+.gradle
