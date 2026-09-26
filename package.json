@@ -52,7 +52,7 @@
     }
   },
   "dependencies": {
-    "@transistorsoft/background-geolocation-types": "^5.3.4"
+    "@transistorsoft/background-geolocation-types": "^5.3.5"
   },
   "author": "Chris Scott, Transistor Software",
   "license": "Apache-2.0",

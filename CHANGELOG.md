@@ -1,13 +1,17 @@
 # CHANGELOG
 
-## Unreleased
+## 5.4.1 &mdash; 2026-09-25
 
 * [Fixed][Android] `transistorAuthorizationToken` now wins over an `http.url` passed with it, as it
   already did on iOS. The token's URL was sent as the deprecated flat `url`, and on Android a nested
   `http.url` beats its flat alias, so the token's `authorization` was applied but locations went to
   your own URL. The token's URL is now sent as `http.url`, as on React Native. (WO-048)
-
-## 5.4.1 &mdash; 2026-09-24
+* [Types] Requires `@transistorsoft/background-geolocation-types` 5.3.5. `GeoConfig` no longer
+  declares `stopOnStationary` or `disableStopDetection`: no SDK ever read them under `geolocation`, so
+  set them under `activity`. `State` no longer declares `reset` or `transistorAuthorizationToken`, which
+  are inputs no SDK reports back, and `Location.geofence` is a `GeofenceTrigger`
+  (`{identifier, action, timestamp, extras?}`), the summary every SDK sends. TypeScript code that set
+  either key under `geolocation`, or read `location.geofence.location`, no longer compiles.
 
 * [Fixed][iOS] `ready()` and `reset(config)` now apply your configuration as one change. The
   configuration was reset silently and yours re-applied against the defaults. That had two effects.
@@ -26,6 +30,12 @@
   too. They include `Event.NotificationAction` (types 5.3.4), so
   `BackgroundGeolocation.on(BackgroundGeolocation.Event.NotificationAction, …)` works. The
   `LOG_LEVEL_*`-style constants are unchanged.
+* [Fixed] `requestPermission(Permission.Location)` and `requestPermission(Permission.Motion)` now request
+  only that permission and resolve its `AuthorizationStatus`. The call type-checked, but the permission
+  never reached the native side: it returned `undefined` instead of a Promise, requested location and then
+  motion as `requestPermission()` does, and a denial became an unhandled rejection. A denial now rejects
+  with the status, as `requestPermission()` does. `requestPermission()` and the
+  `requestPermission(success, failure)` form are unchanged. (WO-052)
 * [Fixed][Android] With R8 minification enabled, your `BackgroundGeolocationHeadlessTask` is no longer
   removed from the app. Nothing references the class (the plugin loads it by name), so R8 stripped it and
   every headless event was dropped with `HeadlessTask failed to find`. Requires tslocationmanager
