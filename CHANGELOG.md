@@ -2,6 +2,12 @@
 
 ## Unreleased
 
+* [Types] Requires `@transistorsoft/background-geolocation-types` 5.3.8. `GeoConfig` declares
+  `locationTimeout`, the time in seconds `getCurrentPosition()` waits for a location when the call
+  passes no `timeout` of its own (default `60`), so `geolocation: {locationTimeout: 30}` now compiles.
+  `Coords.floor` is typed `number | null`: iOS sends `null` when it reports no floor. Under
+  `strictNullChecks`, code that assigns `floor` to a `number | undefined` no longer compiles; test
+  `floor != null` rather than `floor !== undefined`.
 * [Docs] `getCurrentPosition()`'s `timeout` defaults to `geolocation.locationTimeout`, `60` seconds
   unless you change it, not `30` as documented. The key is now declared, so
   `geolocation: {locationTimeout: 30}` compiles (it failed with *TS2353*), and the migration guide's
