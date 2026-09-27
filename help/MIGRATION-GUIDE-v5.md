@@ -278,6 +278,7 @@ Each group is a separate TypeScript interface. See API docs for details.
 | `stationaryRadius`                         | `geolocation`    | `stationaryRadius`                     |                                       |
 | `stopTimeout`                              | `geolocation`    | `stopTimeout`                          |                                       |
 | `stopAfterElapsedMinutes`                  | `geolocation`    | `stopAfterElapsedMinutes`              |                                       |
+| `locationTimeout`                          | `geolocation`    | `locationTimeout`                      |                                       |
 | `geofenceProximityRadius`                  | `geolocation`    | `geofenceProximityRadius`              |                                       |
 | `geofenceInitialTriggerEntry`              | `geolocation`    | `geofenceInitialTriggerEntry`          |                                       |
 | `geofenceModeHighAccuracy`                 | `geolocation`    | `geofenceModeHighAccuracy`             |                                       |
@@ -346,6 +347,8 @@ Each group is a separate TypeScript interface. See API docs for details.
 - **`locationFilter` renamed to `filter`** within the `geolocation` group.
 - **Legacy flat config remains supported but deprecated:**
   - Using the legacy flat config will show warnings at runtime, but will **not** result in an error. Migration to the new grouped config is recommended for future compatibility.
+- **`Location.age` is in seconds:**
+  - v4 reported an integer number of milliseconds; this version reports seconds with millisecond precision (e.g. `1.234`). If your code compares `age` against a millisecond value, divide that value by 1000.
 
 
 ## 🧪 Testing Your Migration
