@@ -1,5 +1,12 @@
 # CHANGELOG
 
+## Unreleased
+
+* [Fixed][Android] `addGeofences()` no longer holds the page's JavaScript while it builds the geofences.
+  The plugin built every geofence, computing each polygon's enclosing circle, inside the native call the
+  page's JavaScript waits on, so adding thousands of polygons in one call froze the app's web UI until they
+  were built. They are now built on the SDK's background thread. (WO-107)
+
 ## 5.4.1 &mdash; 2026-09-27
 
 * [Types] Requires `@transistorsoft/background-geolocation-types` 5.3.8. `GeoConfig` declares
