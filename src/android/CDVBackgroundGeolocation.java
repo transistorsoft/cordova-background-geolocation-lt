@@ -620,22 +620,29 @@ public class CDVBackgroundGeolocation extends CordovaPlugin {
         }
     }
 
-    private void addGeofences(final CallbackContext callbackContext, JSONArray data) {
-        List<TSGeofence> geofences = new ArrayList<TSGeofence>();
-        for (int i = 0; i < data.length(); i++) {
-            try {
-                geofences.add(buildGeofence(data.getJSONObject(i)));
-            } catch (JSONException | TSGeofence.Exception e) {
-                callbackContext.error(e.getMessage());
-                return;
-            }
-        }
-        getAdapter().addGeofences(geofences, new TSCallback() {
-            @Override public void onSuccess() {
-                callbackContext.success();
-            }
-            @Override public void onFailure(String error) {
-                callbackContext.error(error);
+    private void addGeofences(final CallbackContext callbackContext, final JSONArray data) {
+        // (WO-107) execute() runs on the WebView's bridge thread while the page's JavaScript waits for it to return,
+        // and building a polygon geofence computes its minimum enclosing circle: thousands froze the page.  Build on
+        // the SDK's pool, so execute() returns at once.
+        BackgroundGeolocation.getThreadPool().execute(new Runnable() {
+            @Override public void run() {
+                List<TSGeofence> geofences = new ArrayList<TSGeofence>();
+                for (int i = 0; i < data.length(); i++) {
+                    try {
+                        geofences.add(buildGeofence(data.getJSONObject(i)));
+                    } catch (JSONException | TSGeofence.Exception e) {
+                        callbackContext.error(e.getMessage());
+                        return;
+                    }
+                }
+                getAdapter().addGeofences(geofences, new TSCallback() {
+                    @Override public void onSuccess() {
+                        callbackContext.success();
+                    }
+                    @Override public void onFailure(String error) {
+                        callbackContext.error(error);
+                    }
+                });
             }
         });
     }
