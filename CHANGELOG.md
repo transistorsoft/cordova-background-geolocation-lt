@@ -1,6 +1,6 @@
 # CHANGELOG
 
-## Unreleased
+## 5.4.2 &mdash; 2026-10-05
 
 * [Fixed][Android] `addGeofences()` no longer holds the page's JavaScript while it builds the geofences.
   The plugin built every geofence, computing each polygon's enclosing circle, inside the native call the
