@@ -1,6 +1,6 @@
 # CHANGELOG
 
-## Unreleased
+## 5.4.3 &mdash; 2026-10-06
 
 * [Fixed][Android] A Capacitor app's build no longer fails on Android Gradle Plugin 9 with `Could not get
   unknown property 'applicationVariants'`. `src/android/app.gradle`, which a Capacitor app applies from its
