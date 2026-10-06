@@ -1,11 +1,25 @@
 # CHANGELOG
 
-## Unreleased
+## 5.4.2 &mdash; 2026-10-05
 
 * [Fixed][Android] `addGeofences()` no longer holds the page's JavaScript while it builds the geofences.
   The plugin built every geofence, computing each polygon's enclosing circle, inside the native call the
   page's JavaScript waits on, so adding thousands of polygons in one call froze the app's web UI until they
   were built. They are now built on the SDK's background thread. (WO-107)
+* [iOS] Minimum `TSLocationManager` is now 4.7.2 (the plugin's pod spec is `~> 4.7.2`). Among its fixes:
+  `stop()` now releases the location monitoring that an earlier run of the app left registered with iOS,
+  which kept waking a stopped app; `preventSuspend` no longer stops a few minutes into the background
+  (#2439); and `persistence.maxRecordsToPersist`, `maxDaysToPersist` or `persistMode` set to a string that
+  is not a whole number takes the setting's default, where iOS read it as `0`.
+* [Android] Minimum `tslocationmanager` is now 4.6.2. The plugin's `TSLOCATIONMANAGER_VERSION` defaults to
+  that version in place of `4.6.+`, and an older `TSLOCATIONMANAGER_VERSION` or
+  `ext.tslocationmanagerVersion` is raised to it with a build warning. An app whose `package.json` has
+  `4.6.+` saved keeps it, and builds with 4.6.2 once Gradle refreshes its dynamic versions, within 24 hours.
+  Among its fixes: a location the SDK has already processed is no longer handed to it again after Android
+  kills the app's process; the SDK's foreground services no longer do work on the main thread for every
+  location, which Android could report as the app not responding; `stop()` no longer blocks the main thread
+  for longer the more geofences are stored; and a stationary-geofence EXIT is accepted whenever its location
+  is provably outside the region, however poor that location's accuracy.
 
 ## 5.4.1 &mdash; 2026-09-27
 
