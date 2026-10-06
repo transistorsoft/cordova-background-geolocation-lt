@@ -2,10 +2,7 @@
 
 ## 5.4.3 &mdash; 2026-10-06
 
-* [Fixed][Android] A Capacitor app's build no longer fails on Android Gradle Plugin 9 with `Could not get
-  unknown property 'applicationVariants'`. `src/android/app.gradle`, which a Capacitor app applies from its
-  `android/app/build.gradle`, used an API that Android Gradle Plugin 9 removed. The script is now empty: it
-  was meant to strip the SDK's debug sound files from release builds, which it no longer did.
+* [Fixed][Android] Remove app.gradle
 
 ## 5.4.2 &mdash; 2026-10-05
 
