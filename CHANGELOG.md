@@ -1,5 +1,12 @@
 # CHANGELOG
 
+## Unreleased
+
+* [Fixed][Android] A Capacitor app's build no longer fails on Android Gradle Plugin 9 with `Could not get
+  unknown property 'applicationVariants'`. `src/android/app.gradle`, which a Capacitor app applies from its
+  `android/app/build.gradle`, used an API that Android Gradle Plugin 9 removed. The script is now empty: it
+  was meant to strip the SDK's debug sound files from release builds, which it no longer did.
+
 ## 5.4.2 &mdash; 2026-10-05
 
 * [Fixed][Android] `addGeofences()` no longer holds the page's JavaScript while it builds the geofences.
