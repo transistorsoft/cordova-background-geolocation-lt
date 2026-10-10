@@ -14,6 +14,10 @@
   `deleted X of Y geofences` when an identifier is not found, after removing the ones that were found, as on
   iOS. Android used to resolve `true`. Code that removes an identifier that may not exist must catch the
   rejection. (WO-054)
+* [Changed][Android] The plugin takes `tslocationmanager` `4.7.+` by default again, where 5.4.2 through 5.5.0
+  pinned an exact version. An app that sets no `TSLOCATIONMANAGER_VERSION` preference and no
+  `ext.tslocationmanagerVersion` of its own now picks up each native patch release at its next build, as it
+  already does on iOS (`TSLocationManager` `~> 4.8.0`). An app that sets its own version keeps it.
 
 ## 5.5.0 &mdash; 2026-10-09
 
