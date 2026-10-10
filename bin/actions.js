@@ -83,8 +83,11 @@ async function mirror() {
 	];
 
 	mirroredPaths.forEach(function(dir) {
-    var src = path.join(SRC_PATH, dir);
-    var dest = path.join('.', dir);
+    if (!/^[\w\-]+$/.test(dir)) {
+      throw new CLIError('Invalid mirrored directory name: ' + dir);
+    }
+    var src = SRC_PATH + '/' + dir;
+    var dest = './' + dir;
     console.log('- cp -R ', src, dest);
     fs.copySync(src, dest);
 	});
@@ -107,6 +110,9 @@ function cpDeclarations(args) {
     throw new CLIError('A src-path argument is required, eg: cp-declarations /path/to/other');
   }
   const srcPath = args.shift();
+  if (!/^[\w\-.\/]+$/.test(srcPath)) {
+    throw new CLIError('Invalid src-path: only alphanumeric characters, dots, dashes, underscores and slashes are allowed');
+  }
 
   const cmd = './scripts/cp-declarations ' + srcPath;
 
