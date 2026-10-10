@@ -630,6 +630,11 @@ module.exports = {
         // (WO-055) "All" crosses to native as null, never as []: an empty list removes none.
         if (identifiers === undefined) identifiers = null;
         return new Promise(function(resolve, reject) {
+            // (WO-055) Anything else that is not a list rejects here: exec sends JSON on both platforms, where NaN
+            // becomes null, and null removes all.
+            if (identifiers !== null && !Array.isArray(identifiers)) {
+                return reject("#removeGeofences requires an Array of identifiers, or nothing to remove all geofences");
+            }
             var success = function() { resolve(true) }   // (WO-028)
             var failure = function(error) { reject(error) }
             exec(success, failure, MODULE_NAME, 'removeGeofences', [identifiers]);
