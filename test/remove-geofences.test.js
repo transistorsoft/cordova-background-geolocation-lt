@@ -1,12 +1,12 @@
 /**
 * (WO-055) What removeGeofences() hands to cordova/exec.
 *
-* "Remove all" is the absence of a list: an omitted argument, `null` and the callback form all cross as `null`, and
-* the native plugins send that to the core's remove-all entry.  An empty list crosses as `[]`, which removes none.
-* Through 5.5.0 an omitted argument was sent as `[]`, and `[]` removed every geofence.
+* "Remove all" is the absence of a list: an omitted argument, `null` and the callback form.  It crosses as `[]`, as
+* it does in every release, because both cores read an empty list as "remove all".  So an empty list the caller
+* passed never crosses: it names none, and is answered in JavaScript.  Through 5.5.0 it was sent, and removed every
+* geofence.
 *
-* Anything else that is not a list rejects before exec.  exec sends JSON on both platforms, where NaN and Infinity
-* become null: they would be read as "remove all".
+* Anything else that is not a list rejects before exec, and never becomes "all".
 *
 * No dependencies:  run with `npm test` (or `node test/remove-geofences.test.js`).
 */
@@ -61,22 +61,22 @@ function sent(execs) {
 
 // ---- the tests ---------------------------------------------------------------------------------------------
 
-test('(WO-055) removeGeofences() sends null: remove all', async function(execs, BG) {
+test('(WO-055) removeGeofences() sends []: remove all, as every release sends it', async function(execs, BG) {
     assertEqual(await BG.removeGeofences(), true, 'resolves');
-    assertEqual(sent(execs), '[null]', 'exec args');
+    assertEqual(sent(execs), '[[]]', 'exec args');
 });
 
-test('(WO-055) removeGeofences(undefined) and removeGeofences(null) send null: remove all', async function(execs, BG) {
+test('(WO-055) removeGeofences(undefined) and removeGeofences(null) send []: remove all', async function(execs, BG) {
     await BG.removeGeofences(undefined);
-    assertEqual(sent(execs), '[null]', 'undefined');
+    assertEqual(sent(execs), '[[]]', 'undefined');
     execs.length = 0;
     await BG.removeGeofences(null);
-    assertEqual(sent(execs), '[null]', 'null');
+    assertEqual(sent(execs), '[[]]', 'null');
 });
 
-test('(WO-055) removeGeofences([]) sends the empty list: remove none', async function(execs, BG) {
+test('(WO-055) removeGeofences([]) resolves without calling exec: remove none', async function(execs, BG) {
     assertEqual(await BG.removeGeofences([]), true, 'resolves');
-    assertEqual(sent(execs), '[[]]', 'exec args');
+    assertEqual(removeExecs(execs), 0, 'removeGeofences execs');
 });
 
 test('(WO-055) removeGeofences([ids]) sends the list unchanged', async function(execs, BG) {
@@ -84,10 +84,16 @@ test('(WO-055) removeGeofences([ids]) sends the list unchanged', async function(
     assertEqual(sent(execs), '[["home","work"]]', 'exec args');
 });
 
-test('(WO-055) the callback form removeGeofences(success, failure) sends null and calls success', async function(execs, BG) {
+test('(WO-055) the callback form removeGeofences(success, failure) sends [] and calls success: remove all', async function(execs, BG) {
     var answered = new Promise(function(resolve, reject) { BG.removeGeofences(resolve, reject); });
     assertEqual(await answered, true, 'success(true)');
-    assertEqual(sent(execs), '[null]', 'exec args');
+    assertEqual(sent(execs), '[[]]', 'exec args');
+});
+
+test('(WO-055) the callback form removeGeofences([], success, failure) calls success without calling exec', async function(execs, BG) {
+    var answered = new Promise(function(resolve, reject) { BG.removeGeofences([], resolve, reject); });
+    assertEqual(await answered, true, 'success(true)');
+    assertEqual(removeExecs(execs), 0, 'removeGeofences execs');
 });
 
 test('(WO-055) the callback form removeGeofences([ids], success, failure) sends the list', async function(execs, BG) {

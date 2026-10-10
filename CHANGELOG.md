@@ -9,10 +9,7 @@
   `[]` to remove them all, call `removeGeofences()` instead. The same holds for a command your server
   returns: `["removeGeofences"]` removes every geofence and `["removeGeofences", []]` removes none. An
   argument that is not a list, such as a string, now fails and removes nothing; `''`, `0`, `false` and `NaN`
-  used to remove every geofence. This release requires `tslocationmanager` 4.8.0 on Android and
-  `TSLocationManager` 4.9.0 on iOS, where an empty list means none; an older native SDK reads it as all. The
-  native code changed, so rebuild your app; do not ship this JavaScript as a live update onto an older binary.
-  (WO-055)
+  used to remove every geofence. (WO-055)
 * [Changed][Android] `removeGeofence(identifier)` and `removeGeofences(identifiers)` now fail with
   `deleted X of Y geofences` when an identifier is not found, after removing the ones that were found, as on
   iOS. Android used to resolve `true`. Code that removes an identifier that may not exist must catch the
