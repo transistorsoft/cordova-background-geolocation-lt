@@ -5,6 +5,9 @@
 * the native plugins send that to the core's remove-all entry.  An empty list crosses as `[]`, which removes none.
 * Through 5.5.0 an omitted argument was sent as `[]`, and `[]` removed every geofence.
 *
+* Anything else that is not a list rejects before exec.  exec sends JSON on both platforms, where NaN and Infinity
+* become null: they would be read as "remove all".
+*
 * No dependencies:  run with `npm test` (or `node test/remove-geofences.test.js`).
 */
 var fs = require('fs');
@@ -91,6 +94,30 @@ test('(WO-055) the callback form removeGeofences([ids], success, failure) sends 
     var answered = new Promise(function(resolve, reject) { BG.removeGeofences(['home'], resolve, reject); });
     await answered;
     assertEqual(sent(execs), '[["home"]]', 'exec args');
+});
+
+function removeExecs(execs) {
+    return execs.filter(function(e) { return e.action === 'removeGeofences'; }).length;
+}
+
+[
+    ['NaN', NaN], ['Infinity', Infinity], ['a Symbol', Symbol('home')],
+    ['a string', 'home'], ['an empty string', ''], ['a number', 42], ['zero', 0], ['false', false], ['an object', {identifier: 'home'}]
+].forEach(function(item) {
+    test('(WO-055) removeGeofences(' + item[0] + ') rejects without calling exec', async function(execs, BG) {
+        var rejection = null;
+        try { await BG.removeGeofences(item[1]); } catch (error) { rejection = error; }
+        assertEqual(removeExecs(execs), 0, 'removeGeofences execs');
+        assertEqual(typeof rejection, 'string', 'rejects with a message');
+    });
+});
+
+test('(WO-055) the callback form with a first argument that is not a list calls failure', async function(execs, BG) {
+    var answered = new Promise(function(resolve) {
+        BG.removeGeofences(NaN, function() { resolve('success'); }, function(error) { resolve('failure'); });
+    });
+    assertEqual(await answered, 'failure', 'answered');
+    assertEqual(removeExecs(execs), 0, 'removeGeofences execs');
 });
 
 // ---- run ---------------------------------------------------------------------------------------------------
