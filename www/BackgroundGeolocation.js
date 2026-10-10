@@ -377,7 +377,7 @@ module.exports = {
                 // 3. -> removeGeofences(success, failure?)
                 failure = success || emptyFn;
                 success = identifiers;
-                identifiers = [];
+                identifiers = null;   // (WO-055) remove all is null, never []
             }
             API.removeGeofences(identifiers).then(success).catch(failure);
         }

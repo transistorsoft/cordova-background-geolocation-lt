@@ -627,7 +627,8 @@ module.exports = {
     * Remove all geofences
     */
     removeGeofences: function(identifiers) {
-        identifiers = identifiers || [];
+        // (WO-055) "All" crosses to native as null, never as []: an empty list removes none.
+        if (identifiers === undefined) identifiers = null;
         return new Promise(function(resolve, reject) {
             var success = function() { resolve(true) }   // (WO-028)
             var failure = function(error) { reject(error) }
