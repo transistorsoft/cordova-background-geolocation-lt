@@ -575,17 +575,7 @@
 
 - (void) removeGeofences:(CDVInvokedUrlCommand*)command
 {
-    // (WO-055) null is "remove all": the core is handed nil.  A list removes the ones it names, and an empty list
-    // none.  Anything else is an error: a malformed argument must never become nil.
-    id argument = (command.arguments.count > 0) ? [command.arguments objectAtIndex:0] : [NSNull null];
-    NSArray *identifiers = nil;
-    if ([argument isKindOfClass:[NSArray class]]) {
-        identifiers = argument;
-    } else if (argument != [NSNull null]) {
-        CDVPluginResult *result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:@"removeGeofences: identifiers must be an Array"];
-        [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
-        return;
-    }
+    NSArray *identifiers = [command.arguments objectAtIndex:0];
     __typeof(self.commandDelegate) __weak commandDelegate = self.commandDelegate;
     TSLocationManager *bgGeo = [TSLocationManager sharedInstance];
     [bgGeo removeGeofences:identifiers success:^{

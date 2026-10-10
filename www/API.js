@@ -627,16 +627,22 @@ module.exports = {
     * Remove all geofences
     */
     removeGeofences: function(identifiers) {
-        // (WO-055) "All" crosses to native as null, never as []: an empty list removes none.
-        if (identifiers === undefined) identifiers = null;
         return new Promise(function(resolve, reject) {
-            // (WO-055) Anything else that is not a list rejects here: exec sends JSON on both platforms, where NaN
-            // becomes null, and null removes all.
-            if (identifiers !== null && !Array.isArray(identifiers)) {
-                return reject("#removeGeofences requires an Array of identifiers, or nothing to remove all geofences");
-            }
             var success = function() { resolve(true) }   // (WO-028)
             var failure = function(error) { reject(error) }
+            // (WO-055) "All" crosses to native as [], as it does in every release: both cores read an empty list
+            // as "remove all".
+            if (identifiers === undefined || identifiers === null) {
+                return exec(success, failure, MODULE_NAME, 'removeGeofences', [[]]);
+            }
+            // (WO-055) Anything else that is not a list rejects here, and never becomes "all".
+            if (!Array.isArray(identifiers)) {
+                return reject("#removeGeofences requires an Array of identifiers, or nothing to remove all geofences");
+            }
+            // (WO-055) An empty list names none.  It never crosses to native, where it would remove all.
+            if (!identifiers.length) {
+                return resolve(true);
+            }
             exec(success, failure, MODULE_NAME, 'removeGeofences', [identifiers]);
         });
     },

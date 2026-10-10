@@ -222,8 +222,7 @@ public class CDVBackgroundGeolocation extends CordovaPlugin {
             removeGeofence(data.getString(0), callbackContext);
         } else if (Actions.REMOVE_GEOFENCES.equalsIgnoreCase(action)) {
             result = true;
-            // (WO-055) null is "remove all".  Anything else must be a list: getJSONArray() throws on one that is not.
-            removeGeofences(data.isNull(0) ? null : data.getJSONArray(0), callbackContext);
+            removeGeofences(data.getJSONArray(0), callbackContext);
         } else if (ACTION_ADD_GEOFENCE_LISTENER.equalsIgnoreCase(action)) {
             result = true;
             addGeofenceListener(callbackContext);
@@ -982,26 +981,19 @@ public class CDVBackgroundGeolocation extends CordovaPlugin {
     }
 
     private void removeGeofences(final JSONArray identifiers, final CallbackContext callbackContext) {
-        TSCallback callback = new TSCallback() {
-            @Override public void onSuccess() {
-                callbackContext.success();
-            }
-            @Override public void onFailure(String error) {
-                callbackContext.error(error);
-            }
-        };
-        // (WO-055) null is "remove all" and goes to the core's no-list overload.  A list removes the ones it
-        // names, and an empty list none.
-        if (identifiers == null) {
-            getAdapter().removeGeofences(callback);
-            return;
-        }
         List<String> rs = new ArrayList<String>();
         try {
             for (int i = 0; i < identifiers.length(); i++) {
                 rs.add(identifiers.getString(i));
             }
-            getAdapter().removeGeofences(rs, callback);
+            getAdapter().removeGeofences(rs, new TSCallback() {
+                @Override public void onSuccess() {
+                    callbackContext.success();
+                }
+                @Override public void onFailure(String error) {
+                    callbackContext.error(error);
+                }
+            });
         } catch (JSONException e) {
             callbackContext.error(e.getMessage());
             e.printStackTrace();
