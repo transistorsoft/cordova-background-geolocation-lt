@@ -25,7 +25,10 @@
     <js-module src="www/TransistorAuthorizationToken.js" name="TransistorAuthorizationToken"></js-module>
     <js-module src="www/Enums.js" name="Enums"></js-module>
 
-    <platform name="ios">
+    <!-- (WO-195) package="swift": cordova-ios 8 and later builds the plugin from Package.swift and gets
+         TSLocationManager (and TSBackgroundFetch) from Swift Package Manager. Older cordova-ios ignores the
+         attribute and uses the <source-file>/<header-file> and the <pod> below. -->
+    <platform name="ios" package="swift">
         <preference name="BACKGROUND_MODE_LOCATION" default="&lt;string&gt;location&lt;/string&gt;" />
 
         <!-- required background modes:  App registers for location updates -->
@@ -46,7 +49,11 @@
                 <source url="https://cdn.cocoapods.org/"/>
             </config>
             <pods use-frameworks="true">
-                <pod name="TSLocationManager" spec="~> 4.8.0"/>
+                <!-- (WO-194) 4.9.0 is the first TSLocationManager that accepts TSBackgroundFetch 4.2, at iOS 15:
+                     apps need <preference name="deployment-target" value="15.0" />. -->
+                <!-- (WO-195) nospm: cordova-ios 8 skips this pod and uses Package.swift; the twin of its
+                     native-background-geolocation requirement, so change both together. -->
+                <pod name="TSLocationManager" spec="~> 4.9.0" nospm="true"/>
             </pods>
         </podspec>
 

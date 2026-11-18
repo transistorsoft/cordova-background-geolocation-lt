@@ -13,6 +13,10 @@ src/ionic
 example
 
 *.tgz
+# (WO-195) What SwiftPM writes beside Package.swift
+.build
+.swiftpm
+Package.resolved
 
 
 # Repository tooling, not the plugin
