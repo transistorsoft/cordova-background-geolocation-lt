@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## Unreleased
+
+* [Added][iOS] Swift Package Manager support for cordova-ios 8. `plugin.xml` now declares `<platform name="ios" package="swift">`, so cordova-ios 8 and later builds the plugin from its `Package.swift` and gets TSLocationManager (`native-background-geolocation` `.upToNextMinor(from: "4.9.0")`) and TSBackgroundFetch from Swift Package Manager; cordova-ios 7 and older keep using CocoaPods (the `TSLocationManager` pod is now `nospm`). With cordova-plugin-background-fetch 7.4.0 or later, which is also a Swift package, an app on cordova-ios 8 now links one TSBackgroundFetch: before, it linked two, one from each package manager. Your app's `deployment-target` must be 15.0 or later on both (WO-195)
+* [Changed][iOS] Requires TSLocationManager 4.9.0 (`~> 4.9.0`, was `~> 4.8.0`). TSLocationManager 4.9.0 requires TSBackgroundFetch 4.2.1 or any later 4.x, and iOS 15: your app's iOS deployment target must be 15.0 or later. Set `<preference name="deployment-target" value="15.0" />` in your `config.xml`, then remove and re-add the iOS platform (`cordova platform rm ios && cordova platform add ios`): cordova-ios writes the Podfile's `platform :ios` from the value it copied when the platform was created, and at its default (13.0) CocoaPods refuses TSLocationManager 4.9.0 with "required a higher minimum deployment target". The plugin can now be used together with cordova-plugin-background-fetch 7.4.0 and later, which requires TSBackgroundFetch 4.2 (WO-194)
+
 ## 5.5.1 &mdash; 2026-10-26
 
 * [Changed] `removeGeofences([])` now removes no geofence. An empty list used to remove every geofence, as
