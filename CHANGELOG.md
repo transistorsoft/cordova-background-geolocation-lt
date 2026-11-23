@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## Unreleased
+
+* [Changed][Android] The plugin's ProGuard rules (`src/android/proguard-rules.pro`, which help/INSTALL_CAPACITOR.md adds to an app's release build) no longer keep the SDK's `R` classes. Keeping them kept every SDK resource, so a release build that shrinks resources could not leave out the SDK's debug sounds. To keep the sounds, add `tools:keep="@raw/tslocationmanager_*"` to a keep file in your app's `res/raw/` (WO-200)
+
 ## 5.6.0 &mdash; 2026-11-18
 
 * [Added][iOS] Swift Package Manager support for cordova-ios 8. `plugin.xml` now declares `<platform name="ios" package="swift">`, so cordova-ios 8 and later builds the plugin from its `Package.swift` and gets TSLocationManager (`native-background-geolocation` `.upToNextMinor(from: "4.9.0")`) and TSBackgroundFetch from Swift Package Manager; cordova-ios 7 and older keep using CocoaPods (the `TSLocationManager` pod is now `nospm`). With cordova-plugin-background-fetch 7.4.0 or later, which is also a Swift package, an app on cordova-ios 8 now links one TSBackgroundFetch: before, it linked two, one from each package manager. Your app's `deployment-target` must be 15.0 or later on both (WO-195)
