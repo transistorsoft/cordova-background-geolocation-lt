@@ -30,5 +30,7 @@
         <preference name="android-minSdkVersion" value="24" />
         <preference name="android-targetSdkVersion" value="35" />
         <preference name="android-compileSdkVersion" value="36" />
+        <!-- (WO-200) Keeps the SDK's debug sounds when a release build shrinks resources. -->
+        <resource-file src="res/android/keep_bggeo_example.xml" target="app/src/main/res/raw/keep_bggeo_example.xml" />
     </platform>
 </widget>
