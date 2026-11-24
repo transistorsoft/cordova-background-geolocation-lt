@@ -2,7 +2,7 @@
 
 ## Unreleased
 
-* [Changed][Android] The plugin's ProGuard rules (`src/android/proguard-rules.pro`, which help/INSTALL_CAPACITOR.md adds to an app's release build) no longer keep the SDK's `R` classes. Keeping them kept every SDK resource, so a release build that shrinks resources could not leave out the SDK's debug sounds. To keep the sounds, add `tools:keep="@raw/tslocationmanager_*"` to a keep file in your app's `res/raw/` (WO-200)
+* [Changed][Android] The plugin's ProGuard rules (`src/android/proguard-rules.pro`, which help/INSTALL_CAPACITOR.md adds to an app's release build) no longer keep the SDK's `R` classes. Keeping them kept every SDK resource, so a release build that shrinks resources could not leave out the SDK's debug sounds (WO-200)
 
 ## 5.6.0 &mdash; 2026-11-18
 
